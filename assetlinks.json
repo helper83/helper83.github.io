@@ -1,8 +1,12 @@
-[{
-      "relation": ["delegate_permission/common.handle_all_urls"],
-      "target": {
-        "namespace": "android_app",
-        "package_name": "com.helpertom.app",
-        "sha256_cert_fingerprints": ["BC:01:E3:A9:6B:33:75:B5:67:3A:69:A8:AA:8D:B6:84:57:85:91:FE:ED:C6:0C:F2:84:B8:12:04:CC:3D:98:94"]
-      }
-    }]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.helper83.helpertom",
+      "sha256_cert_fingerprints": [
+        "BC:01:E3:A9:6B:33:75:B5:67:3A:69:A8:AA:8D:B6:84:57:85:91:FE:ED:C6:0C:F2:84:B8:12:04:CC:3D:98:94"
+      ]
+    }
+  }
+]
