@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: helpersohn-interview
+    runtime: python
+    rootDir: interview-workbook
+    buildCommand: "python --version"
+    startCommand: "python server.py"
+    healthCheckPath: /api/health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: MAX_CONCURRENT_AI
+        value: "6"
+      - key: MAX_DAILY_AI_REQUESTS
+        value: "500"
