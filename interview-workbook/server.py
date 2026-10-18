@@ -7,6 +7,11 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parent
 history=defaultdict(deque)
 lock=threading.Lock()
+requests_today=0
+day_stamp=""
+slots=threading.BoundedSemaphore(int(os.getenv("MAX_CONCURRENT_AI","6")))
+MAX_DAILY=int(os.getenv("MAX_DAILY_AI_REQUESTS","500"))
+
 SYSTEM="""당신은 한국 대학생의 면접 전문 코치입니다. 한국어로 답하세요.
 학생의 경험·성과·수치를 지어내지 말고 불확실한 부분은 [확인 필요]로 표시하세요.
 실제 기업 기출이나 평가기준을 검증 없이 단정하지 마세요. 평가 점수는 교육용 참고값이며 합격 예측이 아닙니다.
@@ -39,8 +44,13 @@ class Handler(SimpleHTTPRequestHandler):
             return self.respond(200,{'ok':True,'ai_configured':bool(os.getenv('OPENAI_API_KEY')),'model':os.getenv('OPENAI_MODEL','gpt-4.1-mini')})
         return super().do_GET()
     def do_POST(self):
+        global requests_today, day_stamp
         if self.path!='/api/coach':
             return self.respond(404,{'error':'경로 없음'})
+        origin=self.headers.get('Origin','')
+        host=self.headers.get('Host','')
+        if origin and origin.rstrip('/') not in ('http://'+host,'https://'+host):
+            return self.respond(403,{'error':'다른 사이트에서의 요청을 허용하지 않습니다.'})
         key=os.getenv('OPENAI_API_KEY')
         if not key:
             return self.respond(503,{'error':'서버에 OPENAI_API_KEY를 설정해 주세요.'})
@@ -50,11 +60,18 @@ class Handler(SimpleHTTPRequestHandler):
                 return self.respond(413,{'error':'요청 크기 제한 초과'})
             now=time.time()
             with lock:
+                today=time.strftime('%Y-%m-%d',time.gmtime(now))
+                if today!=day_stamp:
+                    day_stamp=today
+                    requests_today=0
+                if requests_today>=MAX_DAILY:
+                    return self.respond(429,{'error':'오늘의 전체 AI 사용 한도에 도달했습니다.'})
                 q=history[self.client_address[0]]
                 while q and now-q[0]>3600: q.popleft()
                 if len(q)>=25:
                     return self.respond(429,{'error':'시간당 요청 한도 초과'})
                 q.append(now)
+                requests_today+=1
             data=json.loads(self.rfile.read(length))
             mode=str(data.get('mode','diagnose'))
             if mode not in ('diagnose','star','mock','compare','questions'):
@@ -79,8 +96,13 @@ class Handler(SimpleHTTPRequestHandler):
                 data=json.dumps(payload,ensure_ascii=False).encode('utf-8'),
                 headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'},
                 method='POST')
-            with urllib.request.urlopen(request,timeout=55) as response:
-                output=json.load(response)
+            if not slots.acquire(blocking=False):
+                return self.respond(429,{'error':'현재 AI 요청이 많습니다. 잠시 후 다시 시도하세요.'})
+            try:
+                with urllib.request.urlopen(request,timeout=55) as response:
+                    output=json.load(response)
+            finally:
+                slots.release()
             answer=output.get('output_text','')
             if not answer:
                 answer='\n'.join(part.get('text','') for item in output.get('output',[])
@@ -96,4 +118,4 @@ class Handler(SimpleHTTPRequestHandler):
 if __name__=='__main__':
     port=int(os.getenv('PORT','8765'))
     print(f'헬퍼손 AI 면접 워크북: http://localhost:{port}')
-    ThreadingHTTPServer(('127.0.0.1',port),Handler).serve_forever()
+    ThreadingHTTPServer((os.getenv('HOST','127.0.0.1'),port),Handler).serve_forever()
