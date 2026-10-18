@@ -1,0 +1,485 @@
+<title>M1 자기 이해</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap">
+<style>:root{--bg:#F5F2EA;--fg:#14213D;--mute:#44506A;--line:#D9D3C3;--card:#FBF9F3;--acc:#14213D;--accfg:#F5F2EA;--gold:#E3A92F;--goldtx:#8A5D00;--ok:#1F6F4A;--warn:#A03A2A;--sel:#E4EAF6;--bar:#14213D;--bar2:#B9C4DB;--input:#FFFFFF}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1830;--fg:#ECE8DC;--mute:#A9B4CC;--line:#2C3A5E;--card:#17234A;--acc:#E3A92F;--accfg:#14213D;--gold:#E3A92F;--goldtx:#E3A92F;--ok:#6FCF9D;--warn:#FF9B8A;--sel:#22335F;--bar:#E3A92F;--bar2:#2C3A5E;--input:#0F1830;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1830;--fg:#ECE8DC;--mute:#A9B4CC;--line:#2C3A5E;--card:#17234A;--acc:#E3A92F;--accfg:#14213D;--gold:#E3A92F;--goldtx:#E3A92F;--ok:#6FCF9D;--warn:#FF9B8A;--sel:#22335F;--bar:#E3A92F;--bar2:#2C3A5E;--input:#0F1830;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0}
+#app{max-width:980px;margin-inline:auto;padding-block:16px 80px}
+h1,h2,h3{font-family:'Noto Serif KR',Georgia,serif;line-height:1.3;text-wrap:balance}
+h1{font-size:26px;margin:0}h2{font-size:22px;margin:0}h3{font-size:18px;margin:0}
+header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;padding-block:8px 12px}
+header .eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--goldtx)}
+header .sub{color:var(--mute);font-size:14px;margin-top:4px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+nav.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:6px;border-bottom:2px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+nav.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:8px 14px;border-radius:999px;font:inherit;font-size:14px;font-weight:500;cursor:pointer}
+nav.tabs button[aria-selected=true]{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
+nav.tabs button .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-left:6px}
+main{display:flex;flex-direction:column;gap:16px;padding-top:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.card.dark{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
+.card.dark .mute{color:var(--accfg);opacity:.85}
+.card.locked{opacity:.92}
+.row{display:flex;gap:12px;flex-wrap:wrap}.row>*{flex:1 1 240px;min-width:0}
+.mute{color:var(--mute);font-size:14px}
+.tag{display:inline-block;font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;background:var(--sel);color:var(--fg)}
+.tag.gold{background:var(--gold);color:#14213D}.tag.ok{background:var(--ok);color:#fff}.tag.warn{background:var(--warn);color:#fff}
+.tag.ok,.tag.warn{color:var(--bg)}
+button.btn{font:inherit;font-size:15px;font-weight:700;border:1px solid var(--acc);background:var(--acc);color:var(--accfg);padding:9px 16px;border-radius:10px;cursor:pointer}
+button.btn.ghost{background:transparent;color:var(--fg);border-color:var(--line)}
+button.btn.gold{background:var(--gold);border-color:var(--gold);color:#14213D}
+button.btn.sm{font-size:13px;padding:5px 10px}
+button.btn:disabled{opacity:.45;cursor:not-allowed}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+textarea,input[type=text],input[type=number],select{width:100%;font:inherit;font-size:15px;background:var(--input);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{resize:vertical;min-height:44px}
+textarea:disabled,input:disabled,select:disabled{opacity:.7;background:var(--card)}
+.pii-bad{border-color:var(--warn)!important;outline:2px solid var(--warn)}
+#pii{display:none;background:var(--warn);color:var(--bg);padding:10px 14px;border-radius:10px;font-weight:700;margin-top:8px}
+label.lab{display:flex;flex-direction:column;gap:4px;font-size:14px;font-weight:700}
+label.lab span.mute{font-weight:400}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);background:var(--input);border-radius:10px;padding:10px 12px;cursor:pointer}
+.opt:has(input:checked){background:var(--sel);border-color:var(--acc)}
+.opt input{margin-top:5px;flex:none}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.pick{font:inherit;text-align:left;border:2px solid var(--line);background:var(--input);color:var(--fg);border-radius:10px;padding:10px 12px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.pick b{font-size:15px}.pick span{font-size:13px;color:var(--mute)}
+.pick[aria-pressed=true]{border-color:var(--acc);background:var(--sel)}
+.pick.top{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold) inset}
+.pick:disabled{cursor:not-allowed;opacity:.55}
+.q{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--input)}
+.q .qt{font-size:14px;font-weight:700}
+.ab{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (max-width:560px){.ab{grid-template-columns:1fr}}
+.ab button,.q .mc button{font:inherit;font-size:15px;border:2px solid var(--line);background:var(--card);color:var(--fg);border-radius:10px;padding:10px;cursor:pointer;text-align:left}
+.ab button[aria-pressed=true],.q .mc button[aria-pressed=true]{border-color:var(--acc);background:var(--sel);font-weight:700}
+.q .mc{display:flex;flex-direction:column;gap:6px}
+.bar{display:flex;align-items:center;gap:8px;font-size:14px}
+.bar .nm{flex:0 0 112px}.bar .tr{flex:1;height:14px;background:var(--bar2);border-radius:7px;overflow:hidden}
+.bar .fl{height:100%;background:var(--bar)}.bar .v{flex:0 0 52px;text-align:right;font-variant-numeric:tabular-nums}
+table.t{width:100%;border-collapse:collapse;font-size:14px}
+table.t th,table.t td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.t th{background:var(--sel);font-weight:700}
+.tw{overflow-x:auto}
+pre.prompt{white-space:pre-wrap;word-break:break-word;background:var(--input);border:1px solid var(--line);border-radius:10px;padding:12px;font-family:inherit;font-size:14px;line-height:1.55;margin:0;max-height:340px;overflow:auto}
+pre.prompt mark{background:var(--gold);color:#14213D;padding:0 3px;border-radius:3px}
+.timer{display:inline-flex;gap:8px;align-items:center;flex-wrap:wrap}
+.timer .tm{font-variant-numeric:tabular-nums;font-size:22px;font-weight:700;min-width:84px}
+.timer.done .tm{color:var(--warn)}
+.steps{display:flex;flex-direction:column;gap:6px;counter-reset:s}
+.hint{border-left:4px solid var(--gold);padding:6px 12px;background:var(--sel);border-radius:0 8px 8px 0;font-size:14px}
+.sticky-save{font-size:13px;color:var(--mute)}
+.rep h3{margin-top:8px}
+.rep .sec{border-top:2px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px}
+.rep .kv{display:grid;grid-template-columns:150px 1fr;gap:8px;font-size:14px}
+@media (max-width:560px){.rep .kv{grid-template-columns:1fr;gap:0}.bar .nm{flex-basis:84px}}
+.rep .kv b{color:var(--mute)}
+details>summary{cursor:pointer;font-weight:700}
+@media print{
+ body{background:#fff;color:#000;padding:0}
+ header.top,nav.tabs,.noprint,#pii{display:none!important}
+ #app{max-width:none;padding:0}
+ .card{border:1px solid #999;break-inside:avoid;background:#fff}
+ main>.card:not(.rep-card){display:none}
+ .rep .sec{break-inside:avoid}
+ :root{--bg:#fff;--fg:#000;--mute:#333;--line:#999;--card:#fff;--sel:#eee;--input:#fff;--acc:#000;--accfg:#fff;--goldtx:#000;--bar:#000;--bar2:#ccc}
+}
+p,ul{margin:0}ul{padding-left:20px}
+.bad-range{border-color:var(--warn)!important;outline:2px solid var(--warn)}
+.num{max-width:110px}
+.diff{background:var(--gold);color:#14213D;font-weight:700}
+</style>
+<div id="app"></div>
+<script>window.APP={};</script>
+<script>var POOL=[{"c": "J01", "n": "경영기획·전략기획", "d": "시장·경영정보를 분석해 중장기 방향과 경영계획을 수립하는 직무", "i": ["I", "E"], "v": ["영향력", "성취"], "e": ["인정", "성과"], "s": ["t", "s", "i"]}, {"c": "J04", "n": "제품·서비스기획", "d": "고객문제와 사업목표를 바탕으로 제품·서비스 요구사항과 로드맵을 설계하는 직무", "i": ["A", "I"], "v": ["도전성", "영향력"], "e": ["함께", "성과"], "s": ["t", "f", "i"]}, {"c": "J05", "n": "인사(HRM)·채용·노무", "d": "인력확보·배치·평가·보상·노무관계를 운영하는 직무", "i": ["S", "C"], "v": ["소속감", "사회적", "기여"], "e": ["든든", "함께"], "s": ["t", "s", "i"]}, {"c": "J06", "n": "HRD·조직개발·조직문화", "d": "교육·육성체계와 조직문화·조직개발 프로그램을 설계·운영하는 직무", "i": ["S", "A"], "v": ["자기계발", "사회적", "기여"], "e": ["함께", "든든"], "s": ["t", "f", "i"]}, {"c": "J07", "n": "총무·사무행정·비서", "d": "조직 운영에 필요한 자산·문서·행사·사무지원과 임원 지원을 담당하는 직무", "i": ["C"], "v": ["안정성", "균형"], "e": ["편안", "든든"], "s": ["p", "s", "i"]}, {"c": "J08", "n": "재무기획·관리회계", "d": "예산·원가·손익을 분석해 경영의사결정을 지원하는 직무", "i": ["C", "I"], "v": ["안정성", "성취"], "e": ["인정", "편안"], "s": ["p", "s", "i"]}, {"c": "J09", "n": "회계·세무", "d": "거래를 기록·결산하고 회계기준과 세법에 따라 신고·재무제표를 작성하는 직무", "i": ["C"], "v": ["안정성", "보수"], "e": ["편안", "인정"], "s": ["p", "s", "i"]}, {"c": "J11", "n": "은행·여신·금융영업", "d": "예금·대출·기업금융·PB 등 금융상품을 상담·심사·판매하는 직무", "i": ["E", "C"], "v": ["보수", "안정성"], "e": ["성과", "편안"], "s": ["t", "s", "i"]}, {"c": "J16", "n": "공공행정·정책·공공사업", "d": "정부·공공기관의 정책·사업·예산·행정과 기관운영을 수행하는 직무", "i": ["C", "S"], "v": ["안정성", "사회적", "기여"], "e": ["편안", "든든"], "s": ["t", "s", "i"]}, {"c": "J20", "n": "마케팅·브랜드", "d": "시장과 고객을 분석해 브랜드·상품의 포지셔닝과 마케팅 전략을 실행하는 직무", "i": ["E", "A"], "v": ["도전성", "성취"], "e": ["성과", "인정"], "s": ["t", "f", "i"]}, {"c": "J21", "n": "디지털·퍼포먼스마케팅", "d": "디지털 채널의 유입·전환·성과 데이터를 기반으로 캠페인을 최적화하는 직무", "i": ["I", "E"], "v": ["성취", "도전성"], "e": ["성과", "스스로"], "s": ["p", "f", "i"]}, {"c": "J22", "n": "시장조사·고객분석", "d": "조사·데이터로 시장규모·경쟁·고객니즈와 행동을 분석하는 직무", "i": ["I", "C"], "v": ["자기계발", "성취"], "e": ["스스로", "인정"], "s": ["p", "s", "i"]}, {"c": "J23", "n": "홍보·PR·기업커뮤니케이션", "d": "기업·기관의 평판과 대외 메시지를 기획하고 미디어·이해관계자와 소통하는 직무", "i": ["E", "S"], "v": ["사회적", "인정", "영향력"], "e": ["인정", "함께"], "s": ["t", "f", "o"]}, {"c": "J24", "n": "영업·영업관리·기술영업", "d": "국내 고객을 발굴·관리하고 제품·솔루션을 제안해 매출을 창출하는 직무", "i": ["E", "S"], "v": ["보수", "성취"], "e": ["성과", "인정"], "s": ["t", "f", "o"]}, {"c": "J25", "n": "해외영업·무역", "d": "해외시장·바이어를 개발하고 수출입·계약·납기를 관리하는 직무", "i": ["E", "S"], "v": ["도전성", "보수"], "e": ["성과", "스스로"], "s": ["t", "f", "o"]}, {"c": "J26", "n": "MD·상품운영·이커머스", "d": "상품구성·가격·매입·채널 운영으로 판매성과를 관리하는 직무", "i": ["E", "I"], "v": ["성취", "보수"], "e": ["성과", "인정"], "s": ["t", "f", "i"]}, {"c": "J27", "n": "고객서비스·CX·고객성공", "d": "고객문의·불편을 해결하고 고객경험·관계유지와 사용성과를 지원하는 직무", "i": ["S", "C"], "v": ["사회적", "기여", "소속감"], "e": ["함께", "든든"], "s": ["t", "s", "i"]}, {"c": "J28", "n": "구매·조달·소싱", "d": "필요 자재·서비스의 공급업체를 발굴·평가하고 가격·계약·납기를 관리하는 직무", "i": ["C", "E"], "v": ["안정성", "보수"], "e": ["인정", "편안"], "s": ["p", "s", "i"]}, {"c": "J29", "n": "SCM·수요·공급계획", "d": "수요예측과 생산·재고·공급계획을 통합해 공급망을 최적화하는 직무", "i": ["I", "C"], "v": ["성취", "안정성"], "e": ["성과", "든든"], "s": ["t", "s", "i"]}, {"c": "J30", "n": "물류운영·창고·풀필먼트", "d": "입출고·재고·창고·풀필먼트 운영을 관리하는 직무", "i": ["R", "C"], "v": ["안정성", "소속감"], "e": ["든든", "편안"], "s": ["t", "s", "o"]}, {"c": "J33", "n": "기계·기구설계", "d": "기계·기구·구조의 요구사항을 해석해 형상·재료·치수를 설계하는 직무", "i": ["R", "I"], "v": ["자기계발", "성취"], "e": ["스스로", "성과"], "s": ["p", "s", "i"]}, {"c": "J34", "n": "전기·전자·회로설계", "d": "전기·전자 시스템과 회로·전장·하드웨어를 설계·개발하는 직무", "i": ["I", "R"], "v": ["자기계발", "자율성"], "e": ["스스로", "성과"], "s": ["p", "s", "i"]}, {"c": "J35", "n": "소재·화학·바이오 연구개발", "d": "소재·화학·생명과학 기반의 물질·공정·효능을 연구·개발하는 직무", "i": ["I", "R"], "v": ["자기계발", "사회적", "기여"], "e": ["스스로", "성과"], "s": ["p", "s", "i"]}, {"c": "J37", "n": "생산관리", "d": "생산계획·실적·자원·납기를 조정해 생산목표를 달성하는 직무", "i": ["R", "C"], "v": ["안정성", "성취"], "e": ["든든", "성과"], "s": ["t", "s", "o"]}, {"c": "J38", "n": "생산기술·공정기술", "d": "공정·설비·작업방법을 설계·개선해 생산성·수율을 높이는 직무", "i": ["R", "I"], "v": ["성취", "자기계발"], "e": ["성과", "스스로"], "s": ["t", "s", "o"]}, {"c": "J39", "n": "품질관리·품질보증", "d": "제품·공정 품질기준을 수립하고 검사·개선·고객품질을 관리하는 직무", "i": ["C", "R"], "v": ["안정성", "사회적", "기여"], "e": ["편안", "든든"], "s": ["t", "s", "o"]}, {"c": "J42", "n": "IT기획·IT프로젝트관리", "d": "IT전략·투자·요구사항과 정보화 프로젝트를 기획·관리하는 직무", "i": ["I", "E"], "v": ["영향력", "성취"], "e": ["인정", "성과"], "s": ["t", "s", "i"]}, {"c": "J43", "n": "소프트웨어개발", "d": "웹·앱·서비스 소프트웨어를 설계·구현·테스트·개선하는 직무", "i": ["I", "R"], "v": ["자율성", "자기계발"], "e": ["스스로", "성과"], "s": ["p", "f", "i"]}, {"c": "J47", "n": "정보보안·개인정보보호", "d": "정보자산을 위협으로부터 보호하고 보안·개인정보 통제를 운영하는 직무", "i": ["I", "C"], "v": ["안정성", "자기계발"], "e": ["든든", "인정"], "s": ["p", "s", "i"]}, {"c": "J48", "n": "데이터분석·BI", "d": "데이터를 분석·시각화해 경영·고객·운영 의사결정을 지원하는 직무", "i": ["I", "C"], "v": ["자기계발", "성취"], "e": ["스스로", "성과"], "s": ["p", "s", "i"]}, {"c": "J50", "n": "AI·머신러닝", "d": "머신러닝·딥러닝·생성형AI 모델과 AI 서비스를 연구·개발하는 직무", "i": ["I"], "v": ["도전성", "자기계발"], "e": ["스스로", "성과"], "s": ["p", "f", "i"]}, {"c": "J51", "n": "UX·UI디자인", "d": "사용자 경험과 디지털 인터페이스 구조·화면·상호작용을 설계하는 직무", "i": ["A", "I"], "v": ["즐거움", "도전성"], "e": ["함께", "스스로"], "s": ["t", "f", "i"]}, {"c": "J53", "n": "시각·브랜드·그래픽디자인", "d": "브랜드 정체성과 시각정보를 그래픽·패키지·커뮤니케이션 디자인으로 구현하는 직무", "i": ["A"], "v": ["즐거움", "자율성"], "e": ["스스로", "인정"], "s": ["p", "f", "i"]}, {"c": "J54", "n": "디지털콘텐츠 기획·제작", "d": "채널·플랫폼 목적에 맞는 콘텐츠를 기획하고 제작·운영하는 직무", "i": ["A", "E"], "v": ["즐거움", "도전성"], "e": ["스스로", "인정"], "s": ["t", "f", "i"]}, {"c": "J59", "n": "교육·강의·직업훈련", "d": "학습자에게 지식·기술을 가르치고 학습활동을 운영·평가하는 직무", "i": ["S", "A"], "v": ["사회적", "기여", "소속감"], "e": ["함께", "인정"], "s": ["t", "f", "i"]}, {"c": "J60", "n": "교육기획·교수설계·교육콘텐츠", "d": "교육목표에 맞게 교육과정·콘텐츠·학습경험을 설계·개발하는 직무", "i": ["S", "A"], "v": ["자기계발", "사회적", "기여"], "e": ["함께", "든든"], "s": ["t", "s", "i"]}, {"c": "J62", "n": "상담·진로·고용서비스", "d": "개인의 진로·취업·교육·심리 문제를 상담하고 계획·의사결정을 지원하는 직무", "i": ["S"], "v": ["사회적", "기여", "소속감"], "e": ["함께", "든든"], "s": ["p", "f", "i"]}, {"c": "J63", "n": "사회복지·보육·돌봄·지역사회서비스", "d": "개인·가족·지역사회의 복지욕구를 파악해 서비스·사례를 지원하는 직무", "i": ["S"], "v": ["사회적", "기여", "소속감"], "e": ["함께", "든든"], "s": ["t", "f", "o"]}, {"c": "J66", "n": "간호", "d": "환자 상태를 사정하고 간호계획·처치·교육·안전을 수행하는 면허 전문직", "i": ["S", "R"], "v": ["사회적", "기여", "안정성"], "e": ["든든", "함께"], "s": ["t", "s", "o"]}, {"c": "J72", "n": "건설시공·공사관리", "d": "건축·토목 현장의 공정·품질·원가·협력사와 시공을 관리하는 직무", "i": ["R", "E"], "v": ["성취", "보수"], "e": ["성과", "인정"], "s": ["t", "f", "o"]}, {"c": "J75", "n": "환경·기후관리", "d": "대기·수질·폐기물·탄소·환경법규를 관리하고 환경성과를 개선하는 직무", "i": ["I", "R"], "v": ["사회적", "기여", "안정성"], "e": ["든든", "편안"], "s": ["t", "s", "o"]}, {"c": "J76", "n": "에너지·전력", "d": "전력·신재생·에너지 시스템을 설계·운영·효율화하는 직무", "i": ["R", "I"], "v": ["안정성", "사회적", "기여"], "e": ["편안", "든든"], "s": ["t", "s", "o"]}, {"c": "J77", "n": "산업·건설안전·보건", "d": "산업현장의 위험을 평가하고 안전·보건체계를 운영해 사고를 예방하는 직무", "i": ["R", "C"], "v": ["사회적", "기여", "안정성"], "e": ["든든", "편안"], "s": ["t", "s", "o"]}, {"c": "J80", "n": "관광·여행·MICE", "d": "여행상품·관광서비스와 회의·전시·이벤트를 기획·운영하는 직무", "i": ["E", "S"], "v": ["즐거움", "도전성"], "e": ["함께", "성과"], "s": ["t", "f", "o"]}, {"c": "J84", "n": "항공운항·객실·지상서비스", "d": "항공기의 안전운항과 객실·공항 여객서비스를 수행하는 직무군", "i": ["S", "E"], "v": ["도전성", "즐거움"], "e": ["함께", "인정"], "s": ["t", "s", "o"]}, {"c": "J93", "n": "비영리모금·후원개발", "d": "비영리기관·재단의 기부·후원 프로그램을 기획하고 모금 활동과 후원자 관리를 수행하는 직무", "i": ["S", "E"], "v": ["사회적", "기여", "소속감"], "e": ["함께", "인정"], "s": ["t", "f", "o"]}, {"c": "J94", "n": "전략컨설팅·자문", "d": "기업·기관의 경영과제를 진단하고 개선전략과 실행방안을 자문하는 전문컨설팅 직무", "i": ["I", "E"], "v": ["성취", "자기계발"], "e": ["성과", "인정"], "s": ["t", "f", "i"]}];var INDS=[{"n": "농림축산·수산·그린바이오", "c": "F01", "j": ["J35", "J37", "J39"]}, {"n": "철강·금속·기초소재", "c": "F02", "j": ["J35", "J37", "J38"]}, {"n": "화학·석유화학", "c": "F03", "j": ["J35", "J37", "J38"]}, {"n": "환경·자원순환·수처리", "c": "F04", "j": ["J37"]}, {"n": "에너지·전력·가스", "c": "F05", "j": ["J16"]}, {"n": "신재생에너지·수소", "c": "F06", "j": ["J33"]}, {"n": "배터리·첨단소재", "c": "F07", "j": ["J29", "J35", "J37"]}, {"n": "반도체", "c": "F08", "j": ["J34", "J38"]}, {"n": "디스플레이·광학", "c": "F09", "j": ["J33", "J34", "J35"]}, {"n": "전기·전자부품", "c": "F10", "j": ["J29", "J33", "J34"]}, {"n": "통신·네트워크", "c": "F11", "j": ["J04", "J42", "J43"]}, {"n": "정보보안", "c": "F12", "j": ["J42", "J43"]}, {"n": "전자·가전·디바이스", "c": "F13", "j": ["J04", "J33", "J34"]}, {"n": "자동차·미래모빌리티", "c": "F14", "j": ["J28", "J33"]}, {"n": "기계·산업장비", "c": "F15", "j": ["J33", "J37", "J38"]}, {"n": "로봇·스마트팩토리", "c": "F16", "j": ["J33", "J34", "J38"]}, {"n": "조선·해양", "c": "F17", "j": ["J33", "J34", "J37"]}, {"n": "항공·우주·방산", "c": "F18", "j": ["J33", "J34"]}, {"n": "부동산·개발·자산관리", "c": "F20", "j": ["J08"]}, {"n": "무역·상사·글로벌비즈니스", "c": "F21", "j": ["J24", "J25"]}, {"n": "물류·SCM·택배", "c": "F22", "j": ["J29", "J30"]}, {"n": "해운·항만·철도·육상운송", "c": "F23", "j": ["J29", "J30"]}, {"n": "항공·공항서비스", "c": "F24", "j": ["J27"]}, {"n": "유통·리테일", "c": "F25", "j": ["J20", "J21", "J24"]}, {"n": "이커머스·커머스플랫폼", "c": "F26", "j": ["J20", "J21", "J26"]}, {"n": "식품·음료·푸드테크", "c": "F27", "j": ["J20", "J24", "J29"]}, {"n": "외식·프랜차이즈", "c": "F28", "j": ["J20", "J24", "J27"]}, {"n": "화장품·뷰티", "c": "F29", "j": ["J20", "J21", "J24"]}, {"n": "패션·섬유", "c": "F30", "j": ["J20", "J21", "J24"]}, {"n": "생활소비재·가구", "c": "F31", "j": ["J04", "J20", "J24"]}, {"n": "제약", "c": "F32", "j": ["J24", "J28", "J29"]}, {"n": "바이오의약·CDMO", "c": "F33", "j": ["J29", "J35"]}, {"n": "의료기기·디지털헬스", "c": "F34", "j": ["J04", "J24", "J33"]}, {"n": "병원·헬스케어서비스", "c": "F35", "j": ["J66"]}, {"n": "관광·호텔·레저", "c": "F36", "j": ["J20", "J27"]}, {"n": "은행·여신금융", "c": "F37", "j": ["J11", "J27"]}, {"n": "증권·자산운용·투자", "c": "F38", "j": ["J20"]}, {"n": "보험", "c": "F39", "j": ["J27"]}, {"n": "핀테크·디지털금융", "c": "F40", "j": ["J04", "J11"]}, {"n": "미디어·광고·마케팅서비스", "c": "F41", "j": ["J20", "J21", "J22"]}, {"n": "콘텐츠·엔터테인먼트", "c": "F42", "j": ["J20", "J21", "J53"]}, {"n": "교육·에듀테크", "c": "F43", "j": ["J04", "J43", "J48"]}, {"n": "사회복지·비영리·사회서비스", "c": "F44", "j": ["J16", "J59", "J62"]}, {"n": "컨설팅·회계·법률·인증 전문서비스", "c": "F45", "j": ["J01", "J09"]}, {"n": "AI·데이터솔루션", "c": "F46", "j": ["J04", "J42", "J43"]}, {"n": "소프트웨어·SaaS", "c": "F47", "j": ["J04", "J24", "J27"]}, {"n": "IT서비스·클라우드·IDC", "c": "F48", "j": ["J42"]}, {"n": "인터넷·플랫폼", "c": "F49", "j": ["J04", "J20", "J21"]}, {"n": "게임", "c": "F50", "j": ["J04", "J20", "J21"]}];var AN={value:'가치',interest:'흥미',strength:'강점',env:'환경',pers:'성격',eff:'효능감'};
+var AREAS=['value','interest','strength','eff','env','pers'];
+var MIN={value:[5,5,5,2,3,1],interest:[5,5,6,2,3,1],strength:[5,5,6,2,3,1],env:[5,5,5,2,3,1],pers:[5,4,4,2,3,1],eff:[4,4,3,2,3,1]};
+var HOOK={
+value:{job:'마케팅·영업',sit:'신입 영업사원인 나에게 대형 거래처 제안 기회가 왔다. 성공하면 성과급과 승진 기회가 크지만 3주간 야근과 주말 근무가 필요하다. 나는?',o:[['도전해서 큰 성과를 만들어 본다','도전성·성취·보수'],['선배·동료와 역할을 나눠 함께 맡는다','소속감·균형'],['근무 시간과 보상 조건을 먼저 협상한다','자율성·보수'],['지금 맡은 안정적인 업무를 유지한다','안정성·균형']]},
+interest:{job:'IT·데이터',sit:'새 앱 서비스 개발 프로젝트가 시작됐다. 역할을 하나 고를 수 있다면?',o:[['이용자 데이터를 분석해 숨은 문제의 원인을 찾는 역할','탐구형(I)'],['기능을 직접 만들어 구현하는 역할','현실형(R)'],['이용자의 불편을 듣고 개선안을 제안하는 역할','사회형(S)'],['일정과 문서를 정리해 프로젝트를 관리하는 역할','관습형(C)']]},
+strength:{job:'생산·품질·물류',sit:'납품 이틀 전, 오늘 생산한 제품의 불량률이 평소의 두 배로 나왔다. 나는 먼저?',o:[['불량 데이터를 모아 원인부터 분석한다','문제해결·수리'],['생산·품질 담당자를 모아 상황을 공유하고 조율한다','대인관계·의사소통'],['출하 일정과 인력을 다시 계획해 가능한 것부터 실행한다','자원관리'],['품질 기준과 보고 절차를 확인한 뒤 상사에게 보고한다','조직이해·직업윤리']]},
+env:{job:'인사·교육',sit:'입사 한 달 차 신입 3명이 적응이 어렵다고 한다. 내가 신입이라면 어떤 팀에서 가장 잘 적응할까?',o:[['일을 맡기고 스스로 판단하게 두는 팀','독립(스스로) 환경'],['매뉴얼과 체계가 갖춰져 상사가 든든히 받쳐 주는 팀','지원(든든) 환경'],['선배와 동료가 함께 일하며 이끌어 주는 팀','관계(함께) 환경'],['한 일의 결과와 성과가 분명히 드러나는 팀','성취(성과) 환경']]},
+pers:{job:'공공 행정·민원',sit:'접수 마감 30분 전, 서류 보완이 필요한 민원인이 왔다. 그런데 상사가 갑자기 다른 업무 변경을 지시했다. 나는?',o:[['하던 민원을 계획대로 마무리하고 변경 업무를 이어서 처리한다','성실성 높은 쪽'],['상황에 맞춰 순서를 바로 바꾸어 유연하게 대응한다','개방성·유연한 쪽'],['동료에게 도움을 요청해 나눠서 처리한다','호감성·외향성'],['숨을 고르고 우선순위부터 침착하게 정리한다','정서적 안정 쪽']]},
+eff:{job:'신입사원 첫 보고',sit:'입사 3개월 차, 팀장님이 처음 해 보는 업무를 맡겼다. 고객사별 월간 실적 보고 자료를 금요일까지 만들어야 한다. 나는 먼저?',o:[['비슷한 자료를 끝까지 만들어 낸 경험을 떠올리며 바로 시작한다','성공 경험'],['선배가 만든 지난달 보고서를 보고 구조를 따라 해 본다','대리 경험'],['팀장님께 방향을 먼저 확인받고 시작한다','사회적 설득'],['떨리지만 숨을 고르고 오늘 할 분량만 정해 쪼개서 시작한다','정서·신체 상태 관리']]}
+};
+var VAL=[['안정성','오래, 걱정 없이 다닐 수 있는 직장'],['보수','일한 만큼 충분히 받는 월급과 보상'],['균형','퇴근 후와 휴일이 지켜지는 생활'],['즐거움','일 자체가 재미있고 흥미로운 것'],['소속감','팀의 한 사람으로 함께한다는 느낌'],['자기계발','일하면서 계속 배우고 성장하는 것'],['도전성','매번 새롭고 달라지는 일에 도전하는 것'],['영향력','내 의견이 결정에 반영되는 것'],['사회적 기여','내 일이 사람들과 사회에 도움이 되는 것'],['성취','목표를 세우고 해냈을 때의 뿌듯함'],['사회적 인정','주변에서 내 능력과 성과를 알아주는 것'],['자율성','내 방식대로 계획하고 진행하는 것']].map(function(x){return {id:x[0],n:x[0]==='균형'?'일과 삶의 균형':x[0],d:x[1]}});
+var ITY={R:'현실형',I:'탐구형',A:'예술형',S:'사회형',E:'진취형',C:'관습형'};
+function hexRel(a,b){var o='RIASEC',d=Math.abs(o.indexOf(a)-o.indexOf(b));d=Math.min(d,6-d);return d===1?'육각형에서 이웃해요(일관성 높음)':d===2?'한 칸 건너예요(일관성 중간)':'반대편이에요(일관성 낮음: 서로 다른 방향의 흥미가 함께 있어요. 직무에서 두 흥미를 어떻게 살릴지 더 구체적으로 확인해 보세요)'}
+var INTC=[['R','직접 만들고 고치기'],['R','기계·도구 다루기'],['R','현장·야외에서 몸으로 일하기'],['I','자료를 분석해 규칙 찾기'],['I','"왜 그럴까?" 원리 파고들기'],['I','궁금한 것 끝까지 조사하기'],['A','그림·디자인으로 표현하기'],['A','글쓰기'],['A','새로운 콘텐츠 아이디어 내기'],['S','쉽게 설명해 가르치기'],['S','고민을 들어주고 돕기'],['S','사람들을 모아 함께하는 모임 만들기'],['E','사람을 설득하고 협상하기'],['E','새 사업·프로젝트 구상하기'],['E','팀을 이끌기'],['C','자료를 정리·분류하기'],['C','숫자·문서를 정확히 관리하기'],['C','정해진 절차대로 꼼꼼히 처리하기']].map(function(x){return {id:x[1],n:x[1],t:x[0],d:''}});
+var STR=[['의사소통','읽고, 쓰고, 듣고, 말하기','문서이해, 문서작성, 경청, 의사표현, 기초외국어'],['수리','숫자 계산, 표·그래프 읽기','기초연산, 기초통계, 도표분석, 도표작성'],['문제해결','문제의 원인을 찾고 해결책 만들기','사고력, 문제처리'],['자기개발','나를 알고 관리하며 성장 계획 세우기','자아인식, 자기관리, 경력개발'],['자원관리','시간·돈·물건·사람을 계획해서 쓰기','시간·예산·물적·인적자원관리'],['대인관계','팀워크, 이끌기, 갈등 풀기, 고객 응대','팀워크, 리더십, 갈등관리, 협상, 고객서비스'],['정보','컴퓨터로 정보를 찾고 정리·활용하기','컴퓨터활용, 정보처리'],['기술','기술을 이해하고 알맞게 골라 쓰기','기술이해, 기술선택, 기술적용'],['조직이해','조직이 어떻게 돌아가는지 파악하기','경영이해, 체제이해, 업무이해, 국제감각'],['직업윤리','책임감, 정직, 규칙 지키기','근로윤리, 공동체윤리']].map(function(x){return {id:x[0],n:x[0],d:x[1],sub:x[2].split(', ')}});
+var ENV=[['성과','성과가 보이는 일터','한 일의 결과가 분명히 드러남'],['스스로','스스로 하는 일터','내가 판단하고 진행함'],['인정','인정받는 일터','평가와 승진 기준이 분명함'],['함께','함께하는 일터','동료와 협력하는 분위기'],['든든','든든한 일터','상사·조직이 도와주고 받쳐 줌'],['편안','편안한 일터','고용이 안정되고 근무 여건이 좋음']].map(function(x){return {id:x[0],n:x[1],d:x[2]}});
+var PERS=[['외향성','사람들과 있을 때 힘이 난다','혼자 있을 때 힘이 난다'],['호감성','상대 입장을 먼저 생각하고 배려한다','내 기준과 주장이 분명하다'],['성실성','계획을 세우고 끝까지 마무리한다','상황에 맞춰 유연하게 움직인다'],['정서적 불안정성','걱정과 긴장을 잘 느끼는 편이다','느긋하고 침착한 편이다'],['경험에 대한 개방성','새로운 시도가 즐겁다','익숙하고 검증된 방식이 편하다']];
+/* 검사 문항 (모두 초안, 타당도 검증 없음) */
+var VQ=[['정년까지 걱정 없이 다닐 수 있는 직장','안정성','해마다 새롭고 낯선 일에 도전하는 직장','도전성'],['월급과 성과급을 충분히 주는 회사','보수','내 일이 사회에 도움이 되는 회사','사회적 기여'],['퇴근 후와 휴일이 철저히 지켜지는 일','균형','힘들어도 큰 목표를 해내는 일','성취'],['내 방식대로 혼자 판단해서 진행하는 일','자율성','팀 모두가 한 식구처럼 움직이는 일','소속감'],['힘들어도 실력이 쑥쑥 느는 일','자기계발','하는 동안 재미있고 즐거운 일','즐거움'],['중요한 결정에 내 의견이 반영되는 자리','영향력','내 성과를 모두가 알아주는 자리','사회적 인정'],['오래 걱정 없이 다닐 수 있는 직장','안정성','일하면서 계속 배우고 성장하는 직장','자기계발'],['연봉이 높은 일','보수','업무 방식을 내가 정하는 일','자율성'],['퇴근 후 내 시간이 확실한 일','균형','매번 새로운 일에 도전하는 일','도전성'],['하는 일 자체가 재미있는 일','즐거움','내 결정이 조직에 영향을 주는 일','영향력'],['동료와 한 팀이라는 느낌이 강한 일','소속감','목표를 세우고 끝까지 이루는 일','성취'],['내 일이 다른 사람에게 도움이 되는 일','사회적 기여','내 능력을 주변이 알아주는 일','사회적 인정'],['안정적으로 오래 다닐 수 있는 일','안정성','큰 성취감을 주는 일','성취'],['충분한 보상을 받는 일','보수','동료와 깊이 어울리는 일','소속감'],['일과 생활의 균형이 잘 맞는 일','균형','사회에 의미 있는 일','사회적 기여'],['재미있게 몰입하는 일','즐거움','늘 새로운 도전이 있는 일','도전성'],['계속 배우며 성장하는 일','자기계발','능력을 인정받는 일','사회적 인정'],['중요한 결정에 영향력을 갖는 일','영향력','스스로 방식을 정하는 일','자율성']].map(function(x){return {a:x[0],ka:x[1],b:x[2],kb:x[3]}});
+VQ.push({a:VQ[0].a,ka:VQ[0].ka,b:VQ[0].b,kb:VQ[0].kb,ref:0,cons:true});VQ.push({a:VQ[7].a,ka:VQ[7].ka,b:VQ[7].b,kb:VQ[7].kb,ref:7,cons:true});
+var ITXT={R:'고장 난 장비를 직접 고쳐서 다시 돌리는 일',I:'자료를 분석해 문제의 원인을 밝혀내는 일',A:'새로운 디자인이나 콘텐츠를 만들어 표현하는 일',S:'어려움을 겪는 사람의 이야기를 듣고 돕는 일',E:'사람들을 설득해 계약이나 합의를 이끌어 내는 일',C:'흩어진 자료를 정리해 오류 없이 관리하는 일'};
+var IQ=[['R','I'],['R','A'],['R','E'],['R','C'],['I','A'],['I','S'],['I','C'],['A','S'],['A','E'],['S','E'],['S','C'],['E','C']].map(function(x){return {a:ITXT[x[0]],ka:x[0],b:ITXT[x[1]],kb:x[1]}});
+var SQ=[['팀 발표 전날, 내가 맡은 자료에서 큰 오류를 발견했다. 나는?',[['원인을 찾아 해결 방법을 만든다','문제해결'],['팀원에게 바로 알리고 역할을 다시 나눈다','대인관계'],['남은 시간을 계산해 우선순위를 다시 정한다','자원관리'],['교수님께 상황을 설명하고 조언을 구한다','의사소통']]],
+['두 자료에서 같은 항목의 숫자가 서로 다르다. 나는?',[['숫자를 다시 계산하고 표와 그래프로 비교한다','수리'],['프로그램이나 검색 도구로 원본 데이터를 확인한다','정보'],['틀릴 가능성을 숨기지 않고 먼저 보고한다','직업윤리'],['자료를 만든 사람에게 연락해 차이의 이유를 확인하고 정리한다','의사소통']]],
+['회사가 새 업무 시스템을 도입했다. 나는 먼저?',[['작동 원리와 기능을 이해하려고 직접 써 본다','기술'],['스스로 배우는 계획을 세워 익힌다','자기개발'],['왜 도입했고 업무 흐름이 어떻게 바뀌는지 파악한다','조직이해'],['매뉴얼과 관련 자료를 검색해 정리한다','정보']]],
+['같은 팀 두 동료가 업무 방식을 두고 계속 부딪힌다. 나는?',[['두 사람의 입장을 조율하는 자리를 만든다','대인관계'],['각자의 이야기를 끝까지 듣고 쟁점을 정리해 준다','의사소통'],['판단 기준을 정해 어느 방식이 맞는지 따져 본다','문제해결'],['공정한 원칙과 규칙에 따라 정리하자고 제안한다','직업윤리']]],
+['프로젝트 예산이 계획보다 20% 부족하다. 나는?',[['시간·인력·물품 사용을 다시 짜서 효율을 높인다','자원관리'],['항목별 지출을 계산해 줄일 금액을 찾는다','수리'],['누구의 결재가 필요한지와 우선순위를 확인해 요청한다','조직이해'],['대안을 여러 개 만들어 가장 현실적인 안을 고른다','문제해결']]],
+['첫 인턴 때 내가 낸 실수로 일정이 하루 늦어졌다. 다음에 나는?',[['원인을 정리해 배운 점과 개선 계획을 세운다','자기개발'],['실수를 숨기지 않고 먼저 알리고 책임을 진다','직업윤리'],['같은 실수를 막을 도구나 방법을 익힌다','기술'],['이 실수가 조직 전체 업무에 준 영향을 확인한다','조직이해']]]].map(function(x){return {q:x[0],o:x[1]}});
+var EQ=[['한 일의 결과가 분명히 드러나는 일터','성과','동료와 함께 협력하는 일터','함께'],['스스로 판단하고 진행하는 일터','스스로','상사와 조직이 든든히 받쳐 주는 일터','든든'],['평가와 승진 기준이 분명한 일터','인정','고용이 안정되고 근무 여건이 편안한 일터','편안'],['한 일의 결과가 분명히 드러나는 일터','성과','스스로 판단하고 진행하는 일터','스스로'],['평가와 승진 기준이 분명한 일터','인정','동료와 함께 협력하는 일터','함께'],['상사와 조직이 든든히 받쳐 주는 일터','든든','고용이 안정되고 근무 여건이 편안한 일터','편안']].map(function(x){return {a:x[0],ka:x[1],b:x[2],kb:x[3]}});
+var WQ=[['혼자 집중해서 끝내는 일','p','여럿이 의견을 나누며 진행하는 일','t'],['정해진 절차와 기준에 따라 하는 일','s','상황에 맞춰 방법을 바꿔 가는 일','f'],['사무실에서 자료와 화면으로 하는 일','i','현장이나 외부에서 움직이며 하는 일','o']].map(function(x){return {a:x[0],ka:x[1],b:x[2],kb:x[3]}});
+var WN={p:'개인형',t:'팀형',s:'정형',f:'유연',i:'내근',o:'외근'};
+var EFF=[['자기 이해','내 가치·흥미·강점을 경험 사례와 함께 설명하기'],['직무 정보 찾기','관심 직무의 하는 일·자격요건을 찾아 정리하기'],['목표 직무 정하기','관심 직무를 비교해 이유와 함께 하나 고르기'],['지원서 쓰기','자소서·지원 문항을 끝까지 써서 완성하기'],['면접에서 말하기','면접 질문에 소리 내어 답하기']];
+var EFS=['성공 경험','대리 경험','사회적 설득','정서·신체 상태'];
+var EFQ=[{f:'자기 이해',q:'내 강점·가치·흥미 중 하나를 경험 사례와 함께 설명한 적이 있다.',a:'있다 · 사례를 들어 설명해 본 적이 있다',b:'아직 없다 · 사례까지 설명해 본 적은 없다'},{f:'직무 정보 찾기',q:'관심 직무의 공고나 공식 사이트를 보고 하는 일을 정리한 적이 있다.',a:'있다 · 정리해 본 적이 있다',b:'아직 없다 · 정리해 본 적은 없다'},{f:'목표 직무 정하기',q:'관심 직무 2~3개를 비교해 이유와 함께 하나를 고른 적이 있다.',a:'있다 · 비교해서 고른 적이 있다',b:'아직 없다 · 비교해서 고른 적은 없다'},{f:'지원서 쓰기',q:'자소서나 지원 문항 하나를 끝까지 써 본 적이 있다.',a:'있다 · 한 문항 이상 끝까지 써 봤다',b:'아직 없다 · 끝까지 써 본 적은 없다'},{f:'면접에서 말하기',q:'면접 질문 하나에 소리 내어 1분쯤 답해 본 적이 있다.',a:'있다 · 소리 내어 답해 본 적이 있다',b:'아직 없다 · 소리 내어 답해 본 적은 없다'}];
+var ACT={'자기 이해':[['성공 경험','강점 1개를 사례 2줄로 써 본다'],['대리 경험','합격 후기에서 자기소개 문장 1개를 찾아 구조를 본다'],['사회적 설득','지인 1명에게 내 강점 1개를 물어본다'],['정서·신체 상태','쓰기 전 2분 호흡하고 5분만 쓴다']],
+'직무 정보 찾기':[['성공 경험','공고 1건에서 자격요건 3개를 표로 정리한다'],['대리 경험','같은 학과 선배의 직무 후기 1편을 읽는다'],['사회적 설득','고용24 직무정보를 보고 궁금한 점 1개를 상담사에게 묻는다'],['정서·신체 상태','30분 타이머를 맞추고 직무 한 가지만 본다']],
+'목표 직무 정하기':[['성공 경험','후보 2개의 좋은 점·걸리는 점을 3줄씩 비교한다'],['대리 경험','비슷한 전공 선배가 직무를 고른 기준 1개를 찾는다'],['사회적 설득','고른 이유를 한 사람에게 말하고 피드백 1개를 받는다'],['정서·신체 상태','"지금의 1순위이며 바꿔도 된다"고 적어 부담을 낮춘다']],
+'지원서 쓰기':[['성공 경험','자소서 1문항을 이번 주 안에 끝까지 쓴다'],['대리 경험','공개된 우수 사례의 구조(상황-행동-결과)만 보고 내 경험에 대 본다'],['사회적 설득','초안 5줄을 상담사에게 보여 주고 피드백 1개를 받는다'],['정서·신체 상태','25분 타이머로 초안만 쓰고 고치기는 내일 한다']],
+'면접에서 말하기':[['성공 경험','질문 1개에 1분 답변을 소리 내어 녹음해 본다'],['대리 경험','모의면접 영상에서 좋은 답변의 구조 1개를 따라 해 본다'],['사회적 설득','친구에게 1분 답변을 들려주고 이해된 점을 묻는다'],['정서·신체 상태','답하기 전 3초 숨 고르기를 연습한다']]};
+function effRead(s,v){s=+s;if(!s||!v)return ['-',false];var hi=s>=4,lo=s<=2;if(v==='A')return hi?['믿음과 근거가 맞아요',true]:lo?['믿음이 근거보다 낮아요 → 해 본 경험을 글로 확인',false]:['대체로 맞아요',true];return lo?['근거를 만들 차례예요(낮은 믿음과 맞아요)',true]:hi?['믿음이 근거보다 높아요 → 증거를 묻는 질문 받아 보기',false]:['근거가 아직 없어요 → 작은 행동으로 만들기',false]}
+var PQ=[['처음 보는 사람 20명이 모인 자리에서 나는?','먼저 말을 걸어 대화를 이어 간다','한두 명과 천천히 이야기하며 분위기를 본다'],['팀원이 내 의견과 다른 안을 냈다. 나는?','상대 입장을 먼저 들어 보고 맞춰 본다','내 근거를 분명히 말하고 설득한다'],['과제 마감이 2주 남았다. 나는?','일정을 쪼개 계획표대로 진행한다','상황을 보며 유연하게 몰아서 진행한다'],['중요한 발표 전날 밤, 나는?','이런저런 걱정이 자꾸 떠오른다','크게 신경 쓰지 않고 잠든다'],['낯선 방식을 써 보자는 제안이 나왔다. 나는?','새로 해 보고 싶다','검증된 기존 방식이 편하다']].map(function(x,i){return {f:PERS[i][0],q:x[0],a:x[1],b:x[2]}});
+
+var K=window.K;
+function g(p,d){return K.get(p,d)}
+function areaDone(a){return !!g('card.'+a+'.locked')}
+/* ---------- 채점 ---------- */
+function pairScore(list,keys,ans,upto){var score={},h2h={};keys.forEach(function(k){score[k]=0});var n=0;list.forEach(function(q,i){if(upto!=null&&i>=upto)return;var r=ans&&ans[i];if(!r)return;n++;var w=r==='A'?q.ka:q.kb,l=r==='A'?q.kb:q.ka;score[w]++;h2h[w+'|'+l]=w;h2h[l+'|'+w]=w});return {score:score,h2h:h2h,n:n}}
+function rankKeys(keys,score,h2h,tie){var cmp=function(x,y){var sx=tie?tie(x):score[x],sy=tie?tie(y):score[y];if(sy!==sx)return sy-sx;var r=h2h&&h2h[x+'|'+y];if(r===x)return -1;if(r===y)return 1;return keys.indexOf(x)-keys.indexOf(y)};var rank=keys.slice().sort(cmp);var third=rank[2],tied=[];var sv=tie?tie:function(k){return score[k]};rank.slice(3).forEach(function(k){if(sv(k)===sv(third)&&!(h2h&&(h2h[third+'|'+k]||h2h[k+'|'+third])))tied.push(k)});if(tied.length)tied.unshift(third);return {rank:rank,top:rank.slice(0,3),tied:tied}}
+function res(a){var T=g('test.'+a+'.ans',{});
+ if(a==='value'){var keys=VAL.map(function(v){return v.n==='일과 삶의 균형'?'균형':v.id});var r=pairScore(VQ,keys,T,18);var rk=rankKeys(keys,r.score,r.h2h);var c=0;[18,19].forEach(function(i){var ref=VQ[i].ref;if(T[i]&&T[ref]&&T[i]===T[ref])c++});return {done:Object.keys(T).filter(function(k){return +k<20}).length>=20,n:Object.keys(T).length,N:20,score:r.score,max:3,rk:rk,cons:c,keys:keys}}
+ if(a==='interest'){var keys=['R','I','A','S','E','C'];var r=pairScore(IQ,keys,T);var rk=rankKeys(keys,r.score,r.h2h);return {done:r.n>=12,n:r.n,N:12,score:r.score,max:4,rk:rk,keys:keys}}
+ if(a==='strength'){var keys=STR.map(function(s){return s.id});var sel={},app={};keys.forEach(function(k){sel[k]=0;app[k]=0});var n=0;SQ.forEach(function(q,i){q.o.forEach(function(o){app[o[1]]++});if(T[i]!=null){n++;sel[q.o[T[i]][1]]++}});var ratio={};keys.forEach(function(k){ratio[k]=app[k]?sel[k]/app[k]:0});var rk=rankKeys(keys,ratio,null,function(k){return ratio[k]*100+sel[k]/10});return {done:n>=6,n:n,N:6,score:ratio,sel:sel,app:app,max:1,rk:rk,keys:keys}}
+ if(a==='env'){var keys=ENV.map(function(e){return e.id});var r=pairScore(EQ,keys,T,6);var rk=rankKeys(keys,r.score,r.h2h);var st={};var n=Object.keys(T).length;WQ.forEach(function(q,i){var x=T[6+i];if(x)st[i]=x==='A'?q.ka:q.kb});return {done:n>=9,n:n,N:9,score:r.score,max:2,rk:rk,keys:keys,style:st}}
+ if(a==='pers'){var side={},n=0;PQ.forEach(function(q,i){if(T[i]){side[q.f]=T[i];n++}});return {done:n>=5,n:n,N:5,side:side}}
+ if(a==='eff'){var ans={},n=0;EFQ.forEach(function(q,i){if(T[i]){ans[q.f]=T[i];n++}});return {done:n>=5,n:n,N:5,ans:ans}}}
+function nm(a,k){if(a==='interest')return ITY[k]+'('+k+')';if(a==='env'){var e=ENV.filter(function(x){return x.id===k})[0];return e?e.n:k}if(a==='value'&&k==='균형')return '일과 삶의 균형';return k}
+function cardName(a,id){if(a==='value'){return id==='일과 삶의 균형'?'균형':id}if(a==='env'){return id}return id}
+function cardTopKeys(a){var top=g('card.'+a+'.top',[]);if(a==='interest')return top.map(function(id){return INTC.filter(function(c){return c.id===id})[0].t});if(a==='value')return top.map(function(id){return id==='일과 삶의 균형'?'균형':id});return top}
+/* 간이 비교 */
+function cmp(a){var R=res(a);if(a==='eff'){var c=0,rows=[];EFF.forEach(function(e){var sc=g('card.eff.score.'+e[0]),v=R.ans[e[0]],r=effRead(sc,v);if(r[1])c++;rows.push([e[0],sc?sc+'점':'-',v?(v==='A'?'해 본 적 있음':'아직 없음'):'-',r[0]])});return {count:c,max:5,rows:rows,R:R}}
+ if(a==='pers'){var cs=g('card.pers.side',{}),c=0,rows=[];PERS.forEach(function(p){var t=R.side[p[0]],cd=cs[p[0]];var same=t&&cd&&t===cd;if(same)c++;rows.push([p[0],cd?(cd==='A'?p[1]:p[2]):'-',t?(t==='A'?p[1]:p[2]):'-',same?'일치':'다름'])});return {count:c,max:5,rows:rows,R:R}}
+ var ck=cardTopKeys(a),tk=R.rk?R.rk.top:[];
+ if(a==='value'){var m=ck.filter(function(k){return R.score[k]>=2}).length;return {count:m,max:3,ck:ck,tk:tk,R:R,disc:tk.filter(function(k){return ck.indexOf(k)<0})}}
+ if(a==='interest'){var u=ck.filter(function(k,i){return ck.indexOf(k)===i});var m=u.filter(function(k){return tk.indexOf(k)>=0}).length;return {count:m,max:3,ck:u,tk:tk,R:R,disc:tk.filter(function(k){return u.indexOf(k)<0})}}
+ var m=ck.filter(function(k){return tk.indexOf(k)>=0}).length;return {count:m,max:3,ck:ck,tk:tk,R:R,disc:tk.filter(function(k){return ck.indexOf(k)<0})}}
+/* ---------- 화면 조각 ---------- */
+function hookCard(a){var H=HOOK[a],pre='hook.'+a;var lock=function(){return false};
+ return K.card(h3('① 직무 상황 사례 · '+H.job+' ('+MIN[a][0]+'분)'),K.note('정답이 없습니다. 지금 내가 하고 싶은 쪽을 고르고 이유를 한 줄 쓰세요. 이 선택은 점수나 순위로 만들지 않습니다.'),K.h('p',{style:'font-weight:500'},H.sit),K.radio(pre+'.c',H.o.map(function(o,i){return {v:String(i),t:'① ② ③ ④'.split(' ')[i]+' '+o[0]}})),K.lab('이유 한 줄',null,K.field(pre+'.why',{rows:2,ph:'왜 그렇게 골랐나요?'})),K.timer(MIN[a][0],'사례 타이머'))}
+function h3(t){return K.h('h3',null,t)}
+function cardArea(a,box){
+ var items=a==='value'?VAL:a==='interest'?INTC:a==='strength'?STR:ENV;var n1={value:5,interest:6,strength:5,env:0}[a];var P='card.'+a;var locked=function(){return !!g(P+'.locked')};
+ function draw(){box.innerHTML='';var p1=g(P+'.p1',[]),top=g(P+'.top',[]);var lk=locked();
+  var c=K.card(h3('② 카드 선택 · 노트 ('+MIN[a][1]+'분)'),K.note(lk?'저장되어 잠겼어요. 검사 결과를 보고 카드를 고치지 않습니다.':'단어가 모두 좋아 보이지만 반드시 3개로 줄입니다. 카드는 표준화 검사가 아니라 나를 생각해 보는 도구입니다.'));
+  if(a==='value')c.appendChild(K.note('이 12가치는 수업용으로 학생 눈높이에 맞춰 만든 목록입니다. 워크넷 직업가치관검사의 13요인(성취·봉사·개별활동·직업안정·변화지향·몸과 마음의 여유·영향력 발휘·지식추구·애국·자율성·금전적 보상·인정·실내활동)과 1:1로 대응하지 않아요. 대응표는 [후보] 탭 맨 아래에 있어요.','hint'));
+  function pickGrid(list,sel,max,cls,onTog,labelFn){var gr=K.h('div',{class:'cards'});list.forEach(function(it){var on=sel.indexOf(it.id)>=0;var b=K.h('button',{type:'button',class:'pick'+(cls&&on?' '+cls:''),'aria-pressed':on?'true':'false'},K.h('b',null,(labelFn?labelFn(it):'')+it.n),it.d?K.h('span',null,it.d):null);if(lk||(!on&&sel.length>=max))b.disabled=true;b.addEventListener('click',function(){onTog(it.id)});gr.appendChild(b)});return gr}
+  if(n1){c.appendChild(K.h('p',{style:'font-weight:700'},'1차 선택: '+n1+'개 고르기 ('+p1.length+'/'+n1+')'));c.appendChild(pickGrid(items,p1,n1,'',function(id){var x=g(P+'.p1',[]).slice();var i=x.indexOf(id);if(i>=0){x.splice(i,1);K.set(P+'.top',g(P+'.top',[]).filter(function(t){return t!==id}))}else x.push(id);K.set(P+'.p1',x);K.changed();draw()}))}
+  var pool=n1?items.filter(function(it){return p1.indexOf(it.id)>=0}):items;
+  if(!n1||p1.length===n1){c.appendChild(K.h('p',{style:'font-weight:700'},(n1?'2차':'')+' 최종 Top3 고르기 ('+top.length+'/3) · 먼저 누른 순서가 1위·2위·3위'));c.appendChild(pickGrid(pool,top,3,'top',function(id){var x=g(P+'.top',[]).slice();var i=x.indexOf(id);if(i>=0)x.splice(i,1);else x.push(id);K.set(P+'.top',x);K.changed();draw()},function(it){var i=top.indexOf(it.id);return i>=0?(i+1)+'위 · ':''}))}
+  if(top.length===3){var need=[];c.appendChild(K.h('p',{style:'font-weight:700'},'Top3 이유와 근거를 직접 쓰세요'));top.forEach(function(id,i){var it=items.filter(function(x){return x.id===id})[0];var w=K.h('div',{class:'q'},K.h('div',{class:'qt'},(i+1)+'위 · '+it.n));
+    w.appendChild(K.lab('이유 한 줄',null,K.field(P+'.reason.'+id,{rows:2,locked:locked,ph:'왜 이 카드를 골랐나요?'})));if(!g(P+'.reason.'+id))need.push(it.n+' 이유');
+    if(a==='value'||a==='strength'){w.appendChild(K.lab(a==='strength'?'증거 경험 한 줄':'경험 한 줄',a==='strength'?'잘한다는 주장에는 증거가 필요해요. 없으면 비워 두고 아래에서 [아직 증거 없음(잠재)]를 고르세요':null,K.field(P+'.exp.'+id,{rows:2,locked:locked,ph:'이 카드와 관련된 내가 한 경험'})));if(a==='value'&&!g(P+'.exp.'+id))need.push(it.n+' 경험')}
+    if(a==='strength'){w.appendChild(K.radio(P+'.conf.'+id,[{v:'have',t:'자신 있음 (증거 경험이 있어요)'},{v:'none',t:'아직 증거 없음 (잠재)'}],{locked:locked}));w.appendChild(K.lab('하위 능력 1개',null,K.select(P+'.sub.'+id,it.sub,{locked:locked,ph:'하위 능력 선택'})));if(!g(P+'.conf.'+id))need.push(it.n+' 자신 있음/없음');if(g(P+'.conf.'+id)==='have'&&!g(P+'.exp.'+id))need.push(it.n+' 증거 경험')}
+    c.appendChild(w)});
+   var ok=need.length===0;c.appendChild(lk?K.h('span',{class:'tag ok'},'저장됨 · 잠김'):K.h('div',{class:'row',style:'align-items:center'},K.confirmBtn('저장하고 잠그기','저장하면 수정할 수 없어요. 한 번 더 누르세요',function(){K.set(P+'.locked',true);K.changed();K.persist();K.show(K.cur())},'gold'),ok?null:K.note('아직 필요: '+need.join(', '))));
+   if(!ok&&!lk)c.lastChild.firstChild.disabled=false}
+  box.appendChild(c)}
+ draw()}
+function persCard(box){var P='card.pers';var locked=function(){return !!g(P+'.locked')};
+ var c=K.card(h3('② 카드 선택 · 노트 ('+MIN.pers[1]+'분)'),K.note('요인마다 지금 나에게 더 가까운 쪽 하나를 고르고 경험을 한 줄 씁니다. 성격에는 좋고 나쁨이 없고, 직무 후보 계산에도 쓰지 않는 참고 도구입니다.'));
+ c.appendChild(K.note('내향성은 외향성의 반대가 아니라 외향 특성이 적은 것이에요. 정서적 불안정성은 진단이 아니라 정상 성격의 한 차원이에요.','hint'));
+ PERS.forEach(function(p){var w=K.h('div',{class:'q'},K.h('div',{class:'qt'},p[0]));w.appendChild(K.radio(P+'.side.'+p[0],[{v:'A',t:p[1]},{v:'B',t:p[2]}],{locked:locked}));w.appendChild(K.lab('경험 한 줄',null,K.field(P+'.exp.'+p[0],{rows:2,locked:locked,ph:'그렇게 고른 경험'})));c.appendChild(w)});
+ var done=PERS.every(function(p){return g(P+'.side.'+p[0])&&g(P+'.exp.'+p[0])});
+ c.appendChild(locked()?K.h('span',{class:'tag ok'},'저장됨 · 잠김'):K.h('div',{class:'row',style:'align-items:center'},K.btn('저장하고 잠그기',null,'gold',{disabled:!done}),K.note(done?'':'5요인 모두 선택과 경험 한 줄이 필요해요')));
+ if(!locked()){var b=c.lastChild.firstChild;if(done){b.replaceWith(K.confirmBtn('저장하고 잠그기','저장하면 수정할 수 없어요. 한 번 더 누르세요',function(){K.set(P+'.locked',true);K.changed();K.persist();K.show(K.cur())},'gold'))}}
+ box.appendChild(c);
+}
+function effCard(box){var P='card.eff';var locked=function(){return !!g(P+'.locked')};
+ var c=K.card(h3('② 카드 선택 · 노트 ('+MIN.eff[1]+'분)'),K.note('취업 준비 과제 5개마다 지금 "해낼 수 있다"고 믿는 정도(1~5)와 그 근거 경험을 한 줄 씁니다. 경험이 없으면 "아직 없음"이라고 쓰세요. 점수는 비교용이 아니라 나를 설명하는 근거예요.'));
+ c.appendChild(K.note('효능감은 실력이 아니라 과제별 믿음이에요. 5개 과제는 진로결정 자기효능감(Taylor & Betz, 1983)의 5개 역량을 참고해 이 과정에 맞게 바꾼 비표준 점검표이며 원문 문항이 아니에요. 가장 낮은 과제 1개를 고르는 것이 이 카드의 Top3 역할이에요.','hint'));
+ EFF.forEach(function(e){var w=K.h('div',{class:'q'},K.h('div',{class:'qt'},e[0]),K.h('div',{class:'mute'},e[1]));w.appendChild(K.radio(P+'.score.'+e[0],[{v:'1',t:'1 거의 못 믿음'},{v:'2',t:'2'},{v:'3',t:'3 보통'},{v:'4',t:'4'},{v:'5',t:'5 매우 믿음'}],{locked:locked}));w.appendChild(K.lab('근거 경험 한 줄',null,K.field(P+'.exp.'+e[0],{rows:2,locked:locked,ph:'그렇게 믿는 근거 (없으면 "아직 없음")'})));c.appendChild(w)});
+ c.appendChild(K.h('p',{style:'font-weight:700'},'가장 낮은 과제 1개와 이번 주 작은 행동 1개'));
+ var w2=K.h('div',{class:'q'});w2.appendChild(K.lab('가장 낮은 과제',null,K.select(P+'.low',EFF.map(function(e){return e[0]}),{locked:locked,ph:'과제 선택'})));w2.appendChild(K.lab('올리는 원천 (Bandura, 1997)',null,K.select(P+'.src',EFS,{locked:locked,ph:'원천 선택'})));w2.appendChild(K.lab('이번 주 작은 행동 1개',null,K.field(P+'.act',{rows:2,locked:locked,ph:'이번 주 안에 끝낼 수 있는 크기로'})));c.appendChild(w2);
+ var sv=K.h('div');c.appendChild(sv);
+ K.reg(function(){sv.innerHTML='';if(locked()){sv.appendChild(K.h('span',{class:'tag ok'},'저장됨 · 잠김'));return}
+  var need=[];EFF.forEach(function(e){if(!g(P+'.score.'+e[0]))need.push(e[0]+' 점수');if(!g(P+'.exp.'+e[0]))need.push(e[0]+' 근거')});if(!g(P+'.low'))need.push('가장 낮은 과제');if(!g(P+'.src'))need.push('원천');if(!g(P+'.act'))need.push('작은 행동');
+  if(!need.length)sv.appendChild(K.confirmBtn('저장하고 잠그기','저장하면 수정할 수 없어요. 한 번 더 누르세요',function(){K.set(P+'.locked',true);K.changed();K.persist();K.show(K.cur())},'gold'));
+  else sv.appendChild(K.h('div',{class:'row',style:'align-items:center'},K.btn('저장하고 잠그기',null,'gold',{disabled:true}),K.note('아직 필요: '+need.join(', '))))});
+ box.appendChild(c)}
+function effActs(c){var out=K.h('div',{style:'display:flex;flex-direction:column;gap:8px'});c.appendChild(out);
+ K.reg(function(){out.innerHTML='';var low=g('card.eff.low'),L=ACT[low];if(!L){out.appendChild(K.note('카드에서 가장 낮은 과제를 고르면 작은 행동 예시가 보여요.'));return}
+  out.appendChild(K.note('가장 낮은 과제 ['+low+']를 올릴 수 있는 작은 행동 예시예요. 4가지 원천(Bandura, 1997)별로 하나씩이고, 이번 주에 끝낼 수 있는 것에 ♡를 누르세요. 제안 예시이며 정답이 아니에요. 직무 찜과는 따로 모아 보여요.','hint'));
+  L.forEach(function(o,i){var on=!!g('eff.act.'+i,false);var b=K.btn(on?'♥ 찜함':'♡ 찜하기',function(){K.set('eff.act.'+i,!on);K.changed()},on?'gold':'ghost sm');b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',o[1]+(on?' 찜 취소':' 찜하기'));
+   out.appendChild(K.h('div',{class:'q'},K.h('div',{class:'row',style:'align-items:center'},K.h('div',null,K.h('b',null,o[0]),K.h('div',{class:'mute'},o[1])),K.h('div',{style:'flex:0 0 auto'},b))))});
+  out.appendChild(K.note('내 카드에 쓴 작은 행동: '+(g('card.eff.act','')||'(미입력)')+' · 종합 성찰에서 함께 봅니다.'))})}
+function effPicked(){var low=g('card.eff.low'),L=ACT[low]||[];return L.filter(function(o,i){return g('eff.act.'+i,false)}).map(function(o){return o[0]+': '+o[1]})}
+function effSynCard(el){var box=K.h('div');el.appendChild(K.card(h3('효능감 · 가장 낮은 과제와 이번 주 작은 행동'),K.note('직무 찜과 별도로, 믿음을 근거와 맞추기 위한 행동을 한 곳에 모았어요. 점수는 비교용이 아닙니다.'),box));
+ K.reg(function(){box.innerHTML='';if(!areaDone('eff')){box.appendChild(K.note('효능감 카드를 저장하면 나타나요.'));return}
+  box.appendChild(K.table(['항목','내용'],[['가장 낮은 과제',g('card.eff.low','')],['올리는 원천',g('card.eff.src','')],['내가 쓴 작은 행동',g('card.eff.act','')],['찜한 예시',effPicked().join(' / ')||'(없음)']]))})}
+/* 검사 */
+function flipOf(a,i,list,base){base=base||0;var P='test.'+a+'.flip.'+i;var f=g(P);if(f===undefined){var q=list[i-base];if(q&&q.cons){var rf=flipOf(a,q.ref+base,list,base);f=!rf}else f=Math.random()<.5;K.set(P,f)}return f}
+function pairTest(a,list,off,N){var wrap=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});var prog=K.h('p',{class:'mute'});
+ list.forEach(function(q,i){var gi=(off||0)+i;var fl=flipOf(a,gi,list,off||0);
+  var row=K.h('div',{class:'q'}),qt=K.h('div',{class:'qt'},'문항 '+(gi+1)+(q.q?' · '+q.q:' · 둘 중 지금 더 가까운 쪽'));var ab=K.h('div',{class:'ab'});var cur=function(){return g('test.'+a+'.ans.'+gi)};
+  var sides=fl?['B','A']:['A','B'];sides.forEach(function(s){var b=K.h('button',{type:'button','aria-pressed':cur()===s?'true':'false'},s==='A'?q.a:q.b);b.addEventListener('click',function(){K.set('test.'+a+'.ans.'+gi,s);K.changed();Array.prototype.forEach.call(ab.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true')});ab.appendChild(b)});row.appendChild(qt);row.appendChild(ab);wrap.appendChild(row)});
+ return wrap}
+function testArea(a,box){
+ var c=K.card(h3('③ 웹앱 검사 ('+MIN[a][2]+'분)'));box.appendChild(c);
+ if(!areaDone(a)){c.appendChild(K.note('카드 노트를 저장하고 잠그면 검사가 열려요. (카드를 먼저, 검사는 나중에)','hint'));return}
+ c.appendChild(K.note(a==='eff'?'정답이 없습니다. 과제마다 지금까지 해 본 적이 있는지 사실대로 고르세요. 점수가 아니라 사실 확인이며, 문항은 초안으로 표준화 검사가 아닙니다. 정밀 결과는 워크넷·고용24, 커리어넷 공식 검사로 확인하세요.':'정답이 없습니다. 둘 다 좋아도 지금 더 가까운 쪽 하나만 직감으로 고르세요. 검사 문항은 초안이며 표준화 검사가 아닙니다. 정밀 결과는 워크넷·고용24, 커리어넷 공식 검사로 확인하세요.'));
+ if(a==='interest')c.appendChild(K.note('이 검사는 내 안에서 더 끌리는 유형을 보는 방식이라 다른 사람과 비교한 점수가 아닙니다. 공식 직업선호도검사의 흥미 코드는 상위 2개로 표시됩니다.','hint'));
+ if(a==='strength')c.appendChild(K.note('이 상황판단은 능력 수준이 아니라 내가 고르는 경향입니다. 공식 성인용 직업적성검사(11개 적성요인)는 정답이 있는 능력검사예요.','hint'));
+ var list=a==='value'?VQ:a==='interest'?IQ:a==='env'?EQ.concat(WQ):a==='strength'?null:null;
+ if(a==='strength'){var wrap=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});SQ.forEach(function(q,i){var r=K.h('div',{class:'q'},K.h('div',{class:'qt'},'문항 '+(i+1)+' · '+q.q));var mc=K.h('div',{class:'mc'});q.o.forEach(function(o,j){var b=K.h('button',{type:'button','aria-pressed':String(g('test.strength.ans.'+i))===String(j)?'true':'false'},'① ② ③ ④'.split(' ')[j]+' '+o[0]);b.addEventListener('click',function(){K.set('test.strength.ans.'+i,j);K.changed();Array.prototype.forEach.call(mc.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true')});mc.appendChild(b)});r.appendChild(mc);wrap.appendChild(r)});c.appendChild(wrap)}
+ else if(a==='pers'){var wrap=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});PQ.forEach(function(q,i){var fl=flipOf('pers',i,PQ,0);var r=K.h('div',{class:'q'},K.h('div',{class:'qt'},'문항 '+(i+1)+' · '+q.q),K.note('좋고 나쁨이 없어요'));var ab=K.h('div',{class:'ab'});(fl?['B','A']:['A','B']).forEach(function(s){var b=K.h('button',{type:'button','aria-pressed':g('test.pers.ans.'+i)===s?'true':'false'},s==='A'?q.a:q.b);b.addEventListener('click',function(){K.set('test.pers.ans.'+i,s);K.changed();Array.prototype.forEach.call(ab.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true')});ab.appendChild(b)});r.appendChild(ab);wrap.appendChild(r)});c.appendChild(wrap)}
+ else if(a==='eff'){var wrap=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});EFQ.forEach(function(q,i){var fl=flipOf('eff',i,EFQ,0);var r=K.h('div',{class:'q'},K.h('div',{class:'qt'},'문항 '+(i+1)+' · '+q.f),K.h('div',null,q.q));var ab=K.h('div',{class:'ab'});(fl?['B','A']:['A','B']).forEach(function(s){var b=K.h('button',{type:'button','aria-pressed':g('test.eff.ans.'+i)===s?'true':'false'},s==='A'?q.a:q.b);b.addEventListener('click',function(){K.set('test.eff.ans.'+i,s);K.changed();Array.prototype.forEach.call(ab.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true')});ab.appendChild(b)});r.appendChild(ab);wrap.appendChild(r)});c.appendChild(wrap)}
+ else if(a==='env'){c.appendChild(K.h('p',{style:'font-weight:700'},'근무환경 6쌍'));c.appendChild(pairTest('env',EQ,0));c.appendChild(K.h('p',{style:'font-weight:700'},'업무 방식 3쌍'));c.appendChild(pairTest('env',WQ,6))}
+ else c.appendChild(pairTest(a,list,0));
+ c.appendChild(K.timer(MIN[a][2],'검사 타이머'));
+ var out=K.h('div');c.appendChild(out);
+ K.reg(function(){out.innerHTML='';var R=res(a);out.appendChild(K.h('p',{class:'mute'},'응답 '+R.n+'/'+(a==='value'?20:R.N)));if(!R.done)return;out.appendChild(resultView(a,R))})}
+function resultView(a,R){var w=K.h('div',{style:'display:flex;flex-direction:column;gap:10px;border-top:2px solid var(--line);padding-top:10px'});w.appendChild(K.h('h3',null,'내 선택이 보여주는 힌트 (진단이 아닙니다)'));
+ if(a==='eff'){EFF.forEach(function(e){var v=R.ans[e[0]];w.appendChild(K.h('p',null,K.h('b',null,e[0]+': '),v==='A'?'해 본 적 있음':'아직 없음'))});w.appendChild(K.note('점수가 아니라 사실 확인이에요. 카드의 믿음과의 비교는 다음 단계에서 봐요.'));return w}
+ if(a==='pers'){PERS.forEach(function(p){var s=R.side[p[0]];w.appendChild(K.h('p',null,K.h('b',null,p[0]+': '),s==='A'?p[1]:p[2]))});return w}
+ var items=R.rk.rank.map(function(k){return {n:nm(a,k),v:a==='strength'?Math.round(R.score[k]*100):R.score[k]}});
+ w.appendChild(K.bars(items,a==='strength'?100:R.max,a==='strength'?function(v){return v+'%'}:function(v){return v+'/'+R.max+'점'}));
+ w.appendChild(K.h('p',null,K.h('b',null,'Top3: '),R.rk.top.map(function(k){return nm(a,k)}).join(' · ')));
+ if(a==='interest'){w.appendChild(K.h('p',null,K.h('b',null,'흥미 코드(상위 2): '),R.rk.top.slice(0,2).join('')+'  ·  Top3: '+R.rk.top.join('')));w.appendChild(K.note('상위 두 유형의 관계: '+hexRel(R.rk.top[0],R.rk.top[1])+'. 점수 차이가 작으면 한 코드로 단정하지 말고 다른 유형도 함께 보세요. 이 검사는 내 안에서 더 끌리는 쪽을 보는 방식이라 다른 사람과 비교한 점수가 아닙니다.','hint'))}
+ if(a==='strength')w.appendChild(K.note('선택 경향이며 능력 수준이 아닙니다.'));
+ if(R.rk.tied&&R.rk.tied.length)w.appendChild(K.note('경계 동점: '+R.rk.tied.map(function(k){return nm(a,k)}).join(', ')+' — 같은 쌍에서 맞붙은 결과가 없어 동점이에요. 이유 한 줄로 직접 결정해 보세요.','hint'));
+ if(a==='value'){var t=['선택이 일관돼요','상황에 따라 달라질 수 있는 가치가 있어요','두 가치가 비슷하게 중요할 수 있어요. 이유 한 줄을 다시 확인해 보세요'][2-R.cons];w.appendChild(K.note('일관성 점검(점수 제외): '+t));}
+ if(a==='env'){var ks=Object.keys(R.style);if(ks.length)w.appendChild(K.h('p',null,K.h('b',null,'업무 방식: '),ks.map(function(i){return WN[R.style[i]]}).join(' · ')))}
+ return w}
+var CQ={value:'카드 Top3 중 검사에서도 상위(2점 이상)인 가치는 몇 개인가?',interest:'카드로 고른 흥미 유형과 검사 흥미 Top3는 얼마나 겹치는가?',strength:'내가 잘한다고 고른 영역과 문제를 풀 때 고른 영역이 같은가?',env:'원하는 일터 Top3와 검사 순위가 같은가?',pers:'카드에서 고른 쪽과 상황에서 고른 쪽이 같은 요인은 몇 개인가?',eff:'카드의 믿음 점수와 검사의 해 본 적 여부가 맞는 과제는 몇 개이고, 어긋난 과제는 무엇인가?'};
+function cmpArea(a,box){var c=K.card(h3('④ 간이 비교 ('+MIN[a][3]+'분)'));box.appendChild(c);
+ if(!areaDone(a)){c.appendChild(K.note('카드 저장과 검사 완료 후 열려요.'));return}
+ var out=K.h('div',{style:'display:flex;flex-direction:column;gap:8px'});c.appendChild(out);
+ c.appendChild(K.lab('비교 질문: '+CQ[a],'불일치는 오류가 아니라 발견이에요. 한 줄 쓰기',K.field('cmp.'+a,{rows:2,ph:'내 생각'})));
+ K.reg(function(){out.innerHTML='';var R=res(a);if(!R.done){out.appendChild(K.note('검사를 모두 마치면 비교가 보여요.'));return}var m=cmp(a);
+  if(a==='eff'){out.appendChild(K.h('p',null,K.h('b',null,'믿음과 근거가 맞은 과제 '+m.count+'/5')));out.appendChild(K.table(['과제','카드의 믿음','검사의 사실','읽는 법'],m.rows));out.appendChild(K.note('목표는 점수를 올리는 것이 아니라 믿음과 근거를 맞추는 것이에요. 자기 평가는 실제와 어긋나기 쉬워서(Dunning et al., 2004) 점수에는 근거 한 줄을 붙여요. 비표준 점검이라 비교·평가에 쓰지 않아요.'))}
+  else if(a==='pers'){out.appendChild(K.h('p',null,K.h('b',null,'일치한 요인 '+m.count+'/5')));out.appendChild(K.table(['요인','카드에서 고른 쪽','검사에서 고른 쪽','결과'],m.rows));out.appendChild(K.note('성격 일치 수는 참고로만 읽으세요.'))}
+  else{out.appendChild(K.h('p',null,K.h('b',null,'일치 '+m.count+'/3'),' · 카드: '+m.ck.map(function(k){return nm(a,k)}).join(', ')+' · 검사 Top3: '+m.tk.map(function(k){return nm(a,k)}).join(', ')));if(m.disc.length)out.appendChild(K.h('p',null,K.h('span',{class:'tag gold'},'발견 후보'),' 검사에는 있고 카드엔 없는 것: '+m.disc.map(function(k){return nm(a,k)}).join(', ')));if(a==='strength'){var lack=g('card.strength.top',[]).filter(function(id){return g('card.strength.conf.'+id)!=='have'});if(lack.length)out.appendChild(K.note('증거 경험이 없는 카드는 "잠재"로 표시돼요: '+lack.join(', ')))}}})}
+function areaTab(a){return function(el){var H=K.card('cls:dark',K.h('h2',null,AN[a]+' 사이클 · 사례 → 카드 → 검사 → 간이 비교 → '+(a==='eff'?'작은 행동 찜':'추천 직무 찜')),K.h('p',{class:'mute'},'권장 '+MIN[a].reduce(function(x,y){return x+y})+'분 · 정답이 없고 좋고 나쁨도 없어요. 카드를 저장하면 잠기고, 그 뒤 검사가 열려요.'));el.appendChild(H);el.appendChild(hookCard(a));var cb=K.h('div');el.appendChild(cb);if(a==='pers')persCard(cb);else if(a==='eff')effCard(cb);else cardArea(a,cb);var tb=K.h('div');el.appendChild(tb);testArea(a,tb);var mb=K.h('div');el.appendChild(mb);cmpArea(a,mb);var wb=K.h('div');el.appendChild(wb);recoArea(a,wb);var sb=K.h('div');el.appendChild(sb);shareCard(a,sb)}}
+/* ---------- 종합 성찰 ---------- */
+function keywords(a){var ck=cardTopKeys(a),R=res(a),tk=R.done&&R.rk?R.rk.top:[];var u=ck.slice();tk.forEach(function(k){if(u.indexOf(k)<0)u.push(k)});u=u.filter(function(k,i){return u.indexOf(k)===i});return u.map(function(k){var inC=ck.indexOf(k)>=0,inT=tk.indexOf(k)>=0;var ev=true;var topIds=g('card.'+a+'.top',[]);if(a==='value'){var id=k==='균형'?'일과 삶의 균형':k;ev=!!g('card.value.exp.'+id)}else if(a==='strength'){ev=g('card.strength.conf.'+k)==='have'&&!!g('card.strength.exp.'+k)}else{ev=true}var sug=inC&&inT&&ev?'확정':inT&&!inC?'발견':'재검토';return {a:a,k:k,name:nm(a,k),inC:inC,inT:inT,sug:sug}})}
+function synTab(el){
+ el.appendChild(K.card('cls:dark',K.h('h2',null,'종합 성찰 (16분)'),K.h('p',{class:'mute'},'6영역 결과를 나란히 보고, 찜한 직무를 모아 성찰하고, 확정·재검토·발견을 고른 뒤, 성찰 3문항과 나의 한 문장을 직접 씁니다.')));
+ var t1=K.h('div');el.appendChild(K.card(h3('① 결과표 (3분)'),t1));
+ K.reg(function(){t1.innerHTML='';var rows=AREAS.map(function(a){var R=res(a);if(!areaDone(a))return [AN[a],'카드 미저장','-','-'];if(a==='eff'){var m=R.done?cmp('eff'):null;return [AN[a],EFF.map(function(e){var s=g('card.eff.score.'+e[0]);return s?e[0]+' '+s+'점':''}).filter(Boolean).join(', '),R.done?'검사 완료':'검사 미완료',m?m.count+'/5 맞음':'-']}if(a==='pers'){var m=R.done?cmp('pers'):null;return [AN[a],PERS.map(function(p){var s=g('card.pers.side.'+p[0]);return s?p[0]+(s==='A'?'(한쪽)':'(반대쪽)'):''}).join(', '),R.done?'검사 완료':'검사 미완료',m?m.count+'/5 일치':'-']}var ck=cardTopKeys(a).map(function(k){return nm(a,k)}).join(', ');if(!R.done)return [AN[a],ck,'검사 미완료','-'];var m=cmp(a);return [AN[a],ck,R.rk.top.map(function(k){return nm(a,k)}).join(', '),m.count+'/3 일치']});t1.appendChild(K.table(['영역','카드 Top3','검사 결과','일치'],rows))});
+ var t2=K.h('div');el.appendChild(K.card(h3('사례 6개 선택 패턴 (참고용 · 점수 아님)'),K.note('"이런 장면에서 이런 선택을 했다"는 관찰입니다. 단정하지 마세요.'),t2));
+ K.reg(function(){t2.innerHTML='';var rows=AREAS.map(function(a){var c=g('hook.'+a+'.c');var o=c!=null&&c!==''?HOOK[a].o[+c]:null;return [AN[a]+' · '+HOOK[a].job,o?o[0]:'(미선택)',o?o[1]:'',g('hook.'+a+'.why','')||'']});t2.appendChild(K.table(['영역·직무','내가 고른 선택','대응 태그(참고)','이유'],rows))});
+ wishSynCard(el);effSynCard(el);
+ var t3=K.h('div');el.appendChild(K.card(h3('③ 키워드 판정 (3분)'),K.note('확정: 카드·검사 모두 상위이고 경험 근거가 있음 / 재검토: 한쪽에만 있거나 근거가 없음 / 발견: 검사에서만 상위. 자동 제안은 참고이고 최종 선택은 내가 합니다.'),t3));
+ var kwAll=[];function drawJ(){t3.innerHTML='';kwAll=[];['value','interest','strength','env'].forEach(function(a){var ks=keywords(a);if(!ks.length)return;t3.appendChild(K.h('p',{style:'font-weight:700;margin-top:6px'},AN[a]));ks.forEach(function(x){kwAll.push(x);t3.appendChild(K.h('div',{class:'row',style:'align-items:center;gap:8px'},K.h('span',null,x.name+'  ',K.h('span',{class:'mute'},(x.inC?'카드 ':'')+(x.inT?'검사 ':'')+'· 제안: '+x.sug)),K.select('syn.j.'+a+'.'+x.k,['확정','재검토','발견'],{ph:'판정',aria:x.name+' 판정'})))})});if(!kwAll.length)t3.appendChild(K.note('카드를 저장한 영역이 있어야 키워드가 나타나요.'))}
+ drawJ();
+ var q2=['단어 이해 차이','좋은 쪽을 고르려는 마음','상황에 따른 차이','문항 표현의 영향','경험 부족'];
+ var q3=K.h('div',{style:'display:flex;flex-direction:column;gap:8px'});['value','interest','strength','env'].forEach(function(a){var opts=keywords(a).map(function(x){return {v:x.name,t:x.name}});q3.appendChild(K.h('div',{class:'row',style:'align-items:start'},K.lab(AN[a]+' 키워드',null,K.select('syn.q3.'+a,opts,{ph:'가장 확신하는 1개',aria:AN[a]+' 키워드'})),K.lab('경험 근거 한 줄',null,K.field('syn.q3x.'+a,{rows:2,ph:'근거가 되는 내 경험'}))))});
+ el.appendChild(K.card(h3('④ 성찰 노트 (3분)'),K.lab('① 카드와 검사에서 가장 놀라운 일치 또는 불일치는 무엇인가?','한두 문장',K.field('syn.q1',{rows:3})),K.h('div',{class:'lab'},K.h('span',null,'② 불일치가 있다면 이유는 무엇이라고 생각하나요?'),K.check('syn.q2',q2)),K.field('syn.q2t',{rows:2,ph:'이유 한 줄'}),K.h('div',{class:'lab'},K.h('span',null,'③ 지금 가장 확신하는 키워드는?')),q3));
+ el.appendChild(K.card(h3('나의 한 문장 (3분)'),K.note('내 말로 직접 씁니다. 웹앱과 강사는 대신 써 주지 않습니다. 틀: 나는 ( )를 중요하게 여기고, ( ) 활동에서 몰입하며, ( ) 강점을 살려 ( ) 환경에서 힘을 낸다.'),K.field('syn.one',{rows:3,ph:'나는 ...'}),K.timer(3,'한 문장 타이머')));var sb=K.h('div');el.appendChild(sb);shareCard('syn',sb)}
+/* ---------- 추천 직무 · 찜하기 ---------- */
+var SKT={};"J01 문제해결,조직이해,수리;J04 문제해결,의사소통,정보;J05 대인관계,조직이해,직업윤리;J06 의사소통,대인관계,자기개발;J07 자원관리,정보,직업윤리;J08 수리,자원관리,조직이해;J09 수리,직업윤리,정보;J11 대인관계,수리,직업윤리;J16 조직이해,직업윤리,의사소통;J20 의사소통,정보,문제해결;J21 수리,정보,문제해결;J22 수리,정보,문제해결;J23 의사소통,대인관계,조직이해;J24 대인관계,의사소통,자기개발;J25 의사소통,대인관계,조직이해;J26 수리,자원관리,의사소통;J27 대인관계,의사소통,문제해결;J28 자원관리,수리,대인관계;J29 수리,자원관리,문제해결;J30 자원관리,조직이해,직업윤리;J33 기술,문제해결,수리;J34 기술,수리,문제해결;J35 문제해결,기술,자기개발;J37 자원관리,문제해결,조직이해;J38 기술,문제해결,자원관리;J39 직업윤리,수리,문제해결;J42 정보,조직이해,의사소통;J43 기술,정보,문제해결;J47 정보,직업윤리,기술;J48 수리,정보,문제해결;J50 수리,기술,자기개발;J51 의사소통,문제해결,정보;J53 의사소통,기술,자기개발;J54 의사소통,정보,자기개발;J59 의사소통,자기개발,대인관계;J60 의사소통,문제해결,자원관리;J62 대인관계,의사소통,직업윤리;J63 대인관계,직업윤리,의사소통;J66 직업윤리,대인관계,기술;J72 자원관리,대인관계,기술;J75 문제해결,기술,직업윤리;J76 기술,직업윤리,조직이해;J77 직업윤리,조직이해,문제해결;J80 대인관계,의사소통,자원관리;J84 대인관계,직업윤리,의사소통;J93 의사소통,대인관계,조직이해;J94 문제해결,의사소통,수리".split(';').forEach(function(x){var q=x.split(' ');SKT[q[0]]=q[1]});
+POOL.forEach(function(p){var v=[];p.v.forEach(function(x,i){if(x==='사회적'&&p.v[i+1]==='기여')v.push('사회적 기여');else if(x!=='기여')v.push(x)});p.v=v;p.k=(SKT[p.c]||'').split(',')});
+var WN2={t:'팀 중심',p:'혼자 집중',s:'절차·기준 중심',f:'유연하게 변화'};
+function matchOf(a,p,k){if(a==='value')return p.v.indexOf(k)>=0?1:0;if(a==='interest'){var i=p.i.indexOf(k);return i===0?1:i===1?.6:0}if(a==='strength')return p.k.indexOf(k)>=0?1:0;if(a==='env')return p.e.indexOf(k)>=0?1:0;return 0}
+function pickKeys(a){var k=cardTopKeys(a);return k.filter(function(x,i){return k.indexOf(x)===i})}
+function recoJobs(a){var C=cand(),W=[1,.8,.6],out;
+ if(a==='pers'){var s1=g('card.pers.side.외향성'),s2=g('card.pers.side.성실성');var u0=s1==='A'?'t':'p',u1=s2==='A'?'s':'f';
+  out=POOL.map(function(p){var sc=0,why=[];if(s1&&p.s[0]===u0){sc++;why.push('외향성 카드('+(s1==='A'?'함께':'혼자')+') ↔ '+WN2[u0]+' 직무')}if(s2&&p.s[1]===u1){sc++;why.push('성실성 카드('+(s2==='A'?'계획대로':'유연하게')+') ↔ '+WN2[u1]+' 직무')}return {p:p,sc:sc/2,why:why}})}
+ else{var keys=pickKeys(a),R=res(a),tk=R.done&&R.rk?R.rk.top:[];
+  out=POOL.map(function(p){var sc=0,tw=0,why=[];keys.forEach(function(k,i){var m=matchOf(a,p,k);sc+=W[i]*m;tw+=W[i];if(m>0)why.push(nm(a,k))});var cs=tw?sc/tw:0,ts=0,tt=0;tk.forEach(function(k,i){ts+=W[i]*matchOf(a,p,k);tt+=W[i]});var tv=tt?ts/tt:0;if(!why.length&&tv>0)why=['검사 상위 항목('+tk.filter(function(k){return matchOf(a,p,k)>0}).map(function(k){return nm(a,k)}).join(', ')+')'];return {p:p,sc:tk.length?.7*cs+.3*tv:cs,why:why}})}
+ out.forEach(function(o){o.r=o.sc+.01*(C&&C.byc&&C.byc[o.p.c]?C.byc[o.p.c].t:0)});
+ return out.filter(function(o){return o.sc>0}).sort(function(x,y){return y.r-x.r}).slice(0,5)}
+function wishAreas(c){var w=g('wish.'+c,{});return AREAS.filter(function(a){return w&&w[a]})}
+function wishList(){return POOL.filter(function(p){return wishAreas(p.c).length}).sort(function(x,y){return wishAreas(y.c).length-wishAreas(x.c).length||(x.c<y.c?-1:1)})}
+function recoArea(a,box){var c=K.card(h3(a==='eff'?'⑤ 이번 주 작은 행동 찜하기 ('+MIN[a][5]+'분)':'⑤ 이 선택으로 본 추천 직무 · 찜하기 ('+MIN[a][5]+'분)'));box.appendChild(c);
+ if(!areaDone(a)){c.appendChild(K.note('카드 저장과 검사 완료 후 열려요.'));return}
+ if(a==='eff'){effActs(c);return}
+ var out=K.h('div',{style:'display:flex;flex-direction:column;gap:8px'});c.appendChild(out);
+ K.reg(function(){out.innerHTML='';var R=res(a);if(!R.done){out.appendChild(K.note('검사를 모두 마치면 추천 직무가 보여요.'));return}
+  out.appendChild(K.note(a==='pers'?'성격 카드에서 고른 쪽(외향성·성실성)과 일하는 방식이 맞닿는 직무예요. 성격만으로 직무를 정하지 않으니 참고로만 보세요.':'내가 고른 '+AN[a]+' Top3('+pickKeys(a).map(function(k){return nm(a,k)}).join(', ')+')와 겹치는 직무예요. 추천이 아니라 탐색 후보입니다.','hint'));
+  var L=recoJobs(a);if(!L.length){out.appendChild(K.note('이 선택과 바로 겹치는 직무가 없어요. 다른 영역에서 찾아봐도 괜찮아요.'));return}
+  L.forEach(function(o){var on=!!g('wish.'+o.p.c+'.'+a,false);var b=K.btn(on?'♥ 찜함':'♡ 찜하기',function(){K.set('wish.'+o.p.c+'.'+a,!on);K.changed()},on?'gold':'ghost sm');b.setAttribute('aria-pressed',on?'true':'false');b.setAttribute('aria-label',o.p.n+(on?' 찜 취소':' 찜하기'));
+   out.appendChild(K.h('div',{class:'q'},K.h('div',{class:'row',style:'align-items:center'},K.h('div',null,K.h('b',null,o.p.n),K.h('div',{class:'mute'},o.p.d)),K.h('div',{style:'flex:0 0 auto'},b)),K.h('div',{class:'mute'},'내 선택과 겹침: '+o.why.join(' · '))))});
+  out.appendChild(K.note('지금까지 찜한 직무 '+wishList().length+'개 · 마지막 종합 성찰에서 한꺼번에 모아 봅니다. 직무 정보는 고용24·커리어넷에서 확인하세요.'))})}
+function wishSynCard(el){var box=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});
+ el.appendChild(K.card(h3('② 찜한 직무 모아 성찰 (4분)'),K.note('각 영역에서 찜한 직무를 한 화면에 모았어요. 여러 영역에서 겹칠수록 내 기준이 한 방향으로 모이는 직무입니다. 추천이 아니라 탐색 후보입니다.'),box));
+ var last=null;K.reg(function(){var L=wishList();var sig=L.map(function(p){return p.c+':'+wishAreas(p.c).join('')}).join('|');if(sig===last)return;last=sig;box.innerHTML='';
+  if(!L.length){box.appendChild(K.note('각 영역 ⑤ 단계에서 찜한 직무가 아직 없어요. 영역 탭에서 찜하고 돌아오세요.','hint'));return}
+  box.appendChild(K.table(['직무','찜한 영역','겹침'],L.map(function(p){var as=wishAreas(p.c);return [p.n,as.map(function(x){return AN[x]}).join('·'),as.length>=3?'여러 기준에서 겹침('+as.length+')':as.length===2?'두 기준에서 겹침':'한 기준에서만']})));
+  L.forEach(function(p){box.appendChild(K.lab(p.n+' · 왜 찜했나요? 한 줄',null,K.field('wish.note.'+p.c,{rows:1,ph:'내 가치·흥미·강점·환경과 연결해서'})))});
+  box.appendChild(K.lab('① 여러 영역에서 겹친 직무가 있나요? 왜 겹쳤을까요?',null,K.field('syn.wq1',{rows:2})));
+  box.appendChild(K.lab('② 한 영역에서만 찜한 직무는 어떤 기준 때문이었나요? (가치·흥미·강점·환경·성격)',null,K.field('syn.wq2',{rows:2})));
+  box.appendChild(K.h('div',{class:'lab'},K.h('span',null,'③ 가장 끌리는 직무 1~2개'),K.check('syn.wpick',L.map(function(p){return p.n}))));
+  box.appendChild(K.lab('끌리는 이유와 M2+M3에서 확인할 것',null,K.field('syn.wq3',{rows:2,ph:'예: 이 직무의 신입 공고에서 요구하는 자격요건'})))})}
+/* ---------- 후보 ---------- */
+function cand(){var rv=res('value'),ri=res('interest'),re=res('env');if(!(rv.done&&ri.done&&re.done))return null;
+ var W={i:.375,v:.25,e:.25,s:.125};var style=re.style||{};var out=POOL.map(function(p){function fit(keys,score,max){var ws=[1,.6],s=0,t=0;keys.forEach(function(k,i){s+=ws[i]*(score[k]||0);t+=ws[i]*max});return t?s/t:0}
+  var fi=fit(p.i,ri.score,4),fv=fit(p.v.map(function(x){return x}),rv.score,3),fe=fit(p.e,re.score,2);var sm=0,sn=0;var js=p.s;var us=[style[0],style[1],style[2]];js.forEach(function(x,i){if(us[i]){sn++;if(us[i]===x)sm++}});var fs=sn?sm/sn:.5;
+  var t=W.i*fi+W.v*fv+W.e*fe+W.s*fs;var ax=[['흥미',fi],['가치',fv],['환경',fe],['업무방식',fs]].sort(function(x,y){return y[1]-x[1]});return {p:p,t:t,ax:ax}}).sort(function(x,y){return y.t-x.t});
+ var jobs=out.slice(0,3);var byc={};out.forEach(function(o){byc[o.p.c]=o});var inds=INDS.map(function(x){var s=x.j.map(function(c){return byc[c]}).sort(function(a,b){return b.t-a.t});var top=s.slice(0,2);var avg=top.reduce(function(a,b){return a+b.t},0)/top.length;return {n:x.n,t:avg,jobs:top.map(function(o){return o.p.n}),ax:top[0].ax}}).sort(function(x,y){return y.t-x.t}).slice(0,3);return {jobs:jobs,inds:inds,byc:byc}}
+function candTab(el){
+ el.appendChild(K.card('cls:dark',K.h('h2',null,'적합 산업·직무 후보 (10분)'),K.h('p',{class:'mute'},'추천이 아니라 탐색 후보입니다. 직무·산업 정보는 공식 사이트(고용24·커리어넷·헬퍼탐)에서 확인하세요.')));
+ var box=K.h('div');el.appendChild(box);
+ (function(){box.innerHTML='';var C=cand();if(!C){box.appendChild(K.card(K.note('가치·흥미·환경 검사를 모두 마치면 후보가 나타나요. (성격·강점은 계산에서 제외합니다)','hint')));return}
+  box.appendChild(K.card(h3('직무 후보 TOP3 (내가 찜한 직무도 아래 ‘내 후보 정리’에서 고를 수 있어요)'),K.note('계산: 흥미 37.5% + 가치 25% + 환경 25% + 업무방식 12.5% (제안). 직무별 태깅은 수업용 임의 초안이라 근거 수준은 "참고"입니다. 강점·성격은 계산에서 제외했습니다.'),K.table(['직무','한 줄 설명','적합 근거(높은 축)','근거 수준'],C.jobs.map(function(o){return [o.p.n,o.p.d,o.ax.slice(0,2).map(function(x){return x[0]}).join('·'),'참고']}))));
+  box.appendChild(K.card(h3('산업 후보 TOP3'),K.table(['산업','대표 직무','적합 근거(높은 축)','근거 수준'],C.inds.map(function(o){return [o.n,o.jobs.join(', '),o.ax.slice(0,2).map(function(x){return x[0]}).join('·'),'참고']}))));
+  var names=C.jobs.map(function(o){return o.p.n}).concat(C.inds.map(function(o){return o.n}));wishList().forEach(function(p){if(names.indexOf(p.n)<0)names.push(p.n)});
+  box.appendChild(K.card(h3('내 후보 정리 (관심 1~2개, 반대 1개)'),K.h('div',{class:'lab'},K.h('span',null,'관심 가는 후보 1~2개'),K.check('cand.pick',names)),K.lab('이유 (내 확정 키워드와 연결해 한두 문장)',null,K.field('cand.why',{rows:3})),K.lab('끌리지 않는 후보 1개',null,K.select('cand.dis',names,{ph:'선택'})),K.field('cand.disWhy',{rows:2,ph:'이유'}),K.lab('다음 차시(M2+M3)에서 확인할 것 1개',null,K.field('cand.m2',{rows:2,ph:'예: 이 직무의 신입 공고에서 요구하는 자격요건'}))));
+  box.appendChild(K.card(h3('다음 차시(M2+M3) 내 정보 카드로 이월할 한 줄'),K.h('pre',{class:'prompt',id:'m2line'}),K.copyBtn(function(){return m2line()},'한 줄 복사')));
+  box.appendChild(K.card(h3('더 정확히 알고 싶다면 · 공식 검사(한국고용정보원 가이드 기준)'),K.table(['M1 영역','공식 검사','시간 · 대상'],[['흥미·성격','직업선호도검사 S형(흥미) · L형(흥미·성격·생활사)','S형 25분 · L형 60분 / 만 18세 이상'],['가치','직업가치관검사(13개 가치요인)','약 20분 / 만 15~50세'],['능력·적성','성인용 직업적성검사(11개 적성요인)','80~90분 / 만 18세 이상'],['취업 준비도','대학생 진로준비도검사','약 20분 / 대학생·만 29세 이하']]),K.note('가이드는 2013년경 자료로 보여 현재 제공 검사·시간·사이트는 고용24(www.work24.go.kr)·커리어넷(www.career.go.kr)에서 확인이 필요해요. 적성검사 시간은 가이드 안에서도 90분과 약 80분으로 다르게 적혀 있어요.','hint')));
+  box.appendChild(K.card(h3('가치 · 우리 12가치와 공식 13요인 대응표(추정)'),K.table(['우리 12가치','공식 13요인'],[['성취 · 영향력 · 자율성 · 사회적 인정','성취 · 영향력 발휘 · 자율성 · 인정 (이름이 거의 같음)'],['안정성 · 보수 · 일과 삶의 균형 · 자기계발 · 도전성 · 사회적 기여','직업안정 · 금전적 보상 · 몸과 마음의 여유 · 지식추구 · 변화지향 · 봉사 (뜻이 비슷함)'],['즐거움 · 소속감','공식 13요인에 없음(수업용 추가)'],['(없음)','개별활동 · 애국 · 실내활동 (공식 검사에서 확인)']]),K.note('대응은 이름과 설명을 비교한 제 판단(추정)이며 공식 기준이 아닙니다.','hint')));
+  K.reg(function(){var p=document.getElementById('m2line');if(p)p.textContent=m2line()})})()}
+function m2line(){var v=cardTopKeys('value').map(function(k){return nm('value',k)}).join('·'),ri=res('interest');var ic=ri.done?ri.rk.top.slice(0,2).join('')+' (Top3 '+ri.rk.top.join('')+')':'';return '전공·학년: '+(g('info.major','')||'(미입력)')+' '+(g('info.grade','')||'')+' / 가치 키워드: '+(v||'(미입력)')+' / 흥미 코드: '+(ic||'(미입력)')}
+/* ---------- 시작·출력 ---------- */
+function reportSecs(){var s=[];s.push({t:'M1 자기 이해 · 헤더',kv:[['전공·학년',(g('info.major','')+' '+g('info.grade','')).trim()],['작성일',new Date().toLocaleDateString('ko-KR')]]});
+ AREAS.forEach(function(a){var R=res(a),P='card.'+a;var kv=[];if(a==='eff'){EFF.forEach(function(e){var sc=g(P+'.score.'+e[0]);kv.push([e[0],(sc?sc+'점':'')+(g(P+'.exp.'+e[0])?' / 근거: '+g(P+'.exp.'+e[0]):'')])});kv.push(['가장 낮은 과제',(g(P+'.low','')||'')+(g(P+'.src','')?' / 원천: '+g(P+'.src',''):'')]);kv.push(['이번 주 작은 행동',g(P+'.act','')]);if(effPicked().length)kv.push(['찜한 작은 행동 예시',effPicked().join('\n')]);if(R.done)kv.push(['점수와 사실이 맞은 과제',cmp('eff').count+'/5'])}
+  else if(a==='pers'){PERS.forEach(function(p){var sd=g(P+'.side.'+p[0]);kv.push([p[0]+' 카드',(sd?(sd==='A'?p[1]:p[2]):'')+(g(P+'.exp.'+p[0])?' / '+g(P+'.exp.'+p[0]):'')])});if(R.done)kv.push(['검사 결과 일치',cmp('pers').count+'/5'])}
+  else{g(P+'.top',[]).forEach(function(id,i){var line=(g(P+'.reason.'+id,'')||'');var ex=g(P+'.exp.'+id,'');if(ex)line+=' / 경험: '+ex;if(a==='strength')line+=' / '+(g(P+'.conf.'+id)==='have'?'자신 있음':'잠재(증거 없음)');kv.push([(i+1)+'위 '+id,line])});if(R.done){kv.push(['검사 Top3',R.rk.top.map(function(k){return nm(a,k)}).join(', ')]);if(a==='interest')kv.push(['흥미 코드(상위 2)',R.rk.top.slice(0,2).join('')+' / Top3 '+R.rk.top.join('')]);kv.push(['일치 수',cmp(a).count+'/3'])}}
+  kv.push(['사례 선택',(function(){var c=g('hook.'+a+'.c');return c!=null&&c!==''?HOOK[a].o[+c][0]+' / '+(g('hook.'+a+'.why','')):'(미선택)'})()]);kv.push(['간이 비교 한 줄',g('cmp.'+a,'')]);s.push({t:AN[a]+' 영역 결과',kv:kv})});
+ var jr=[];['value','interest','strength','env'].forEach(function(a){keywords(a).forEach(function(x){jr.push([AN[a],x.name,x.inC&&x.inT?'카드+검사':x.inC?'카드':'검사',g('syn.j.'+a+'.'+x.k,'')||'(미선택)'])})});
+ s.push({t:'종합 판정표',tbl:{head:['영역','키워드','나타난 곳','내 판정'],rows:jr.length?jr:[['-','-','-','-']]},note:'결과는 내 선택이 보여주는 힌트이며 표준화 검사가 아닙니다.'});
+ (function(){var wl=wishList();s.push({t:'찜한 직무 모아 성찰',tbl:{head:['직무','찜한 영역','내 이유'],rows:wl.length?wl.map(function(p){return [p.n,wishAreas(p.c).map(function(x){return AN[x]}).join('·'),g('wish.note.'+p.c,'')||'(미입력)']}):[['-','-','-']]},kv:[['겹친 직무와 이유',g('syn.wq1','')],['한 영역에서만 찜한 이유',g('syn.wq2','')],['끌리는 직무 1~2개',(g('syn.wpick',[])||[]).join(', ')],['이유·확인할 것',g('syn.wq3','')]],note:'추천이 아니라 탐색 후보입니다.'})})();
+ s.push({t:'성찰 노트',kv:[['① 놀라운 점',g('syn.q1','')],['② 불일치 이유',(g('syn.q2',[]).join(', ')+' '+(g('syn.q2t','')||'')).trim()],['③ 확신 키워드',['value','interest','strength','env'].map(function(a){var k=g('syn.q3.'+a,'');return k?AN[a]+': '+k+' ('+(g('syn.q3x.'+a,'')||'근거 미입력')+')':''}).filter(Boolean).join('\n')],['나의 한 문장',g('syn.one','')]]});
+ var C=cand();s.push({t:'적합 산업·직무 후보 (탐색용)',kv:[['직무 후보',C?C.jobs.map(function(o){return o.p.n}).join(', '):'(검사 미완료)'],['산업 후보',C?C.inds.map(function(o){return o.n}).join(', '):'(검사 미완료)'],['관심 후보',(g('cand.pick',[])||[]).join(', ')],['이유',g('cand.why','')],['끌리지 않는 후보',(g('cand.dis','')||'')+(g('cand.disWhy','')?' / '+g('cand.disWhy',''):'')],['M2에서 확인할 것',g('cand.m2','')],['M2 이월 한 줄',m2line()]],note:'추천이 아니라 탐색 후보입니다. 직무 태깅은 수업용 초안입니다.'});return s}
+/* ---------- 예시 ---------- */
+function sample(S,set,get){S.info={major:'경영학과',grade:'4학년',nick:'파란여우'};S.wish={J48:{value:true,interest:true,strength:true},J22:{interest:true,env:true},J08:{value:true}};
+ var hk={value:[0,'도전해서 성과를 내는 쪽이 끌려서'],interest:[0,'데이터로 원인을 찾는 일이 재밌어 보여서'],strength:[0,'원인부터 보는 편이라서'],env:[3,'결과가 보이는 팀이 좋아서'],pers:[0,'계획대로 마무리하는 편이라서'],eff:[1,'합격 선배의 구조를 먼저 보면 덜 막막해서']};AREAS.forEach(function(a){set('hook.'+a+'.c',String(hk[a][0]));set('hook.'+a+'.why',hk[a][1])});
+ function lock(a,top,p1,extra){set('card.'+a+'.p1',p1);set('card.'+a+'.top',top);top.forEach(function(id){set('card.'+a+'.reason.'+id,'(가상) '+id+'이(가) 나를 잘 설명한다고 느꼈다')});if(extra)extra();set('card.'+a+'.locked',true)}
+ lock('value',['성취','자기계발','안정성'],['성취','자기계발','안정성','도전성','보수'],function(){['성취','자기계발','안정성'].forEach(function(id){set('card.value.exp.'+id,'(가상) 학회 회계 정산 지연을 6회에서 0회로 줄였다')})});
+ lock('interest',['사람을 설득하고 협상하기','자료를 분석해 규칙 찾기','자료를 정리·분류하기'],['사람을 설득하고 협상하기','자료를 분석해 규칙 찾기','자료를 정리·분류하기','쉽게 설명해 가르치기','글쓰기','팀을 이끌기']);
+ lock('strength',['의사소통','문제해결','대인관계'],['의사소통','문제해결','대인관계','수리','자원관리'],function(){['의사소통','문제해결'].forEach(function(id){set('card.strength.conf.'+id,'have');set('card.strength.exp.'+id,'(가상) 학회 발표와 정산 공지를 맡았다');set('card.strength.sub.'+id,id==='의사소통'?'문서작성':'문제처리')});set('card.strength.conf.대인관계','none');set('card.strength.sub.대인관계','팀워크')});
+ lock('env',['성과','인정','함께'],[]);
+ PERS.forEach(function(p,i){set('card.pers.side.'+p[0],i===3?'B':'A');set('card.pers.exp.'+p[0],'(가상) 동아리에서 그렇게 행동했다')});set('card.pers.locked',true);
+ var sc={'자기 이해':'4','직무 정보 찾기':'3','목표 직무 정하기':'3','지원서 쓰기':'2','면접에서 말하기':'2'},ex={'자기 이해':'(가상) 학회 정산 지연을 6회에서 0회로 줄인 사례를 말할 수 있다','직무 정보 찾기':'(가상) 공고 3건을 비교해 본 적이 있다','목표 직무 정하기':'(가상) 후보는 있지만 비교표는 만들어 본 적 없다','지원서 쓰기':'(가상) 자소서를 끝까지 써 본 적이 없다','면접에서 말하기':'(가상) 소리 내어 답해 본 적이 없다'};
+ EFF.forEach(function(e){set('card.eff.score.'+e[0],sc[e[0]]);set('card.eff.exp.'+e[0],ex[e[0]])});set('card.eff.low','지원서 쓰기');set('card.eff.src','성공 경험');set('card.eff.act','(가상) 자소서 1문항을 이번 주 안에 끝까지 쓴다');set('card.eff.locked',true);set('eff.act.0',true);
+ ['A','A','B','B','B'].forEach(function(v,i){set('test.eff.ans.'+i,v)});
+ function ans(a,list,pref,off){list.forEach(function(q,i){var ia=pref.indexOf(q.ka),ib=pref.indexOf(q.kb);set('test.'+a+'.ans.'+((off||0)+i),ia<=ib?'A':'B')})}
+ ans('value',VQ.slice(0,18),['성취','자기계발','도전성','보수','사회적 인정','영향력','자율성','즐거움','소속감','안정성','균형','사회적 기여']);
+ set('test.value.ans.18',g2('test.value.ans.0'));set('test.value.ans.19',g2('test.value.ans.7')==='A'?'B':'A');
+ function g2(p){return get(p)}
+ ans('interest',IQ,['E','I','C','S','A','R']);ans('env',EQ,['성과','인정','스스로','함께','든든','편안']);set('test.env.ans.6','B');set('test.env.ans.7','A');set('test.env.ans.8','A');
+ var sp=['문제해결','의사소통','수리','자원관리','정보','대인관계','자기개발','조직이해','직업윤리','기술'];SQ.forEach(function(q,i){var b=0,bi=99;q.o.forEach(function(o,j){var x=sp.indexOf(o[1]);if(x<bi){bi=x;b=j}});set('test.strength.ans.'+i,b)});
+ PQ.forEach(function(q,i){set('test.pers.ans.'+i,i===1?'B':'A')});
+ set('cmp.value','(가상) 안정성은 카드에서만 높고 검사에서는 낮았다. 내가 쓴 단어와 선택이 달랐다.');
+ set('syn.q1','(가상) 안정성이 검사에서 거의 나오지 않은 점이 놀라웠다');set('syn.q2',['좋은 쪽을 고르려는 마음','경험 부족']);set('syn.q2t','(가상) 안정적이어야 한다는 생각이 앞섰던 것 같다');set('syn.one','(가상) 나는 성취와 성장을 중요하게 여기고, 데이터를 분석하는 활동에서 몰입하며, 소통 강점을 살려 성과가 보이는 환경에서 힘을 낸다.');
+ set('cand.why','(가상) 성취와 분석 키워드가 마케팅·데이터 직무와 이어진다')}
+
+/* ---------- 수업 나눔: 구글 폼 자동 제출 (전송 전 미리보기) ---------- */
+/* ★ 강사 설정: 구글 Apps Script 웹 앱 URL(…/exec)을 아래 url 에 붙여 넣으세요. */
+var SHARE_CFG={url:'https://script.google.com/macros/s/AKfycbwV_I_PAqUH_4sgHPtYLxFqkpJdsGmD06GdOV7oTgK28yBqeh8mxuS1TxWCwD8Lats/exec'};
+var SHARE_PII=[/01[016789][-\s.]?\d{3,4}[-\s.]?\d{4}/,/[\w.+-]+@[\w-]+\.[\w.-]+/,/\d{6}[-\s]?[1-4]\d{6}/];
+function shareOK(){return !!SHARE_CFG.url}
+function shareData(a){var d={nick:(g('info.nick','')||'').trim(),area:a==='syn'?'종합':AN[a],mine:'',test:'',note:''};var L=[];
+ if(a==='syn'){['value','interest','strength','env'].forEach(function(x){var k=g('syn.q3.'+x,'');if(k)L.push(AN[x]+' 확신 키워드: '+k+(g('syn.q3x.'+x,'')?' ('+g('syn.q3x.'+x,'')+')':''))});if(g('syn.one',''))L.push('나의 한 문장: '+g('syn.one',''));d.mine=L.join('\n');
+  var T=[];if((g('cand.pick',[])||[]).length)T.push('관심 후보: '+g('cand.pick',[]).join(', '));if(g('cand.why',''))T.push('이유: '+g('cand.why',''));if(g('cand.m2',''))T.push('다음 차시(M2+M3)에서 확인할 것: '+g('cand.m2',''));d.test=T.join('\n');d.note=g('syn.q1','')||'';return d}
+ var R=res(a);
+ if(a==='eff'){EFF.forEach(function(e){var sc=g('card.eff.score.'+e[0]);if(sc)L.push(e[0]+' '+sc+'점'+(g('card.eff.exp.'+e[0],'')?' / 근거: '+g('card.eff.exp.'+e[0],''):''))});if(g('card.eff.low',''))L.push('가장 낮은 과제: '+g('card.eff.low','')+(g('card.eff.act','')?' → 작은 행동: '+g('card.eff.act',''):''));d.mine=L.join('\n');d.test=R.done?'점수와 사실이 맞은 과제 '+cmp('eff').count+'/5':'(검사 미완료)'}
+ else if(a==='pers'){PERS.forEach(function(p){var s=g('card.pers.side.'+p[0]);if(s)L.push(p[0]+': '+(s==='A'?p[1]:p[2])+(g('card.pers.exp.'+p[0],'')?' / '+g('card.pers.exp.'+p[0],''):''))});d.mine=L.join('\n');
+  d.test=R.done?'카드와 검사 일치 '+cmp('pers').count+'/5':'(검사 미완료)'}
+ else{g('card.'+a+'.top',[]).forEach(function(id,i){var s=(i+1)+'위 '+id;var rs=g('card.'+a+'.reason.'+id,'');if(rs)s+=' - '+rs;var ex=g('card.'+a+'.exp.'+id,'');if(ex)s+=' / 경험: '+ex;if(a==='strength')s+=' / '+(g('card.strength.conf.'+id)==='have'?'자신 있음':'잠재(증거 없음)');L.push(s)});d.mine=L.join('\n');
+  if(R.done){var m=cmp(a);d.test='검사 Top3: '+R.rk.top.map(function(k){return nm(a,k)}).join(', ')+(a==='interest'?' (흥미 코드 '+R.rk.top.slice(0,2).join('')+' · Top3 '+R.rk.top.join('')+')':'')+' / 카드와 일치 '+m.count+'/3'+(m.disc.length?' / 발견 후보: '+m.disc.map(function(k){return nm(a,k)}).join(', '):'')}else d.test='(검사 미완료)'}
+ d.note=g('cmp.'+a,'')||'';return d}
+function shareCard(a,box){var nmA=a==='syn'?'종합':AN[a];
+ var c=K.card(h3('⑥ 수업 나눔 · 강사에게 보내기'));c.classList.add('noprint');box.appendChild(c);
+ if(a!=='syn'&&!areaDone(a)){c.appendChild(K.note('카드를 저장하고 잠그면 나눔 제출이 열려요.'));return}
+ if(!shareOK()){c.appendChild(K.note('제출 기능이 아직 연결되지 않았어요. 강사에게 문의하세요.'));return}
+ c.appendChild(K.note('내가 쓴 내용을 강사의 수업 화면으로 보냅니다. 보내기 전에 미리보기로 확인하고, 보내기 싫은 내용은 칸에서 지운 뒤 다시 미리보기를 누르세요. 보내지 않아도 수업 진행에는 지장이 없어요.'));
+ c.appendChild(K.lab('닉네임','실명 금지 · 시작 탭의 닉네임과 같은 칸이에요',K.field('info.nick',{rows:0,ph:'예: 파란여우'})));
+ var stat=K.h('p',{class:'mute'});var prev=K.h('div',{style:'display:flex;flex-direction:column;gap:10px'});
+ function sentTxt(){var t=g('share.'+a+'.at','');return t?'마지막 제출 요청: '+t+' (고친 뒤 다시 제출하면 내 슬라이드가 새 내용으로 바뀌어요)':'아직 제출하지 않았어요.'}
+ stat.textContent=sentTxt();
+ function bad(d){var all=[d.nick,d.mine,d.test,d.note].join('\n');return SHARE_PII.some(function(r){return r.test(all)})}
+ var pb=K.btn('전송 전 미리보기',function(){prev.innerHTML='';var d=shareData(a);var err='';
+   if(!d.nick)err='닉네임을 먼저 입력하세요.';else if(d.nick.length>12)err='닉네임은 12자 이내로 쓰세요.';else if(!d.mine)err='나눌 내용이 아직 없어요. 카드(또는 종합 성찰)를 먼저 작성하세요.';else if(bad(d))err='전화번호·이메일·주민번호 형태가 들어 있어요. 해당 내용을 지우고 다시 눌러 주세요.';
+   if(err){prev.appendChild(K.h('p',{class:'hint',style:'border-left-color:var(--warn)'},err));return}
+   var rows=[['닉네임',d.nick],['영역',d.area],['내 선택과 이유',d.mine],['검사 결과·비교',d.test||'(없음)'],['한 줄 소감',d.note||'(없음)']].map(function(r){return [K.h('b',null,r[0]),K.h('span',{style:'white-space:pre-wrap'},r[1])]});
+   var sb=K.btn('이 내용으로 제출',null,'');var cb=K.btn('닫기',function(){prev.innerHTML=''},'ghost');
+   sb.addEventListener('click',function(){sb.disabled=true;sb.textContent='보내는 중…';var fd=new URLSearchParams();
+     fd.append('nick',d.nick);fd.append('area',d.area);fd.append('mine',d.mine);fd.append('test',d.test||'-');fd.append('note',d.note||'-');
+     fetch(SHARE_CFG.url,{method:'POST',mode:'no-cors',body:fd}).then(function(){K.set('share.'+a+'.at',new Date().toLocaleTimeString('ko-KR'));K.persist();stat.textContent=sentTxt();prev.innerHTML='';prev.appendChild(K.h('p',{class:'hint'},'제출 요청을 보냈어요. 공유 슬라이드에 내 닉네임 슬라이드가 생겼는지 잠시 뒤 확인해 보세요(몇 초 걸릴 수 있어요). 안 보이면 인터넷 연결을 확인하고 다시 제출하세요.'))}).catch(function(){sb.disabled=false;sb.textContent='이 내용으로 제출';prev.appendChild(K.h('p',{class:'hint',style:'border-left-color:var(--warn)'},'전송하지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.'))})});
+   prev.appendChild(K.h('h3',null,'미리보기 · '+nmA+' (아직 전송 전)'));prev.appendChild(K.table(['항목','보낼 내용'],rows));prev.appendChild(K.h('div',{class:'row',style:'gap:8px'},sb,cb))},'gold');
+ c.appendChild(K.h('div',{class:'row',style:'align-items:center'},pb,stat));c.appendChild(prev)}
+APP.key='m1-v1';APP.tag='M1';APP.title='M1 자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역 · 카드 → 검사 → 비교 → 후보';
+APP.sample=sample;
+APP.tabs=[].concat(AREAS.map(function(a){return {id:a,label:AN[a],render:areaTab(a)}})).concat([{id:'syn',label:'종합 성찰',render:synTab},{id:'cand',label:'후보',render:candTab},{id:'out',label:'출력',render:function(el){K.outputTab(el,reportSecs,'M1_자기이해_결과.pdf')}}]);
+</script>
+<script>/* ---- 공통 코어: 상태·저장·DOM·프롬프트 카드·타이머·출력 ---- */
+(function(){
+var APP=window.APP, S={}, mem={}, watchers=[], saveT=null, curTab=null, saveState='';
+var store={
+  get:function(k){try{var v=localStorage.getItem(k);if(v!==null)return v}catch(e){}return mem[k]||null},
+  set:function(k,v){mem[k]=v;try{localStorage.setItem(k,v);return true}catch(e){return false}}
+};
+function load(){try{var r=store.get(APP.key);if(r)S=JSON.parse(r)||{}}catch(e){S={}}}
+function persist(){var ok=store.set(APP.key,JSON.stringify(S));var el=document.getElementById('savest');if(el)el.textContent=ok?'자동 저장됨(이 브라우저에만)':'저장소를 쓸 수 없어요. 화면을 닫으면 사라지니 [텍스트 복사]를 해 두세요'}
+function changed(){clearTimeout(saveT);saveT=setTimeout(persist,300);run()}
+function run(){for(var i=0;i<watchers.length;i++){try{watchers[i]()}catch(e){console.error(e)}}}
+function reg(fn){watchers.push(fn);try{fn()}catch(e){console.error(e)}}
+function get(p,d){var o=S,a=p.split('.');for(var i=0;i<a.length;i++){if(o==null||typeof o!=='object')return d;o=o[a[i]]}return o===undefined?d:o}
+function set(p,v){var o=S,a=p.split('.');for(var i=0;i<a.length-1;i++){if(o[a[i]]==null||typeof o[a[i]]!=='object')o[a[i]]={};o=o[a[i]]}o[a[a.length-1]]=v}
+function h(tag,a){var el=document.createElement(tag);if(a)for(var k in a){var v=a[k];if(v==null||v===false)continue;if(k==='class')el.className=v;else if(k==='style')el.style.cssText=v;else if(k.indexOf('on')===0)el.addEventListener(k.slice(2),v);else if(v===true)el.setAttribute(k,'');else el.setAttribute(k,v)}add(el,Array.prototype.slice.call(arguments,2));return el}
+function add(el,kids){for(var i=0;i<kids.length;i++){var c=kids[i];if(c==null||c===false)continue;if(Array.isArray(c))add(el,c);else el.appendChild(c&&c.nodeType?c:document.createTextNode(String(c)))}}
+var PII=[/01[016789][-\s.]?\d{3,4}[-\s.]?\d{4}/,/[\w.+-]+@[\w-]+\.[\w.-]+/,/\d{6}[-\s]?[1-4]\d{6}/];
+function pii(el){var bad=false,v=el.value||'';for(var i=0;i<PII.length;i++)if(PII[i].test(v))bad=true;el.classList.toggle('pii-bad',bad);var any=document.querySelector('.pii-bad');var b=document.getElementById('pii');b.style.display=any?'block':'none';}
+function field(path,o){o=o||{};var rows=o.rows===undefined?2:o.rows;var el=rows>0?h('textarea',{rows:rows,placeholder:o.ph||'','aria-label':o.aria||o.ph||path}):h('input',{type:o.type||'text',placeholder:o.ph||'','aria-label':o.aria||o.ph||path});
+  if(o.type==='number'){el.min=o.min;el.max=o.max}
+  el.value=get(path,'')==null?'':get(path,'');if(o.locked&&o.locked())el.disabled=true;
+  el.addEventListener('input',function(){set(path,el.value);pii(el);changed()});setTimeout(function(){pii(el)},0);return el}
+function lab(text,hint,el){return h('label',{class:'lab'},text,hint?h('span',{class:'mute'},hint):null,el)}
+function btn(text,fn,cls,o){var b=h('button',{type:'button',class:'btn '+(cls||'')},text);if(fn)b.addEventListener('click',function(e){fn(e,b)});if(o&&o.disabled)b.disabled=true;return b}
+function confirmBtn(text,ctext,fn,cls){var b=btn(text,null,cls),t=null;b.addEventListener('click',function(){if(b.dataset.c==='1'){clearTimeout(t);b.dataset.c='0';b.textContent=text;fn()}else{b.dataset.c='1';b.textContent=ctext;t=setTimeout(function(){b.dataset.c='0';b.textContent=text},4000)}});return b}
+function card(){var a=Array.prototype.slice.call(arguments);var cls='card';if(typeof a[0]==='string'&&a[0].indexOf('cls:')===0){cls+=' '+a.shift().slice(4)}return h('div',{class:cls},a)}
+function radio(path,opts,o){o=o||{};var wrap=h('div',{class:'opts',role:'radiogroup'});var name='r'+Math.random().toString(36).slice(2);opts.forEach(function(op){var v=typeof op==='string'?op:op.v,t=typeof op==='string'?op:op.t;var inp=h('input',{type:'radio',name:name,value:v});if(get(path)===v)inp.checked=true;if(o.locked&&o.locked())inp.disabled=true;inp.addEventListener('change',function(){set(path,v);changed()});wrap.appendChild(h('label',{class:'opt'},inp,h('span',null,t)))});return wrap}
+function check(path,opts){var wrap=h('div',{class:'opts'});var arr=get(path,[]);opts.forEach(function(t){var inp=h('input',{type:'checkbox'});inp.checked=arr.indexOf(t)>=0;inp.addEventListener('change',function(){var a=get(path,[]).slice();var i=a.indexOf(t);if(inp.checked&&i<0)a.push(t);if(!inp.checked&&i>=0)a.splice(i,1);set(path,a);changed()});wrap.appendChild(h('label',{class:'opt'},inp,h('span',null,t)))});return wrap}
+function select(path,opts,o){o=o||{};var s=h('select',{'aria-label':o.aria||path});s.appendChild(h('option',{value:''},o.ph||'선택'));opts.forEach(function(x){var v=typeof x==='string'?x:x.v,t=typeof x==='string'?x:x.t;var op=h('option',{value:v},t);s.appendChild(op)});s.value=get(path,'')||'';if(o.locked&&o.locked())s.disabled=true;s.addEventListener('change',function(){set(path,s.value);changed()});return s}
+function bars(items,max,fmt){var w=h('div',{style:'display:flex;flex-direction:column;gap:6px'});items.forEach(function(it){var pct=max>0?Math.round(100*it.v/max):0;w.appendChild(h('div',{class:'bar'},h('span',{class:'nm'},it.n),h('span',{class:'tr'},h('span',{class:'fl',style:'display:block;width:'+pct+'%'})),h('span',{class:'v'},fmt?fmt(it.v):String(it.v))))});return w}
+function table(head,rows){return h('div',{class:'tw'},h('table',{class:'t'},h('tr',null,head.map(function(x){return h('th',null,x)})),rows.map(function(r){return h('tr',null,r.map(function(c){return h('td',null,c)}))})))}
+function note(t,kind){return h('p',{class:kind==='hint'?'hint':'mute'},t)}
+function copyText(text,done){function fb(){var ta=h('textarea',{style:'position:fixed;left:-9999px'});ta.value=text;document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
+  try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){done(true)},fb);return}}catch(e){}fb()}
+function copyBtn(getText,label){var b=btn(label||'복사',null,'gold sm');b.addEventListener('click',function(){copyText(getText(),function(ok){var o=b.textContent;b.textContent=ok?'복사됨':'복사 실패: 글을 직접 선택해 복사하세요';setTimeout(function(){b.textContent=o},1800)})});return b}
+var AIS=[['ChatGPT','https://chatgpt.com/'],['Gemini','https://gemini.google.com/'],['Claude','https://claude.ai/'],['Copilot','https://copilot.microsoft.com/']];
+function aiLinks(){return h('div',{class:'row noprint',style:'gap:6px'},AIS.map(function(a){return h('a',{href:a[1],target:'_blank',rel:'noopener noreferrer',class:'btn ghost sm',style:'text-decoration:none;display:inline-block;flex:0 0 auto;text-align:center;border:1px solid var(--line);color:var(--fg);border-radius:10px;padding:5px 10px;font-size:13px;font-weight:700'},a[0]+' 열기')}))}
+/* 프롬프트 카드: tpl 안의 {{키}}를 vars[키]()로 채움 */
+function promptCard(o){var pre=h('pre',{class:'prompt'});function build(html){var out=o.tpl.replace(/\{\{(\w+)\}\}/g,function(m,k){var f=o.vars&&o.vars[k];var v=f?(typeof f==='function'?f():get(f.path,'')):'';v=(v==null?'':String(v)).trim();if(!v)return html?'<mark>【'+((f&&f.label)||k)+'】</mark>':'【'+((f&&f.label)||k)+'】';return html?esc(v):v});return html?esc2(out):out}
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+  function esc2(){var t=o.tpl.replace(/&/g,'&amp;').replace(/</g,'&lt;');return t.replace(/\{\{(\w+)\}\}/g,function(m,k){var f=o.vars&&o.vars[k];var v=f?(typeof f==='function'?f():get(f.path,'')):'';v=(v==null?'':String(v)).trim();if(!v)return '<mark>【'+((f&&f.label)||k)+'】</mark>';return esc(v)})}
+  function text(){return o.tpl.replace(/\{\{(\w+)\}\}/g,function(m,k){var f=o.vars&&o.vars[k];var v=f?(typeof f==='function'?f():get(f.path,'')):'';v=(v==null?'':String(v)).trim();return v||'【'+((f&&f.label)||k)+'】'})}
+  reg(function(){pre.innerHTML=esc2()});
+  var c=card(h('div',{style:'display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center'},h('h3',null,o.title),copyBtn(text,'프롬프트 복사')),o.rule?h('p',{class:'mute'},o.rule):null,pre,h('p',{class:'mute'},'복사해서 무료 AI 창에 붙여 넣으세요. 노란 칸이 남아 있으면 앞 단계 입력을 채우세요. 개인정보(이름·연락처)는 넣지 않습니다.'),aiLinks());return c}
+var ac=null;function beep(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();var o=ac.createOscillator(),g=ac.createGain();o.connect(g);g.connect(ac.destination);o.frequency.value=880;g.gain.value=.15;o.start();setTimeout(function(){o.stop()},500)}catch(e){}}
+function timer(min,label){var left=min*60,iv=null;var tm=h('span',{class:'tm'},fmt(left));var box=h('span',{class:'timer noprint'});function fmt(s){var m=Math.floor(s/60),x=s%60;return (m<10?'0':'')+m+':'+(x<10?'0':'')+x}
+  function stop(){clearInterval(iv);iv=null}
+  var bs=btn('시작',function(){if(iv){stop();bs.textContent='계속';return}if(left<=0)left=min*60;box.classList.remove('done');bs.textContent='일시정지';beep0();iv=setInterval(function(){left--;tm.textContent=fmt(Math.max(left,0));if(left<=0){stop();box.classList.add('done');bs.textContent='시작';beep()}},1000)},'sm');
+  function beep0(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+  var br=btn('초기화',function(){stop();left=min*60;tm.textContent=fmt(left);box.classList.remove('done');bs.textContent='시작'},'ghost sm');
+  add(box,[label?h('span',{class:'mute'},label):null,tm,bs,br]);return box}
+function aiLog(steps){var rows=steps.map(function(s,i){return [s,field('ailog.'+i+'.tool',{rows:0,ph:'도구'}),field('ailog.'+i+'.req',{rows:0,ph:'요청 요지'}),field('ailog.'+i+'.acc',{rows:0,ph:'수용한 내용'}),field('ailog.'+i+'.edit',{rows:0,ph:'수정한 내용'})]});return card(h('h3',null,'AI 활용 기록'),note('AI의 제안 중 무엇을 받아들이고 무엇을 내 말로 바꿨는지 스텝별 한 줄로 남깁니다. 평가 반영 여부는 아직 정해지지 않았습니다(결정 필요).'),table(['스텝','사용 도구','요청 요지','수용','수정'],rows))}
+/* 보고서(출력) */
+function reportText(secs){var t=[];secs.forEach(function(s){t.push('## '+s.t);(s.kv||[]).forEach(function(r){t.push('- '+r[0]+': '+(r[1]==null||r[1]===''?'(미입력)':r[1]))});(s.tbl?[s.tbl]:[]).forEach(function(tb){t.push(tb.head.join(' | '));tb.rows.forEach(function(r){t.push(r.join(' | '))})});t.push('')});return t.join('\n')}
+function reportView(secs){var w=h('div',{class:'rep',style:'display:flex;flex-direction:column;gap:12px'});secs.forEach(function(s){var d=h('div',{class:'sec'},h('h3',null,s.t));(s.kv||[]).forEach(function(r){d.appendChild(h('div',{class:'kv'},h('b',null,r[0]),h('span',{style:'white-space:pre-wrap'},r[1]==null||r[1]===''?'(미입력)':r[1])))});if(s.tbl)d.appendChild(table(s.tbl.head,s.tbl.rows));if(s.note)d.appendChild(note(s.note));w.appendChild(d)});return w}
+function outputTab(el,getSecs,fname){var box=h('div');var c=card('cls:rep-card',h('div',{class:'noprint',style:'display:flex;flex-direction:column;gap:8px'},h('h2',null,'출력 · PDF 저장'),note('아래 미리보기가 PDF가 됩니다. 브라우저의 인쇄(PC: Ctrl+P, Mac: ⌘+P) → 대상 [PDF로 저장]을 고르세요. 파일명 권장: '+fname+' · 이 화면은 인쇄 버튼을 지원하지 못할 수 있어, 열리지 않으면 [텍스트 복사]로 문서에 붙여 넣으세요.','hint'),h('div',{class:'row',style:'gap:8px'},copyBtn(function(){return reportText(getSecs())},'텍스트 복사'))),box);el.appendChild(c);
+  reg(function(){box.innerHTML='';box.appendChild(h('div',{style:'margin-top:8px'},h('h2',{style:'font-size:20px'},APP.title+' 결과'),h('p',{class:'mute'},'작성일 '+new Date().toLocaleDateString('ko-KR')+' · 이름·연락처는 입력하지 않았습니다')));box.appendChild(reportView(getSecs()))})}
+
+function picker(path,items,max,o){o=o||{};var wrap=h('div',{style:'display:flex;flex-direction:column;gap:8px'});var btns=[];var lastG=null;var grid=null;
+ items.forEach(function(it){if(it.grp&&it.grp!==lastG){lastG=it.grp;wrap.appendChild(h('div',{class:'mute',style:'font-weight:700;margin-top:4px'},it.grp));grid=h('div',{class:'cards'});wrap.appendChild(grid)}else if(!grid){grid=h('div',{class:'cards'});wrap.appendChild(grid)}
+  var b=h('button',{type:'button',class:'pick','aria-pressed':'false'},h('b',null,it.n),it.d?h('span',null,it.d):null);b.addEventListener('click',function(){var a=get(path,[]).slice();var i=a.indexOf(it.id);if(i>=0)a.splice(i,1);else if(a.length<max)a.push(it.id);else return;set(path,a);changed();refresh();if(o.onChange)o.onChange(a)});btns.push([b,it]);grid.appendChild(b)});
+ function refresh(){var a=get(path,[]);var lk=o.locked&&o.locked();btns.forEach(function(x){var on=a.indexOf(x[1].id)>=0;x[0].setAttribute('aria-pressed',on?'true':'false');x[0].disabled=!!lk||(!on&&a.length>=max)})}
+ refresh();return wrap}
+function stepHead(title,mission,mins){return card('cls:dark',h('h2',null,title),h('p',{class:'mute'},mission),h('div',{class:'row',style:'gap:10px'},mins.map(function(m){return timer(m[1],m[0])})))}
+function checks(path,items,title){return card(h('h3',null,title||'자기점검 3개'),check(path,items))}
+function listField(path,listId,o){var el=field(path,o);el.setAttribute('list',listId);return el}
+function datalist(id,vals){return h('datalist',{id:id},vals.map(function(v){return h('option',{value:v})}))}
+/* 틀 */
+function mount(){load();
+  var root=document.getElementById('app');
+  var themeBtn=btn('테마',function(){var cur=document.documentElement.getAttribute('data-theme');var dark=cur?cur==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',dark?'light':'dark')},'ghost sm');
+  var tools=h('div',{class:'tools noprint'},APP.sample?confirmBtn('예시 채우기(강지원·가상)','한 번 더 누르면 현재 입력이 예시로 바뀝니다',function(){APP.sample(S,set,get);persist();curTab&&show(curTab)},'ghost sm'):null,confirmBtn('모두 지우기','한 번 더 누르면 모두 지워집니다',function(){S={};persist();curTab&&show(APP.tabs[0].id)},'ghost sm'),themeBtn);
+  root.appendChild(h('header',{class:'top'},h('div',null,h('div',{class:'eyebrow'},'AI 활용 취업 마스터 클래스 · '+APP.tag),h('h1',null,APP.title),h('div',{class:'sub'},APP.sub)),tools));
+  root.appendChild(h('div',{id:'pii',role:'alert'},'전화번호·이메일·주민등록번호 형태가 감지됐어요. 빨간 칸의 해당 내용을 지워 주세요.'));
+  var nav=h('nav',{class:'tabs',role:'tablist'});var main=h('main');
+  root.appendChild(nav);root.appendChild(main);root.appendChild(h('p',{class:'sticky-save noprint'},h('span',{id:'savest'},'자동 저장됨(이 브라우저에만)'),' · 이 도구는 수업용 참고 도구입니다'));
+  APP.tabs.forEach(function(t){var b=h('button',{type:'button',role:'tab','aria-selected':'false','data-id':t.id},t.label);b.addEventListener('click',function(){show(t.id)});nav.appendChild(b)});
+  window.__show=show;
+  function show(id){curTab=id;watchers.length=0;main.innerHTML='';Array.prototype.forEach.call(nav.children,function(b){b.setAttribute('aria-selected',b.dataset.id===id?'true':'false')});var t=APP.tabs.filter(function(x){return x.id===id})[0];try{t.render(main)}catch(e){console.error(e);main.appendChild(h('p',null,'화면을 그리는 중 문제가 생겼어요: '+e.message))}run();window.scrollTo(0,0)}
+  show(APP.tabs[0].id)}
+window.K={picker:picker,stepHead:stepHead,checks:checks,listField:listField,datalist:datalist,h:h,add:add,get:get,set:set,field:field,lab:lab,btn:btn,confirmBtn:confirmBtn,card:card,radio:radio,check:check,select:select,bars:bars,table:table,note:note,copyBtn:copyBtn,copyText:copyText,promptCard:promptCard,timer:timer,aiLog:aiLog,outputTab:outputTab,reportText:reportText,reportView:reportView,reg:reg,changed:changed,S:function(){return S},show:function(id){window.__show(id)},cur:function(){return curTab},aiLinks:aiLinks,persist:persist};
+window.addEventListener('DOMContentLoaded',function(){mount()});
+})();
+</script>
