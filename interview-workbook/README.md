@@ -1,23 +1,47 @@
-# 헬퍼손 AI 면접 실습 워크북
+# 헬퍼손 AI 면접 실습 워크북 · 운영 배포 안내
 
-대학생을 위한 면접 실습 웹앱. 경험 발굴, STAR 답변, 자기소개·지원동기, 직무별 예상 질문, 모의면접, 평가표, JSON 백업·복원 등.
+## 기능
+- 경험 발굴, STAR, 1분 자기소개, 지원동기, 예상 질문, AI 코칭·모의면접, 자동저장·백업·복원
+- 로그인 없이 실습 가능 (따라서 **누구나 웹사이트에 접근 가능**)
+- AI 코칭 전용 서버 코드: `interview-workbook/server.py`
 
-## 이용
-- 웹앱(정적 페이지): https://helper83.github.io/interview-workbook/
-- 원본 HTML: ./index.html
-- GitHub Pages에서 **AI 직접 코칭은 동작하지 않습니다.** `/api/coach`와 `/api/health`를 제공하는 별도 백엔드가 필요합니다.
-- AI 서버는 `server.py`를 사용해 실행할 수 있으나 현재 개발·시범운영용입니다. 공개 배포 전 인증, 학생별 사용량 제한, 비용 모니터링, HTTPS, 개인정보 검토가 필요합니다.
+## 중요: 두 URL의 차이
+- **GitHub Pages**: https://helper83.github.io/interview-workbook/ — 웹페이지 미리보기. Python 서버가 실행되지 않으므로 **AI 코칭은 작동하지 않습니다.**
+- **Render의 Web Service**: 생성 후 할당되는 `https://<서비스명>.onrender.com/` — 정적 웹앱과 AI API를 **같은 서버**에서 제공하므로 AI 코칭 가능. 실제 주소는 배포 후 확인하십시오.
 
-## 서버 로컬 실행 (Python 3.10+)
+## Render에 배포하기
+1. https://dashboard.render.com/ 로그인 또는 가입 후 GitHub 계정 `helper83` 연결.
+2. **New → Blueprint**에서 `helper83/helper83.github.io` 저장소를 선택합니다. 저장소 최상위 `render.yaml`을 사용합니다.
+3. 생성할 서비스 정보와 요금제를 확인합니다. 선택한 Render 플랜의 요금은 별도 발생할 수 있습니다.
+4. `OPENAI_API_KEY` 환경변수는 **Render 대시보드에서 직접** 입력합니다. ChatGPT 대화창, GitHub 코드, HTML에 붙여넣지 않습니다.
+5. 배포 후 Render에서 받은 HTTPS 주소의 `/api/health`를 열어 `ai_configured: true` 상태인지 확인합니다.
+6. 동일한 Render URL의 **루트 경로**(`/`)로 접속하여 코칭 모드를 시험합니다.
+7. ZOOM 실습 전에 학생 여러 명으로 동시 접속 테스트와 사용량·비용 검토를 진행합니다.
+
+## 운영 한계 및 주의
+- 한 서버 프로세스에서 동시 AI 요청은 기본 6개, 일일 요청은 기본 500개로 제한합니다. `MAX_CONCURRENT_AI`, `MAX_DAILY_AI_REQUESTS` 환경변수로 조정할 수 있습니다.
+- IP별 시간당 25개 제한이 있어 **같은 대학 와이파이 등 공인 IP를 공유하는 학생들**은 제한에 걸릴 수 있습니다. 이 경우 인증·사용자별 제한을 도입해야 합니다.
+- 메모리 기반 제한이므로 서버 재시작·멀티 인스턴스에서는 초기화되거나 일관성이 없습니다. 실제 대규모 서비스에는 외부 저장소 기반 제한과 인증이 필요합니다.
+- 현재 로그인·수강생 인증·관리자 대시보드·정교한 예산 상한·사용자별 데이터 서버 저장·음성 기반 평가를 제공하지 않습니다.
+- 학생의 답변은 AI API 요청 시 외부로 전송됩니다. 개인정보 및 비공개 기업자료를 입력하지 않도록 안내하십시오.
+- API 이용료와 호스팅 요금은 각각 별도로 확인하십시오.
+- 제공 코드는 교육 시범 배포용으로 정식 개인정보·보안 감사가 완료되지 않았습니다.
+- 같은 출처(Origin)의 브라우저 요청만 허용하지만 직접 HTTP 클라이언트로 호출하는 경우까지 사용자 인증하는 방식은 아닙니다.
+
+## 로컬 실행
+Python 3.10+ 설치 후 `interview-workbook` 폴더에서:
 ```powershell
-$env:OPENAI_API_KEY="발급받은_API_키"
-$env:OPENAI_MODEL="gpt-4.1-mini"
+$env:OPENAI_API_KEY="키는 로컬 환경변수로만 설정"
 python server.py
 ```
-브라우저에서 http://localhost:8765/interview-workbook/ 가 아니라 서버와 `index.html`이 동일 폴더에 있는 구성으로 접속해야 합니다. GitHub 저장소의 `interview-workbook/` 폴더만 따로 받아 해당 폴더에서 `python server.py` 실행 후 http://localhost:8765 으로 엽니다.
+브라우저에서 http://localhost:8765/ 접속.
 
-## 보안 주의
-- API 키는 절대 index.html이나 GitHub에 넣지 않습니다.
-- GitHub Pages는 Python 서버를 실행하지 못합니다.
-- 학생이 입력한 질문과 답변은 AI 코칭 요청 시 외부 API로 전송됩니다.
-- 점수는 교육용 참고이며 실제 채용 합격 확률이 아닙니다.
+## 점검용 API
+- `GET /api/health`: 서버 준비 여부
+- `POST /api/coach`: AI 코칭 요청 (동일 도메인 학생용 웹앱에서 사용)
+
+## 추가 개발 우선순위
+1. 수업 코드 또는 인증 + 수강생별 사용 제한
+2. Redis 등 외부 저장소 기반 전역 요청량/예산 관리
+3. 동시 접속 부하 테스트, 개인정보 정책, 장애 대응
+4. 모바일 음성 실습 및 강사용 현황판
