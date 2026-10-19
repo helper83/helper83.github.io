@@ -1,4 +1,4 @@
-<title>헬퍼손 면접 실습</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>헬퍼손 면접 실습</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap">
 <style>
@@ -22,10 +22,13 @@
   --good:#4FC48B; --warn:#E3A340; --bad:#F27B72; --focus:#F28D50; color-scheme:dark}
 
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.55;
+/* 자동 크기 전환: 화면 너비에 따라 글자·본문 폭이 함께 커지고 줄어듭니다 */
+html{font-size:clamp(16px,.35vw + 14.6px,21px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{word-break:keep-all;overflow-wrap:anywhere}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:.9375rem;line-height:1.55;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--band);z-index:10}
-.wrap{max-width:980px;margin:0 auto}
+.wrap{max-width:min(100%,62rem);margin:0 auto}
 button,input,select,textarea{font:inherit;color:inherit}
 :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
 header.band{background:var(--band);color:var(--on-band);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));
@@ -67,7 +70,7 @@ textarea{resize:vertical;min-height:76px}
 .tbl .r:nth-child(even){background:var(--row)}
 .tbl .r>div{padding:11px 12px;display:flex;align-items:center;min-width:0}
 .tbl .r>.k{background:var(--navy);color:var(--on-navy);font-weight:700;justify-content:center;text-align:center}
-.ev .h,.ev .r{grid-template-columns:130px 1fr 190px 60px}
+.ev .h,.ev .r{grid-template-columns:8rem 1fr 12rem 3.75rem}
 .ev .h>div:nth-child(2){text-align:center}
 .seg{display:inline-flex;border:1.5px solid var(--navy);border-radius:9px;overflow:hidden}
 .seg button{border:0;border-right:1px solid var(--line);background:transparent;color:var(--navy);width:34px;height:34px;font-weight:700;cursor:pointer}
@@ -123,7 +126,7 @@ details.qbox>summary{cursor:pointer;font-weight:700;color:var(--navy)}
 .bar2{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
 
 /* mission 2 */
-.mk .h,.mk .r{grid-template-columns:70px 1fr 150px}
+.mk .h,.mk .r{grid-template-columns:4.4rem 1fr 9.4rem}
 .mk .r>div:nth-child(2){display:grid;gap:10px;align-content:start}
 .mk .t{font-weight:700}
 .mk .out{justify-content:center;text-align:center;flex-direction:column;gap:6px}
@@ -153,6 +156,21 @@ details.qbox>summary{cursor:pointer;font-weight:700;color:var(--navy)}
   .steps{gap:6px}
   .step .c{font-size:.78rem;padding:8px 3px}.step .c small{display:none}
   .step .n{width:38px;height:38px;font-size:1rem}
+}
+@media (pointer:coarse){
+  button,.btn,.chip,.tab,select,label.btn,input:not([type=checkbox]):not([type=radio]):not([type=range]):not(.vh){min-height:44px}
+  .btn.sm{padding-block:10px}
+  button[data-n]{min-width:44px}
+}
+@media (max-width:420px){
+  header.band h1{font-size:1.2rem}
+  .tab{font-size:.78rem}
+}
+@media (min-width:1500px){
+  body{padding-block:0 56px}
+}
+@media (orientation:landscape) and (max-height:480px){
+  nav.tabs{position:static}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -1149,3 +1167,4 @@ $('#bank').addEventListener('click',function(e){
 renderBank();
 })();
 </script>
+</body></html>
