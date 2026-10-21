@@ -1,9 +1,4 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>입사지원서 특강 노트</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>입사지원서 특강 노트</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap">
 <style>
@@ -384,6 +379,16 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 @media (min-width:1600px){.wrap{max-width:1480px;zoom:1.12}.t4side{max-height:none!important}}
 @media (min-width:2000px){.wrap{max-width:1600px;zoom:1.3}}
 @media (max-height:520px) and (orientation:landscape){.tabs{position:static}.t4side{position:static!important;max-height:none!important}}
+.aidlg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:max(12px,env(safe-area-inset-top)) 12px 12px;overflow:auto}
+.aibox{background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:10px;width:100%;max-width:640px;margin:auto 0}
+.aihd{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--line)}
+.aibody{padding:12px 14px;display:grid;gap:14px}
+.aibody h4{margin:0 0 6px;font-size:14px}.aibody section{border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:var(--paper)}
+.aibody textarea,.aibody input[type=password]{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:5px;padding:7px;background:var(--surface);color:var(--fg);font:inherit;font-size:13px;margin:6px 0}
+.aibody input[type=password]{flex:1;margin:0}
+.airow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.aimuted{color:var(--muted);font-size:12.5px;margin:4px 0}.aimsg{font-size:12.5px}.aimsg.err{color:var(--warn)}
+.aiol{margin:4px 0 8px;padding-left:20px;font-size:13px}
+.aiset{margin-left:auto;font-size:12.5px;padding:3px 10px}
 </style>
 
 <div class="wrap">
@@ -395,11 +400,11 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   <div class="tabs" role="tablist" aria-label="노트 탭">
     <button class="tab" role="tab" aria-selected="true" id="tab1">① 사람 평가</button>
     <button class="tab" role="tab" aria-selected="false" id="tab2">② AI 평가</button>
-    <button class="tab" role="tab" aria-selected="false" id="tab8">③ 직무탐색</button>
-    <button class="tab" role="tab" aria-selected="false" id="tab4">④ 이력서 작성</button>
-    <button class="tab" role="tab" aria-selected="false" id="tab7">⑤ 경험발굴</button>
-    <button class="tab" role="tab" aria-selected="false" id="tab5">⑥ 자기소개서 작성</button>
-    <button class="tab" role="tab" aria-selected="false" id="tab6">⑦ 포트폴리오 (선택)</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab8">직무탐색</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab4">③ 이력서 작성</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab7">④ 경험발굴</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab5">⑤ 자기소개서 작성</button>
+    <button class="tab" role="tab" aria-selected="false" id="tab6">⑥ 포트폴리오 (선택)</button>
   </div>
 
   <div id="view1">
@@ -691,9 +696,9 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
         <div class="exline"><button type="button" class="lk" id="t7exload">시연용: 김민준 예시 불러오기</button></div>
         <div class="t4body">
           <div class="t4blk" id="t7impblk">
-            <h3>이력서 작성(탭④)에서 불러오기</h3>
-            <div class="subt">탭④에 쓴 교육사항·자격증·경력사항·경험사항을 골라 자세한 STAR 내용만 이어서 쓰세요. 같은 내용을 다시 입력하지 않아도 됩니다.</div>
-            <div class="fg" style="margin-top:8px"><div class="fld full"><label for="t7src">탭④ 항목 선택</label><select id="t7src"></select></div></div>
+            <h3>이력서 작성(탭③)에서 불러오기</h3>
+            <div class="subt">탭③에 쓴 교육사항·자격증·경력사항·경험사항을 골라 자세한 STAR 내용만 이어서 쓰세요. 같은 내용을 다시 입력하지 않아도 됩니다.</div>
+            <div class="fg" style="margin-top:8px"><div class="fld full"><label for="t7src">탭③ 항목 선택</label><select id="t7src"></select></div></div>
             <div class="runmsg" id="t7impmsg" role="status"></div>
           </div>
           <div class="t4blk">
@@ -722,7 +727,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
             <div class="runmsg" id="t7msg" role="status" style="padding:8px 0 0"></div>
           </div>
           <div class="t4blk">
-            <h3>2. 공고 요구역량 반영 <small style="font-weight:400;color:var(--muted)">탭④ 공고 분석 키워드를 가져옵니다</small></h3>
+            <h3>2. 공고 요구역량 반영 <small style="font-weight:400;color:var(--muted)">탭③ 공고 분석 키워드를 가져옵니다</small></h3>
             <div id="t7meter" style="font-size:13px;font-weight:700">요구역량 반영률 -</div>
             <div class="meter"><i id="t7mbar"></i></div>
             <div id="t7kw"></div>
@@ -911,7 +916,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 (function(){
   var $=function(id){return document.getElementById(id)};
   var T=[['tab1','view1'],['tab2','view2'],['tab8','view8'],['tab4','view4'],['tab7','view7'],['tab5','view5'],['tab6','view6']];
-  var SUB=['미션1 · 사람 평가 · 평가표로 직접 평가하고, 컨설팅 보기에서 고칠 부분을 확인합니다','미션2 · AI 평가 · 채용공고·직무기술서를 올려 공고 기준으로 AI가 평가 초안을 만듭니다','미션3 · 직무대영역 → 직무 → 세부직무와 필요 역량을 탐색합니다','미션4 · 공고와 직무기술서에 맞춰 직무 관련 이력서를 작성합니다','미션5 · 경험을 STAR로 정리해 이력서·자소서 소재로 만듭니다','미션6 · 소재 메모 → 본문 → 점검 순서로 자기소개서를 씁니다','선택 · 제출이 필요한 직무만 포트폴리오 개요를 작성합니다'];
+  var SUB=['미션1 · 사람 평가 · 평가표로 직접 평가하고, 컨설팅 보기에서 고칠 부분을 확인합니다','미션2 · AI 평가 · 채용공고·직무기술서를 올려 공고 기준으로 AI가 평가 초안을 만듭니다','참고 · 직무대영역 → 직무 → 세부직무와 필요 역량을 탐색합니다 (번호 없는 참고용)','미션3 · 공고와 직무기술서에 맞춰 직무 관련 이력서를 작성합니다','미션4 · 경험을 STAR로 정리해 이력서·자소서 소재로 만듭니다','미션5 · 소재 메모 → 본문 → 점검 순서로 자기소개서를 씁니다','선택 · 제출이 필요한 직무만 포트폴리오 개요를 작성합니다'];
   var labels=T.map(function(t){return $(t[0]).textContent.trim()});
   var cur=0;
   function show(i,user){
@@ -1304,7 +1309,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   $('t2run').addEventListener('click',async function(){
     var btn=this;
     var sample=null;
-    try{sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null}catch(e){}
+    try{sample=await window.__ipAI.get()}catch(e){}
     if(!sample){msg('AI 평가는 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.','err');return}
     var post=collect('posting',90000),job=[];
     if(!post.length&&!job.length){msg('채용공고·직무기술서를 먼저 불러오세요.','err');return}
@@ -1893,7 +1898,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     var t8=window.__ipT8&&window.__ipT8.certs?window.__ipT8.certs(row.job,(window.__ipInfo&&window.__ipInfo.get().job)||''):null;
     var tips={
       edu:['지식 근거로 쓸 교과·교육을 고릅니다 → '+(k.K[0]||row.def_)].concat(k.K.slice(1,3)).concat(['과목명만 나열하지 말고 \u2018이 내용이 직무의 어떤 업무에 쓰이는지\u2019를 한 줄로 씁니다']),
-      cert:(t8&&t8.length?['직무탐색 자료상 관련 자격·면허: '+t8.slice(0,6).join(', ')]:['관련 자격은 지원 공고의 필수·우대 자격과 탭③ 직무탐색의 자격·면허 정보로 확인합니다']).concat(['자격증은 \u2018취득일·등급\u2019과 \u2018직무에서 쓰이는 장면\u2019을 함께 씁니다']),
+      cert:(t8&&t8.length?['직무탐색 자료상 관련 자격·면허: '+t8.slice(0,6).join(', ')]:['관련 자격은 지원 공고의 필수·우대 자격과 직무탐색 탭의 자격·면허 정보로 확인합니다']).concat(['자격증은 \u2018취득일·등급\u2019과 \u2018직무에서 쓰이는 장면\u2019을 함께 씁니다']),
       career:['인턴·현장실습·아르바이트는 아래 핵심 KPI 중 1~2개와 연결해 수치로 씁니다 → '+row.kpi.slice(0,4).join(', ')].concat(row.rec.filter(function(x){return /인턴|실습|현장/.test(x)}).slice(0,2)).concat(['역할·행동·성과(수치) 순서로 쓰고, 직무와 무관한 업무는 줄입니다']),
       exp:row.rec.slice(0,3).concat(row.port.slice(0,1)).concat(['활동명·기간·내 역할·결과를 쓰고, 직무 키워드가 보이게 정리합니다'])
     };
@@ -2055,7 +2060,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   }
   function guideHTML(cfg){
     var r=inst(),I=r?pseudo():null;
-    if(!r)return cfg.hintEmpty?'<div class="subt" style="padding:6px 0">공공기관을 선택하면 기관 맞춤 자기소개서 가이드가 여기에 표시됩니다. (탭④ 이력서 작성의 공공기관 목록표)</div>':'';
+    if(!r)return cfg.hintEmpty?'<div class="subt" style="padding:6px 0">공공기관을 선택하면 기관 맞춤 자기소개서 가이드가 여기에 표시됩니다. (탭③ 이력서 작성의 공공기관 목록표)</div>':'';
     var bl=cfg.blocks,h='<div class="hbhead"><b>공공기관 맞춤 가이드: '+esc(r[1])+'</b> <span class="tag ex">헬퍼탐 공공기관 · 조사 반영 '+esc('2026-10-21')+'</span></div>';
     function det(key,title,body){return '<details class="hbd"'+(cfg.open&&cfg.open.indexOf(key)>=0?' open':'')+'><summary>'+title+'</summary>'+body+'</details>'}
     var T=draftTexts(I);
@@ -2298,7 +2303,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     return {text:parts.join('\n\n'),imgs:imgs,labels:labels,n:list.length};
   }
   async function ask(prompt,src){
-    var sample=null;try{sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null}catch(e){}
+    var sample=null;try{sample=await window.__ipAI.get()}catch(e){}
     if(!sample)throw {message:'AI 기능은 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.'};
     var opts={cache:false};
     if(src.imgs.length){
@@ -2420,7 +2425,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   }
   function kwHTML(){
     var kws=allKw();
-    var h=kws.length?kws.map(function(x){var n=S.exps.filter(function(e){return matches(x.k,e)}).length;return '<span class="kwc'+(n?' hit':'')+'">'+esc(x.k)+' <b>'+n+'</b>'+(x.src==='c'?'<button type="button" class="kx" data-act="kwdel" data-k="'+esc(x.k)+'" aria-label="'+esc(x.k)+' 삭제">×</button>':'')+'</span>'}).join(''):'<span class="subt">키워드가 없습니다. 탭④에서 공고를 분석하거나 직접 추가하세요.</span>';
+    var h=kws.length?kws.map(function(x){var n=S.exps.filter(function(e){return matches(x.k,e)}).length;return '<span class="kwc'+(n?' hit':'')+'">'+esc(x.k)+' <b>'+n+'</b>'+(x.src==='c'?'<button type="button" class="kx" data-act="kwdel" data-k="'+esc(x.k)+'" aria-label="'+esc(x.k)+' 삭제">×</button>':'')+'</span>'}).join(''):'<span class="subt">키워드가 없습니다. 탭③에서 공고를 분석하거나 직접 추가하세요.</span>';
     $('t7kw').innerHTML=h;
     var hit=kws.filter(function(x){return S.exps.some(function(e){return matches(x.k,e)})}).length;
     var pct=kws.length?Math.round(hit/kws.length*100):0;
@@ -2455,7 +2460,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     S.example=false;editing=null;pendSrc='';save();fillForm(null);srcList();renderAll();gm(editing?'':'목록에 추가했습니다','ok');
   });
   $('t7clr').addEventListener('click',function(){editing=null;pendSrc='';fillForm(null);gm('')});
-  /* ---------- 탭④ 불러오기 ---------- */
+  /* ---------- 탭③ 불러오기 ---------- */
   var pendSrc='';
   function mapType(it){
     var t=it.type,n=it.label+' '+it.content;
@@ -2468,7 +2473,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   function srcList(){
     var T=window.__ipT4,el=$('t7src');if(!el)return;var cur=el.value,items=T&&T.items?T.items():[];
     var done={};S.exps.forEach(function(x){if(x.src)done[x.src]=1});
-    var h='<option value="">'+(items.length?'불러올 항목을 선택하세요':'탭④에 작성한 항목이 없습니다')+'</option>',g='';
+    var h='<option value="">'+(items.length?'불러올 항목을 선택하세요':'탭③에 작성한 항목이 없습니다')+'</option>',g='';
     items.forEach(function(it){if(it.secTitle!==g){if(g)h+='</optgroup>';g=it.secTitle;h+='<optgroup label="'+esc(g)+'">'}
       h+='<option value="'+esc(it.id)+'">'+esc(it.label+(it.period?' ('+it.period+')':''))+(done[it.id]?' ✓ 작성함':'')+'</option>'});
     if(g)h+='</optgroup>';el.innerHTML=h;if(cur)el.value=cur;if(el.value!==cur)el.value='';
@@ -2571,7 +2576,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
       if(ty==='교육사항')T.addEntry('edu',{type:'직업교육',name:x.name,content:(x.a||x.st||content),rel:''});
       else if(ty==='일경험·인턴·현장실습'||ty==='아르바이트')T.addEntry('career',{company:x.org||x.name,period:x.period,contract:ty==='아르바이트'?'아르바이트':'',position:x.role,duty:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw});
       else{var map={'학술활동':'학회','교내외 동아리':'동아리','공모전':'공모전','수상경력':'공모전','봉사활동':'봉사','팀프로젝트':'프로젝트','개인프로젝트':'프로젝트','연구경험':'프로젝트','해외경험':'프로젝트','창업·창업활동':'프로젝트'};T.addEntry('exp',{type:map[ty]||'기타',name:x.name,period:x.period,content:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw})}
-      mg.className='runmsg ok';mg.textContent='탭④ 이력서에 추가했습니다 ('+(ty==='교육사항'?'교육사항':(ty==='일경험·인턴·현장실습'||ty==='아르바이트')?'경력사항':'경험사항')+'). 직무 관련성 칸을 채우세요.';return;
+      mg.className='runmsg ok';mg.textContent='탭③ 이력서에 추가했습니다 ('+(ty==='교육사항'?'교육사항':(ty==='일경험·인턴·현장실습'||ty==='아르바이트')?'경력사항':'경험사항')+'). 직무 관련성 칸을 채우세요.';return;
     }
   });
   $('t7list').addEventListener('change',function(e){
@@ -2592,7 +2597,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 
   /* ---------- AI ---------- */
   var ctrl=null;
-  async function sampleFn(){try{return (window.claude&&window.claude.use)?await window.claude.use('sample'):null}catch(e){return null}}
+  async function sampleFn(){try{return await window.__ipAI.get()}catch(e){return null}}
   function errText(e){var c=e&&e.code;if(c==='not_granted')return 'Claude 사용을 허용해야 AI 기능을 쓸 수 있습니다.';if(c==='rate_limited')return '요청이 많습니다. 잠시 뒤 다시 시도하세요.';return (e&&e.message)||'AI 기능을 실행하지 못했습니다.'}
   function setBusy(on){$('t7ai').disabled=on||!S.exps.some(function(e){return e.review});$('t7q').disabled=on;$('t7stop').hidden=!on}
   $('t7stop').addEventListener('click',function(){if(ctrl)ctrl.abort()});
@@ -2789,11 +2794,11 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     var a=e.target.closest('[data-a]');if(!a||!DB)return;var j=DB.jobs[st.code];if(!j)return;
     if(a.dataset.a==='setjob'){
       window.__ipInfo.set({job:j.n},'t8');
-      msg('지원직무를 \u201c'+j.n+'\u201d로 설정했습니다. 이력서(탭④)·자기소개서(탭⑥)·핸드북 예시에 함께 반영됩니다.','ok');
+      msg('지원직무를 \u201c'+j.n+'\u201d로 설정했습니다. 이력서(탭③)·자기소개서(탭⑤)·핸드북 예시에 함께 반영됩니다.','ok');
     }else if(a.dataset.a==='kw'){
       var T7=window.__ipT7;if(!T7||!T7.addKeywords){msg('경험발굴 탭을 찾지 못했습니다','err');return}
       var ks=j.sk.slice(0,4).concat(j.ab.slice(0,3)).concat(j.tl.slice(0,3)).map(function(x){return x.replace(/\s*\(.*?\)/g,'').slice(0,24)}).filter(Boolean);
-      var n2=T7.addKeywords(ks);msg(n2+'개 키워드를 경험발굴 탭(탭⑤)에 추가했습니다.','ok');
+      var n2=T7.addKeywords(ks);msg(n2+'개 키워드를 경험발굴 탭(탭④)에 추가했습니다.','ok');
     }
   });
 
@@ -2870,13 +2875,13 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   (function(){var g=window.__ipInfo.get();if(g.company||g.job){S.company=g.company;S.job=g.job}})();
   var pill='search';
   function infoR(){var el=document.getElementById('t5info');if(!el)return;var g=window.__ipInfo.get(),hs=window.__ipHB&&window.__ipHB.sel?window.__ipHB.sel():{ind:'',job:''};
-    function v(x){return x?esc(x):'<span style="color:var(--mute,#888)">탭④에서 입력하세요</span>'}
+    function v(x){return x?esc(x):'<span style="color:var(--mute,#888)">탭③에서 입력하세요</span>'}
     S.company=g.company||S.company;S.job=g.job||S.job;
-    el.innerHTML='<dt>지원회사</dt><dd>'+v(g.company)+'</dd><dt>산업·기관</dt><dd>'+(window.__ipPub&&window.__ipPub.code()?'공공기관 (탭④ 목록표에서 선택)':v(hs.ind))+'</dd><dt>지원직무</dt><dd>'+v(g.job)+'</dd>'}
+    el.innerHTML='<dt>지원회사</dt><dd>'+v(g.company)+'</dd><dt>산업·기관</dt><dd>'+(window.__ipPub&&window.__ipPub.code()?'공공기관 (탭③ 목록표에서 선택)':v(hs.ind))+'</dd><dt>지원직무</dt><dd>'+v(g.job)+'</dd>'}
 
   /* ---------- left: writing ---------- */
   function build(){
-    var h='<div class="t4blk" id="t5infoblk"><h3>지원 정보</h3><input type="hidden" id="t5company"><input type="hidden" id="t5job"><dl class="hbkv" id="t5info" aria-live="polite"></dl><div class="subt" style="margin-top:6px">탭④ 이력서 작성에 입력한 지원 정보를 그대로 사용합니다. 바꾸려면 탭④에서 수정하세요.</div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto4">탭④에서 지원 정보 수정하기 →</button></div></div>';
+    var h='<div class="t4blk" id="t5infoblk"><h3>지원 정보</h3><input type="hidden" id="t5company"><input type="hidden" id="t5job"><dl class="hbkv" id="t5info" aria-live="polite"></dl><div class="subt" style="margin-top:6px">탭③ 이력서 작성에 입력한 지원 정보를 그대로 사용합니다. 바꾸려면 탭③에서 수정하세요.</div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto4">탭③에서 지원 정보 수정하기 →</button></div></div>';
     SECS.forEach(function(s){
       h+='<div class="t4blk" id="t5s_'+s.k+'" data-s="'+s.k+'"><div class="sechd"><div><h3>'+s.no+'. '+s.title+'</h3><div class="subt">'+s.sub+'</div></div><button type="button" class="btn ghost sm2" data-act="guide" data-s="'+s.k+'">가이드 보기</button></div>'+
       '<details class="memo" open><summary>소재 메모 (초안을 만들 재료)</summary><div class="fg" style="margin-top:6px">'+s.memos.map(function(m){return '<div class="fld full"><label for="t5m_'+s.k+'_'+m.f+'">'+m.label+'</label><textarea id="t5m_'+s.k+'_'+m.f+'" data-s="'+s.k+'" data-m="'+m.f+'" rows="2" placeholder="'+esc(m.ph)+'"></textarea></div>'}).join('')+'</div></details><div class="impl" id="t5i_'+s.k+'"></div>'+
@@ -2910,7 +2915,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   var ctrls={};
   function getSources(){var T=window.__ipT4;return T&&T.sources?T.sources():{text:'',imgs:[],labels:[],n:0}}
   async function ask(prompt,src,msgEl,key){
-    var sample=null;try{sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null}catch(e){}
+    var sample=null;try{sample=await window.__ipAI.get()}catch(e){}
     if(!sample)throw {message:'AI 기능은 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.'};
     var opts={cache:false};
     if(src&&src.imgs.length){var lim=null;try{lim=await sample.limits()}catch(e){}if(!lim||!lim.images)throw {message:'이 화면에서는 이미지를 AI에 보낼 수 없습니다. 글자로 읽히는 자료를 사용하세요.'};opts.images=src.imgs.slice(0,lim.images.maxCount)}
@@ -2924,7 +2929,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   function info(){return '지원회사: '+(S.company||'(미입력)')+'\n지원직무: '+(S.job||'(미입력)')}
   function srcBlock(src){var t='';if(S.notes.trim())t+='[학생이 모은 자료]\n'+S.notes.slice(0,20000)+'\n\n';if(src.n)t+='[채용공고·직무기술서]\n'+src.text+'\n\n';if(src.labels.length)t+='[첨부 이미지 목록]\n'+src.labels.join('\n')+'\n\n';return t}
 
-  /* ---------- 경험발굴(탭⑤) → 자기소개서 자동 반영 ---------- */
+  /* ---------- 경험발굴(탭④) → 자기소개서 자동 반영 ---------- */
   var MLAB={},RR={};SECS.forEach(function(sc){sc.memos.forEach(function(m){MLAB[sc.k+'|'+m.f]=[sc.title,m.label.replace(/\s*\(.*\)$/,'')]})});
   function impText(x){return '['+x.name+'] '+x.text}
   function rmImp(id){var o=S.imp[id];if(!o)return;var d=S.sec[o.sec];if(d){var m=d.memo[o.f]||'',i=m.indexOf(o.text);if(i>=0){m=(m.slice(0,i)+m.slice(i+o.text.length)).replace(/\n{2,}/g,'\n').replace(/^\n+|\n+$/g,'');d.memo[o.f]=m;var ta=$('t5m_'+o.sec+'_'+o.f);if(ta)ta.value=m}}delete S.imp[id]}
@@ -2955,17 +2960,17 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     var el=$('t5cov');if(!el)return;S.imp=S.imp||{};var n0=0;try{n0=getSources().n}catch(e){}
     var rows=SECS.map(function(sc){var d=S.sec[sc.k],emp=sc.memos.filter(function(m){return !(d.memo[m.f]||'').trim()}),n=Object.keys(S.imp).filter(function(id){return S.imp[id].sec===sc.k}).length,bl=d.body.trim().length;
       return '<tr><th scope="row">'+sc.no+'. '+esc(sc.title)+'</th><td>'+n+'건</td><td>'+(sc.memos.length-emp.length)+'/'+sc.memos.length+'</td><td>'+(emp.length?esc(emp.map(function(m){return m.label.replace(/\s*\(.*\)$/,'')}).join(', ')):'모두 채움')+'</td><td>'+(bl?bl.toLocaleString()+'자':'미작성')+'</td></tr>'}).join('');
-    el.innerHTML='<h3>소재 현황</h3><div class="subt">경험발굴(탭⑤)에서 ‘자소서 소재로’ 고른 경험은 여기로 자동으로 들어옵니다. 비어 있는 소재만 새로 쓰고, 가져온 소재는 ‘AI로 다듬기’로 정교하게 만드세요. 채용공고·직무기술서: '+(n0?('탭④에서 '+n0+'건 연결됨 — AI 점검하기가 공고 요건과 비교합니다'):'아직 없음 — 탭④에 올리면 AI 점검하기가 공고 요건과 비교합니다')+'</div><div class="tblwrap"><table class="cov5"><thead><tr><th>문항</th><th>가져온 경험</th><th>소재칸 채움</th><th>아직 빈 소재</th><th>본문</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto7">탭⑤ 경험발굴에서 소재 고르기 →</button></div>';
+    el.innerHTML='<h3>소재 현황</h3><div class="subt">경험발굴(탭④)에서 ‘자소서 소재로’ 고른 경험은 여기로 자동으로 들어옵니다. 비어 있는 소재만 새로 쓰고, 가져온 소재는 ‘AI로 다듬기’로 정교하게 만드세요. 채용공고·직무기술서: '+(n0?('탭③에서 '+n0+'건 연결됨 — AI 점검하기가 공고 요건과 비교합니다'):'아직 없음 — 탭③에 올리면 AI 점검하기가 공고 요건과 비교합니다')+'</div><div class="tblwrap"><table class="cov5"><thead><tr><th>문항</th><th>가져온 경험</th><th>소재칸 채움</th><th>아직 빈 소재</th><th>본문</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto7">탭④ 경험발굴에서 소재 고르기 →</button></div>';
   }
   $('t5cov').addEventListener('click',function(e){if(e.target.id==='t5goto7'){var b=document.getElementById('tab7');if(b)b.click()}});
   function extraBlocks(){
     var t='',T4=window.__ipT4,T7=window.__ipT7;
-    try{var it=T4&&T4.items?T4.items():[];if(it.length)t+='[이력서(탭④) 입력 내용]\n'+it.map(function(x){return '- '+x.secTitle+': '+x.label+(x.period?' ('+x.period+')':'')+(x.content?' — '+x.content:'')}).join('\n').slice(0,6000)+'\n\n'}catch(e){}
-    try{var st=T7&&T7.stars?T7.stars():[];if(st.length)t+='[경험발굴(탭⑤) STAR]\n'+st.map(function(x){return '- '+x.name+': '+x.text}).join('\n').slice(0,6000)+'\n\n'}catch(e){}
+    try{var it=T4&&T4.items?T4.items():[];if(it.length)t+='[이력서(탭③) 입력 내용]\n'+it.map(function(x){return '- '+x.secTitle+': '+x.label+(x.period?' ('+x.period+')':'')+(x.content?' — '+x.content:'')}).join('\n').slice(0,6000)+'\n\n'}catch(e){}
+    try{var st=T7&&T7.stars?T7.stars():[];if(st.length)t+='[경험발굴(탭④) STAR]\n'+st.map(function(x){return '- '+x.name+': '+x.text}).join('\n').slice(0,6000)+'\n\n'}catch(e){}
     return t;
   }
   function jdHTML(o){
-    var j=o.jd;if(!j){return o.hasSrc===false?'<div class="subt" style="margin-top:6px">탭④에 채용공고·직무기술서를 올리면 공고 요건과 비교한 점검도 함께 받을 수 있습니다.</div>':''}
+    var j=o.jd;if(!j){return o.hasSrc===false?'<div class="subt" style="margin-top:6px">탭③에 채용공고·직무기술서를 올리면 공고 요건과 비교한 점검도 함께 받을 수 있습니다.</div>':''}
     return '<div class="jdb"><b>채용공고·직무기술서 대비</b>'+(j.matched.length?'<div style="margin-top:4px"><b>반영된 요건</b>'+list(j.matched)+'</div>':'')+(j.missing.length?'<div style="margin-top:4px"><b>보완할 요건</b>'+j.missing.map(function(m){return '<div class="mi"><div><b>'+esc(m.req)+'</b></div>'+(m.where?'<div>넣을 위치: '+esc(m.where)+'</div>':'')+(m.how?'<div>방법: '+esc(m.how)+'</div>':'')+'</div>'}).join('')+'</div>':'')+(j.mismatch.length?'<div style="margin-top:4px"><b>공고 표현과 어긋난 부분</b>'+list(j.mismatch)+'</div>':'')+'</div>';
   }
   function setBusy(k,on){var sec=$('t5s_'+k);if(!sec)return;sec.querySelectorAll('[data-act=draft],[data-act=review]').forEach(function(b){b.disabled=on});var st=sec.querySelector('[data-act=stop]');if(st)st.hidden=!on}
@@ -3069,7 +3074,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     if(pill==='search'){
       var src=getSources();
       h+='<div class="gblk"><h4>검색 바로가기</h4><div class="lnks" id="t5links"></div><div class="subt">새 창에서 열립니다. 이 노트는 웹을 직접 검색하지 못하므로, 찾은 내용은 아래에 붙여넣어 정리하세요. 수치와 사실은 공식 자료로 확인하세요.</div></div>'+
-      '<div class="gblk"><h4>찾은 자료 붙여넣기</h4><textarea id="t5notes" aria-label="찾은 자료 붙여넣기" rows="6" placeholder="기업 소개, 인재상, 사업 현황, 직무 설명 등을 붙여넣으세요" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:4px;background:var(--paper);line-height:1.55">'+esc(S.notes)+'</textarea><div class="subt">탭④에 올린 채용공고·직무기술서 '+src.n+'건도 함께 읽습니다.</div>'+
+      '<div class="gblk"><h4>찾은 자료 붙여넣기</h4><textarea id="t5notes" aria-label="찾은 자료 붙여넣기" rows="6" placeholder="기업 소개, 인재상, 사업 현황, 직무 설명 등을 붙여넣으세요" style="width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:4px;background:var(--paper);line-height:1.55">'+esc(S.notes)+'</textarea><div class="subt">탭③에 올린 채용공고·직무기술서 '+src.n+'건도 함께 읽습니다.</div>'+
       '<div class="runbtns" style="margin-top:8px"><button type="button" class="btn" data-act="organize" id="t5org">기업·직무 정리하기</button><button type="button" class="btn ghost" data-act="orgstop" id="t5orgstop" hidden>중지</button></div><div class="runmsg" id="t5om" role="status"></div></div>'+organized();
     }else if(pill==='hb'){
       h+='<div id="t5pub"></div><div id="t5hb"></div>';
@@ -3090,7 +3095,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     if(act==='orgstop'||act==='gstop'){var c=ctrls[act==='orgstop'?'org':'guide'];if(c)c.abort();return}
     if(act==='organize'){
       var om=$('t5om'),src=getSources();
-      if(!S.notes.trim()&&!src.n){om.className='runmsg err';om.textContent='찾은 자료를 붙여넣거나 탭④에 채용공고를 올리세요.';return}
+      if(!S.notes.trim()&&!src.n){om.className='runmsg err';om.textContent='찾은 자료를 붙여넣거나 탭③에 채용공고를 올리세요.';return}
       $('t5org').disabled=true;$('t5orgstop').hidden=false;
       try{
         var p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 아래 자료에서 지원동기 작성에 쓸 기업·직무 정보를 정리하세요.\n'+info()+'\n'+RULES+'- 각 항목의 src에는 출처를 "붙여넣은 자료" 또는 "공고·직무기술서"로 쓴다. 자료에 없는 내용은 쓰지 않는다.\n\n'+srcBlock(src)+
@@ -3237,7 +3242,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     if(act==='review'){
       var t=T(),mg=$('t6m_'+p.id),filled=COMMON.concat(t.fields).filter(function(f){return p[f.f]&&p[f.f].trim()});
       if(filled.length<2){mg.className='runmsg err';mg.textContent='프로젝트 내용을 두 칸 이상 작성하세요.';return}
-      var sample=null;try{sample=(window.claude&&window.claude.use)?await window.claude.use('sample'):null}catch(x){}
+      var sample=null;try{sample=await window.__ipAI.get()}catch(x){}
       if(!sample){mg.className='runmsg err';mg.textContent='AI 점검은 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.';return}
       var btns=en.querySelectorAll('[data-act=review]'),st=en.querySelector('[data-act=stop]');btns.forEach(function(b){b.disabled=true});st.hidden=false;
       var c=new AbortController();ctrls[p.id]=c;
@@ -3287,6 +3292,143 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   if(window.__ipHB&&$('t6hb'))window.__ipHB.mount($('t6hb'),{id:'t6h',blocks:['port','rec','kpi','def'],open:['port']});
   if(window.__ipExp)window.__ipExp.mount($('t6exp'),{id:'t6e',base:'포트폴리오_개요',model:function(){return window.__ipExp.fromText(outline())}});
   build();guide();
+})();
+</script>
+<script>
+/* ===== AI 연결 모듈: Claude 화면이 아닌 곳(GitHub 등)에서도 AI 기능 사용 ===== */
+(function(){
+  var MODEL='claude-sonnet-5-5',KEYN='ip-ai-key-v1';
+  function $(id){return document.getElementById(id)}
+  function getKey(){try{return sessionStorage.getItem(KEYN)||localStorage.getItem(KEYN)||''}catch(e){return ''}}
+  function setKey(k,keep){try{sessionStorage.removeItem(KEYN);localStorage.removeItem(KEYN);if(k){(keep?localStorage:sessionStorage).setItem(KEYN,k)}}catch(e){}}
+  function err(code,message){return {code:code,message:message}}
+  function parseJson(t){
+    t=String(t||'').replace(/```(?:json)?/gi,'');
+    var a=t.indexOf('{'),b=t.lastIndexOf('}');
+    if(a<0||b<=a)throw err('bad_json','AI 응답에서 JSON을 찾지 못했습니다. 응답 전체를 다시 붙여넣거나 다시 시도하세요.');
+    try{return JSON.parse(t.slice(a,b+1))}catch(e){throw err('bad_json','AI 응답을 JSON으로 읽지 못했습니다. 응답이 중간에 잘리지 않았는지 확인하세요.')}
+  }
+  function b64(blob){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(String(r.result).split(',')[1])};r.onerror=function(){rej(err('read','이미지를 읽지 못했습니다.'))};r.readAsDataURL(blob)})}
+  async function api(prompt,opts,key){
+    var content=[];
+    if(opts.images&&opts.images.length){
+      for(var i=0;i<opts.images.length;i++){var bl=opts.images[i];var mt=/^image\/(png|jpeg|gif|webp)$/.test(bl.type)?bl.type:'image/png';content.push({type:'image',source:{type:'base64',media_type:mt,data:await b64(bl)}})}
+    }
+    content.push({type:'text',text:prompt});
+    var resp;
+    try{
+      resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:opts.signal,
+        headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:MODEL,max_tokens:16000,stream:true,messages:[{role:'user',content:content}]})});
+    }catch(e){if(opts.signal&&opts.signal.aborted)throw e;throw err('network','Anthropic 서버에 연결하지 못했습니다. 인터넷 연결을 확인하세요.')}
+    if(!resp.ok){
+      var m='';try{var j=await resp.json();m=j&&j.error&&j.error.message||''}catch(e){}
+      if(resp.status===401||resp.status===403){setKey('');throw err('bad_key','API 키가 올바르지 않아 삭제했습니다. 다시 입력하거나 붙여넣기 방식을 사용하세요. '+m)}
+      if(resp.status===429)throw err('rate_limited','요청이 많습니다. 잠시 뒤 다시 시도하세요.');
+      throw err('api','AI 호출 오류('+resp.status+'): '+m)
+    }
+    var rd=resp.body.getReader(),dec=new TextDecoder(),buf='',text='';
+    while(true){
+      var r=await rd.read();if(r.done)break;
+      buf+=dec.decode(r.value,{stream:true});
+      var lines=buf.split('\n');buf=lines.pop();
+      lines.forEach(function(ln){
+        if(ln.indexOf('data:')!==0)return;
+        try{var ev=JSON.parse(ln.slice(5));if(ev.type==='content_block_delta'&&ev.delta&&ev.delta.text){text+=ev.delta.text;if(opts.onText)opts.onText({text:text,delta:ev.delta.text})}
+          else if(ev.type==='error')throw err('api',ev.error&&ev.error.message||'AI 오류')}catch(e){if(e&&e.code)throw e}
+      });
+    }
+    return text;
+  }
+  /* ---- 대화상자 ---- */
+  var dlg=null,pend=null;
+  function build(){
+    if(dlg)return;
+    dlg=document.createElement('div');dlg.className='aidlg';dlg.hidden=true;dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');
+    dlg.innerHTML='<div class="aibox">'+
+      '<div class="aihd"><b>AI 연결</b><button type="button" class="btn ghost" id="aiX">닫기</button></div>'+
+      '<div class="aibody">'+
+      '<p class="aimuted">이 화면은 Claude 안이 아니라서 AI를 바로 부를 수 없습니다. 아래 두 방법 중 하나를 쓰세요. 입력한 자료는 Anthropic(Claude)으로만 전달됩니다.</p>'+
+      '<section id="aiManual"><h4>방법 A. 키 없이: 복사 → Claude에 붙여넣기 → 결과 붙여넣기</h4>'+
+      '<ol class="aiol"><li>[프롬프트 복사]를 누릅니다.</li><li><a href="https://claude.ai/new" target="_blank" rel="noopener">claude.ai</a>에 붙여넣고 답을 받습니다.</li><li>답변 전체를 아래 칸에 붙여넣고 [결과 적용]을 누릅니다.</li></ol>'+
+      '<div class="airow"><button type="button" class="btn" id="aiCopy">프롬프트 복사</button><span id="aiCopyMsg" class="aimuted"></span></div>'+
+      '<textarea id="aiPrompt" readonly rows="4" aria-label="Claude에 붙여넣을 프롬프트"></textarea>'+
+      '<textarea id="aiPaste" rows="5" placeholder="Claude의 답변 전체를 여기에 붙여넣기" aria-label="Claude 답변 붙여넣기"></textarea>'+
+      '<div class="airow"><button type="button" class="btn" id="aiApply">결과 적용</button><span id="aiMsg" class="aimsg"></span></div></section>'+
+      '<section id="aiKeySec"><h4>방법 B. 자동 실행: 내 Anthropic API 키 입력</h4>'+
+      '<p class="aimuted">키는 이 브라우저에서 Anthropic으로만 전송되며 사용료는 키 주인에게 청구됩니다. 공용 PC에서는 저장하지 마세요. <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener">키 발급</a></p>'+
+      '<div class="airow"><input type="password" id="aiKey" autocomplete="off" placeholder="sk-ant-..." aria-label="Anthropic API 키"><button type="button" class="btn" id="aiRun">키로 실행</button></div>'+
+      '<label class="aimuted"><input type="checkbox" id="aiKeep"> 이 브라우저에 키 저장(체크 안 하면 탭을 닫을 때 삭제)</label>'+
+      '<div class="airow"><button type="button" class="btn ghost" id="aiDel">저장된 키 삭제</button><span id="aiKeyMsg" class="aimuted"></span></div></section>'+
+      '</div></div>';
+    document.body.appendChild(dlg);
+    $('aiX').onclick=function(){close(err('aborted','취소했습니다.'),true)};
+    dlg.addEventListener('keydown',function(e){if(e.key==='Escape')close(err('aborted','취소했습니다.'),true)});
+    $('aiCopy').onclick=function(){
+      var t=$('aiPrompt');t.value=pend?pend.prompt:t.value;
+      function ok(){$('aiCopyMsg').textContent='복사했습니다. 이제 Claude에 붙여넣으세요.'}
+      function fb(){t.focus();t.select();try{document.execCommand('copy');ok()}catch(e){$('aiCopyMsg').textContent='칸을 길게 눌러 직접 복사하세요.'}}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t.value).then(ok,fb)}else fb();
+    };
+    $('aiApply').onclick=function(){
+      try{var v=parseJson($('aiPaste').value);close(null,false,v)}catch(e){$('aiMsg').textContent=e.message;$('aiMsg').className='aimsg err'}
+    };
+    $('aiRun').onclick=async function(){
+      var k=$('aiKey').value.trim();if(!/^sk-ant-/.test(k)){$('aiKeyMsg').textContent='sk-ant- 로 시작하는 키를 입력하세요.';return}
+      setKey(k,$('aiKeep').checked);$('aiKey').value='';
+      if(pend){var p=pend;close(null,false,undefined,true);runApi(p)} else {$('aiKeyMsg').textContent='키를 저장했습니다.';setTimeout(function(){dlg.hidden=true},700)}
+    };
+    $('aiDel').onclick=function(){setKey('');$('aiKeyMsg').textContent='저장된 키를 삭제했습니다.'};
+  }
+  function close(e,rejectIt,val,keep){
+    dlg.hidden=true;var p=pend;pend=null;if(!p)return;
+    if(keep)return
+    if(e)p.rej(e);else p.res(val);
+  }
+  async function runApi(p){
+    try{
+      var t=await api(p.prompt,p.opts,getKey());
+      p.res(parseJson(t));
+    }catch(e){
+      if(e&&e.code==='bad_key'){ // 키 오류 → 붙여넣기 방식으로 전환
+        showDlg(p,e.message)
+      }else p.rej(e)
+    }
+  }
+  function showDlg(p,note){
+    build();pend=p;
+    $('aiPrompt').value=p.prompt;$('aiPaste').value='';$('aiCopyMsg').textContent='';$('aiMsg').textContent=note||'';$('aiMsg').className='aimsg'+(note?' err':'');
+    $('aiKeyMsg').textContent='';$('aiKeySec').style.display='';
+    dlg.hidden=false;
+    if(p.opts&&p.opts.signal)p.opts.signal.addEventListener('abort',function(){if(pend===p){dlg.hidden=true;pend=null;p.rej(err('aborted','중지했습니다.'))}},{once:true});
+    $('aiCopy').focus();
+  }
+  function localJson(prompt,opts){
+    opts=opts||{};
+    return new Promise(function(res,rej){
+      var p={prompt:prompt,opts:opts,res:res,rej:rej};
+      if(getKey())runApi(p);else showDlg(p);
+    });
+  }
+  var local={json:localJson,limits:async function(){return getKey()?{images:{maxCount:10}}:{images:null}},isLocal:true};
+  var cache=null;
+  window.__ipAI={
+    get:async function(){
+      if(cache)return cache;
+      try{if(window.claude&&window.claude.use){var s=await window.claude.use('sample');if(s){cache=s;return s}}}catch(e){}
+      return local;
+    },
+    isLocal:function(){return cache===null}
+  };
+  /* Claude 화면이 아니면 상단에 'AI 연결' 링크 표시 */
+  (async function(){
+    var s=null;try{if(window.claude&&window.claude.use)s=await window.claude.use('sample')}catch(e){}
+    if(s)return;
+    var h=document.querySelector('.note-head');if(!h)return;
+    var b=document.createElement('button');b.type='button';b.className='btn ghost aiset';b.textContent='AI 연결 설정';
+    b.onclick=function(){build();pend=null;$('aiManual').style.display='none';$('aiKeySec').style.display='';$('aiKeyMsg').textContent=getKey()?'저장된 키가 있습니다.':'';dlg.hidden=false;$('aiKey').focus()};
+    h.appendChild(b);
+  })();
 })();
 </script>
 
