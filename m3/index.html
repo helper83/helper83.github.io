@@ -749,6 +749,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
           <div class="gblk"><h4>STAR 질문</h4><div id="t7stqs"></div></div>
           <div id="t7pub"></div>
           <div id="t7hb"></div>
+          <div id="t7publ"></div>
         </div>
       </section>
     </div>
@@ -2662,6 +2663,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     return {st:keep[0],a:keep.slice(1,-1).join(' '),r:keep[keep.length-1]};
   }
   var pgb7=$('t7pub');if(pgb7&&window.__ipPub)window.__ipPub.mountGuide(pgb7,{blocks:['types','ncs'],open:['types'],hintEmpty:false});
+  var pl7=$('t7publ');if(pl7&&window.__ipPub&&!pl7.dataset.m){pl7.dataset.m='1';window.__ipPub.mountList(pl7)}
   var hbBox=$('t7hb');
   if(window.__ipHB&&hbBox)window.__ipHB.mount(hbBox,{id:'t7h',blocks:['ind','q','exps','rec','ksa','kpi'],open:['q'],use:{q:'발굴 질문에 담기',exps:'입력칸에 불러오기'},
     onUse:function(kind,p){
