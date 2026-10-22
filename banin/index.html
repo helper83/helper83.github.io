@@ -343,6 +343,7 @@ function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp
 
 /* ---- tabs ---- */
 function go(id){
+  if(id==='coach'&&$('#p-coach').hidden&&typeof C!=='undefined'&&C){C.step=0;try{renderCoach()}catch(e){}}
   ['eval','coach','make'].forEach(function(k){
     var on=k===id;$('#tab-'+k).setAttribute('aria-selected',on);
     $('#p-'+(k==='make'?'make':k)).hidden=!on});
@@ -762,7 +763,7 @@ $('#cnext').addEventListener('click',function(){
   if(C.step<STEPS-1){if(C.step===1&&!C.qs.length)buildQs();C.step++;renderCoach();save();return}
   var q=C.qs.map(function(x,i){return 'Q'+(i+1)+'. '+x+(ansInfo(i).t?'\n   '+ansInfo(i).tag+': '+ansInfo(i).t:'')}).join('\n');
   copy('[AI 면접 컨설팅 예상 질문 정리]\n지원: '+C.company+' / '+C.job+'\n'+q+'\n\n꼬리 질문 5단계: '+FU.map(function(f){return f[0]}).join(' → '))});
-renderCoach();
+C.step=0;renderCoach();
 
 var FAM={
 process:{hook:'수율·품질·원가가 제품 경쟁력으로 직결되는 공정에서, 데이터로 원인을 좁혀 개선한 경험이 직무를 택한 계기라고 연결합니다.',kw:'공정 변수, 수율, 불량 원인, 실험 설계(DOE), 데이터 분석',
