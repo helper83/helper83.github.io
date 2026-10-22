@@ -239,8 +239,8 @@ details.qbox>summary{cursor:pointer;font-weight:700;color:var(--navy)}
     <button class="step" data-s="0"><span class="n">1</span><span class="c">지원 정보 입력<small>지원 회사 · 직무 소개</small></span></button>
     <button class="step" data-s="1"><span class="n">2</span><span class="c">지원서 업로드<small>붙여넣기 또는 hwpx·docx·txt 파일</small></span></button>
     <button class="step" data-s="2"><span class="n">3</span><span class="c">질문과 답변<small>주요 면접 질문 제시, 답변 작성</small></span></button>
-    <button class="step" data-s="3"><span class="n">4</span><span class="c">답변 예시<small>1차 음성 답변</small></span></button>
-    <button class="step" data-s="4"><span class="n">5</span><span class="c">꼬리 질문<small>꼬리 질문 후 2차 음성 답변</small></span></button>
+    <button class="step" data-s="3"><span class="n">4</span><span class="c">답변 예시<small>확정 답변 보며 연습</small></span></button>
+    <button class="step" data-s="4"><span class="n">5</span><span class="c">꼬리 질문<small>꼬리 질문 후 2차 답변</small></span></button>
   </div>
 
   <div class="card" id="cbody"></div>
@@ -693,21 +693,18 @@ function renderCoach(){
     '<div class="note" style="margin:0">답변을 쓴 뒤 “답변 점검”을 누르면 채용공고·직무기술서와 대조해 부족한 부분을 알려 주고 수정 답변을 제시합니다.</div>'+
     C.qs.map(function(q,i){return '<div class="qbox"><div><b>Q'+(i+1)+'.</b> '+esc(q)+(C.fin[i]?' <span class="tag">확정됨</span>':'')+'</div><label class="f" for="c-a'+i+'"><small>답변 작성</small><textarea id="c-a'+i+'" data-a="'+i+'">'+esc(C.ans[i]||'')+'</textarea></label><div class="row"><button type="button" class="btn orange sm" data-chk="'+i+'">답변 점검</button></div><div id="c-ck'+i+'">'+chkHtml(i)+'</div></div>'}).join('')+'</div>'}
   if(s===3){
-    h='<div class="stack"><b style="color:var(--navy)">4. 답변 예시와 1차 음성 답변</b>'+
+    h='<div class="stack"><b style="color:var(--navy)">4. 답변 예시와 연습</b>'+
     '<div class="qbox"><b>답변 예시 (구조)</b><div class="meta"><span class="tag">결론 먼저</span><span class="tag">근거 2개</span><span class="tag">숫자 1개</span></div>'+
     '<div>“저는 불량 원인 분석으로 수율을 올린 경험이 있습니다. 첫째, 식각 공정 데이터를 비교해 원인을 좁혔습니다. 둘째, 변수 3개를 조정해 실험했습니다. 그 결과 수율이 82%에서 89%로 올랐습니다.”</div></div>'+
-    '<div class="note" style="margin:0">3단계에서 확정한 답변이 질문마다 표시됩니다. 연습할 질문의 버튼을 누르고, 확정 답변을 보며 소리 내어 연습하세요.</div>'+
+    '<div class="note" style="margin:0">3단계에서 확정한 답변이 질문마다 표시됩니다. 연습할 질문의 버튼을 누르고, 확정 답변을 보며 소리 내어 읽어 연습하세요(1분 이내, 결론 먼저).</div>'+
     '<div class="stack" id="c-pr">'+C.qs.map(function(q,k){var a=ansInfo(k),on=C.sel===k;
       return '<div class="qbox'+(on?' sel':'')+'"><div><span class="tag'+(a.ok?'':' ex')+'">'+a.tag+'</span>'+(a.open?' <span class="tag ex">○○ '+a.open+'곳 남음</span>':'')+' <b>Q'+(k+1)+'.</b> '+esc(q)+'</div>'+
       (a.t?'<pre class="result">'+esc(a.t)+'</pre>':'<div class="note" style="margin:0">3단계에서 답변을 쓰고 “답변 점검 → 수정 답변 확정”을 해 주세요.</div>')+
-      '<div class="row"><button type="button" class="btn '+(on?'orange':'ghost')+' sm" data-prac="'+k+'" aria-pressed="'+on+'">'+(on?'연습 중':'이 질문으로 연습')+'</button></div></div>'}).join('')+'</div>'+
-    '<div class="qbox sel"><b>연습 질문 Q'+(C.sel+1)+'</b><div>'+esc(C.qs[C.sel]||'')+'</div></div>'+
-    '<div class="row"><button class="btn orange" id="c-rec">음성 답변 시작</button><button class="btn ghost" id="c-stop" disabled>끝내기</button><span class="note" id="c-time" style="margin:0">0초</span></div>'+
-    '<label class="f" for="c-a1">1차 답변 내용<small>음성 인식이 되지 않으면 직접 입력해도 됩니다</small><textarea id="c-a1">'+esc(C.a1)+'</textarea></label>'+
-    '<div id="c-st">'+stat(C.a1||'',C.t1)+'</div><div class="note" id="c-msg" style="margin:0"></div></div>'}
+      '<div class="row"><button type="button" class="btn '+(on?'orange':'ghost')+' sm" data-prac="'+k+'" aria-pressed="'+on+'">'+(on?'연습 중':'이 질문으로 연습')+'</button></div></div>'}).join('')+'</div>'
+    +'</div>'}
   if(s===4){
     var q=C.qs[C.sel]||'';
-    h='<div class="stack"><b style="color:var(--navy)">5. 꼬리 질문과 2차 음성 답변</b><div class="qbox"><b>원래 질문</b><div>'+esc(q)+'</div></div>'+
+    h='<div class="stack"><b style="color:var(--navy)">5. 꼬리 질문과 2차 답변</b><div class="qbox"><b>원래 질문</b><div>'+esc(q)+'</div></div>'+
     (function(){var a=ansInfo(C.sel);return a.t?'<div class="qbox"><b>'+a.tag+'</b><pre class="result">'+esc(a.t)+'</pre></div>':''})()+
     '<ol class="fu">'+FU.map(function(f){return '<li><div><b>'+f[0]+'</b>'+esc(f[1])+'</div></li>'}).join('')+'</ol>'+
     '<label class="f" for="c-a2">2차 답변 내용<small>꼬리 질문에 답하며 역할·수치·이유를 보강합니다</small><textarea id="c-a2">'+esc(C.a2)+'</textarea></label>'+
@@ -757,39 +754,7 @@ function bindCoach(){
       else if(b.dataset.unfin!==undefined){var k=+b.dataset.unfin;C.fin[k]='';save();renderChk(k);toast('확정을 취소했습니다')}});
     $('#c-regen').addEventListener('click',function(){C.qs=[];buildQs();renderCoach();toast('질문을 다시 만들었습니다')})}
   if(s===3){
-    $('#c-pr').addEventListener('click',function(e){var b=e.target.closest('[data-prac]');if(!b)return;selQ(+b.dataset.prac);save();renderCoach()});
-    $('#c-a1').addEventListener('input',function(e){C.a1=e.target.value;$('#c-st').innerHTML=stat(C.a1,C.t1)});
-    var rec=$('#c-rec'),stop=$('#c-stop'),tm=$('#c-time'),msg=$('#c-msg');
-    function end(){if(!timer.on)return;timer.on=false;stopping=true;clearInterval(timer.h);C.t1=Math.round((Date.now()-timer.start)/1000);try{if(timer.rec)timer.rec.stop()}catch(e){}rec.disabled=false;stop.disabled=true;$('#c-st').innerHTML=stat(C.a1,C.t1)}
-    var base='',fin='',stopping=false,tries=0;
-    function show(interim){var t=(base+(base&&fin?' ':'')+fin+(interim?(fin||base?' ':'')+interim:'')).trim();$('#c-a1').value=t;C.a1=base+(base&&fin?' ':'')+fin;$('#c-st').innerHTML=stat(t,Math.round((Date.now()-timer.start)/1000))}
-    function why(code){
-      var framed=false;try{framed=window.self!==window.top}catch(e){framed=true}
-      var m={'not-allowed':'마이크 사용이 차단되었습니다. 주소창 왼쪽 자물쇠(또는 마이크 아이콘) → 마이크 → 허용 후 다시 눌러 주세요.'+(framed?' 이 화면(미리보기·공유 페이지 안)에서는 브라우저가 마이크를 막습니다. 파일을 내려받아 크롬에서 직접 열거나 새 탭에서 열어 주세요.':''),
-        'service-not-allowed':'이 환경에서는 음성 인식 서비스를 쓸 수 없습니다. 크롬·엣지에서 열어 주세요.',
-        'audio-capture':'마이크를 찾지 못했습니다. 마이크 연결과 기본 입력 장치를 확인해 주세요.',
-        'network':'음성 인식은 인터넷 연결이 필요합니다(크롬은 구글 서버로 처리). 연결을 확인해 주세요.',
-        'language-not-supported':'한국어 음성 인식을 지원하지 않는 환경입니다.'};
-      return m[code]||('음성 인식 오류('+code+'). 답변을 직접 입력해 주세요.')}
-    function startSR(){
-      var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-      var r=new SR();r.lang='ko-KR';r.continuous=true;r.interimResults=true;r.maxAlternatives=1;
-      r.onstart=function(){tries=0;msg.textContent='듣고 있습니다. 말씀하세요 (끝나면 “끝내기”)'};
-      r.onresult=function(ev){var it='';for(var i=ev.resultIndex;i<ev.results.length;i++){var tr=ev.results[i][0].transcript;if(ev.results[i].isFinal)fin+=(fin?' ':'')+tr.trim();else it+=tr}show(it)};
-      r.onerror=function(ev){var c=ev.error;if(c==='no-speech'||c==='aborted')return;stopping=true;msg.textContent=why(c);end()};
-      r.onend=function(){if(!timer.on||stopping)return;
-        if(++tries>8){msg.textContent='음성이 계속 끊깁니다. 답변을 직접 입력해 주세요.';end();return}
-        setTimeout(function(){if(timer.on&&!stopping){try{timer.rec=startSR()}catch(e){msg.textContent='음성 인식이 중단되었습니다.';end()}}},250)};
-      r.start();return r}
-    rec.addEventListener('click',function(){
-      timer.on=true;timer.start=Date.now();stopping=false;tries=0;rec.disabled=true;stop.disabled=false;msg.textContent='';
-      base=(C.a1||'').trim();fin='';tm.textContent='0초';
-      timer.h=setInterval(function(){tm.textContent=Math.round((Date.now()-timer.start)/1000)+'초'},500);
-      var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-      if(!SR){msg.textContent='이 브라우저는 음성 인식을 지원하지 않습니다. 크롬 또는 엣지에서 열어 주세요. 시간은 재고 있으니 답변은 아래에 직접 입력해도 됩니다.';return}
-      if(window.isSecureContext===false){msg.textContent='보안 연결(https)이 아니면 마이크를 쓸 수 없습니다. 파일로 열었다면 크롬에서 열어 주세요.'}
-      try{timer.rec=startSR()}catch(e){msg.textContent='음성 인식을 시작하지 못했습니다. 답변을 직접 입력해 주세요.'}});
-    stop.addEventListener('click',end)}
+    $('#c-pr').addEventListener('click',function(e){var b=e.target.closest('[data-prac]');if(!b)return;selQ(+b.dataset.prac);save();renderCoach()});}
   if(s===4){$('#c-a2').addEventListener('input',function(e){C.a2=e.target.value;cmp()});cmp()}}
 $('#steps').addEventListener('click',function(e){var b=e.target.closest('.step');if(!b)return;C.step=+b.dataset.s;renderCoach()});
 $('#cprev').addEventListener('click',function(){if(C.step>0){C.step--;renderCoach()}});
