@@ -635,7 +635,7 @@ function mount(){load();
   var root=document.getElementById('app');
   var tools=h('div',{class:'tools noprint'},APP.sample?confirmBtn('예시 채우기','한 번 더 누르면 현재 입력이 예시로 바뀝니다',function(){APP.sample(S,set,get);persist();curTab&&show(curTab)},'ghost sm'):null,confirmBtn('모두 지우기','한 번 더 누르면 모두 지워집니다',function(){S={};persist();if(APP.reset)APP.reset();curTab&&show(APP.tabs[0].id)},'ghost sm'));
   var logo=h('span',{class:'logo'});logo.innerHTML='<svg viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A5FD0"/><stop offset="1" stop-color="#16348F"/></linearGradient></defs><rect width="36" height="36" rx="9" fill="url(#lg)"/><path d="M11 9v18M11 18h10M21 9v18" stroke="#fff" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M18 29l6-8 3 3 5-9" stroke="#F2B50F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-  root.appendChild(h('header',{class:'top'},logo,h('div',{style:'min-width:0;flex:1 1 150px'},h('div',{class:'eyebrow'},'AI 활용 취업 마스터 클래스 · '+APP.tag),h('h1',null,APP.title)),tools));
+  root.appendChild(h('header',{class:'top'},logo,h('div',{style:'min-width:0;flex:1 1 150px'},h('h1',null,APP.title)),tools));
   root.appendChild(h('div',{id:'pii',role:'alert'},'전화번호·이메일·주민등록번호 형태가 감지됐어요. 빨간 칸의 해당 내용을 지워 주세요.'));
   var nav=h('nav',{class:'tabs',role:'tablist'});navEl=nav;var main=h('main');
   root.appendChild(nav);root.appendChild(main);root.appendChild(h('p',{class:'sticky-save noprint'},h('span',{id:'savest'},'자동 저장됨(이 브라우저에만)'),' · 탭의 빨간 점은 그 단계를 마쳤다는 표시예요 · 이 도구는 수업용 참고 도구입니다 · v2'));
