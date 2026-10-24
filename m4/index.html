@@ -199,6 +199,35 @@ body{word-break:keep-all;overflow-wrap:anywhere}
 .chip{min-height:46px;min-width:48px}
 
 @media print{header.top,nav#tabs{display:none}}
+
+/* ===== 헬퍼탐 실제 화면 방식으로 통일 (v20): 파스텔 탭칩·파스텔 제목띠·PC 루트 스테퍼·회청색 외곽선 ===== */
+:root{--edge:#8497AE;--line:#D5DCE6;--bg:#F4F6FA;--ink:#2B3545;--ink-sub:#5F6B7D;--tint:#EAF4FC;
+  --b0:#E3F0FA;--b1:#DCEFEA;--b2:#E8E4F7;--b3:#F6E8DC;--b4:#F9E1EA;--b5:#DDEFE3;
+  --i0:#14578C;--i1:#0B5E4F;--i2:#52399A;--i3:#8A4309;--i4:#9C2552;--i5:#1E6038;--r-card:14px;--tb:var(--b0);--ti:var(--i0)}
+body{font-size:16px}
+.wrap,header.top .in{max-width:1180px}
+header.top{border-bottom:1px solid var(--edge);padding-bottom:0}
+.stop .dot{background:var(--tb);color:var(--ti);border-radius:9px}
+.stop.active .lbl{color:var(--ti)}
+.page-head{background:var(--tb);color:var(--ink);border:1.5px solid var(--edge);padding:16px 20px}
+.page-head h2{font-size:22px;font-weight:700;color:var(--ink)}
+.page-head p{color:var(--ink-sub)}
+.card,.list,.acc,.jd{border:1.5px solid var(--edge)}
+.chip,.btn.ghost{border:1.5px solid var(--edge)}
+.chip[aria-pressed="true"],.btn{border-color:var(--tc)}
+select,textarea,input[type=text]{border:1.5px solid var(--edge)}
+.prog{background:var(--tb);color:var(--ink)}.prog b{color:var(--ti)}
+@media(min-width:641px){
+  header.top{padding-top:10px}
+  header.top .in{align-items:flex-start;gap:4px 16px}
+  nav#tabs{flex:1 0 100%;order:2;position:relative;overflow:visible;gap:0;margin-top:4px}
+  nav#tabs::before{content:"";position:absolute;left:8%;right:8%;top:17px;height:2px;background:#E3E8EF}
+  .stop{flex:1 1 0;min-width:0;flex-direction:column;gap:3px;padding:4px 4px 8px;border-radius:0;border-bottom:3px solid transparent;font-size:13.5px;font-weight:600;color:var(--ink);text-align:center}
+  .stop .dot{width:28px;height:28px;flex-basis:28px;z-index:1}
+  .stop .lbl{white-space:normal;line-height:1.3}
+  .stop.active{border-bottom-color:var(--tc)}
+}
+@media(max-width:640px){nav#tabs{box-shadow:0 -4px 18px rgba(24,33,47,.08);border-top:1px solid var(--edge)}header.top{box-shadow:0 1px 8px rgba(24,33,47,.06)}}
 </style>
 
 <div class="wrap">
@@ -307,13 +336,13 @@ const viewEl=$('#view'), tabsEl=$('#tabs');
 const pageHead=i=>`<div class="page-head"><h2>${HEAD[i][0]}</h2><p>${HEAD[i][1]}</p></div>`;
 
 TABS.forEach((t,i)=>{const b=document.createElement('button');b.type='button';b.setAttribute('role','tab');b.className='stop';
-  b.style.setProperty('--tc',`var(${TC[i]})`);
+  b.style.setProperty('--tc',`var(${TC[i]})`);b.style.setProperty('--tb',`var(--b${i})`);b.style.setProperty('--ti',`var(--i${i})`);
   b.innerHTML=`<span class="dot">${i+1}</span><span class="lbl"><span class="l-full">${t[1]}</span><span class="l-short">${SHORT[i]}</span></span>`;
   b.onclick=()=>go(i);tabsEl.appendChild(b)});
 
 function go(i){
   $$('.stop').forEach((b,j)=>{b.tabIndex=j===i?0:-1;b.setAttribute('aria-selected',j===i);b.classList.toggle('active',j===i)});
-  viewEl.style.setProperty('--tc',`var(${TC[i]})`);viewEl.onclick=null;viewEl.innerHTML='';
+  viewEl.style.setProperty('--tc',`var(${TC[i]})`);viewEl.style.setProperty('--tb',`var(--b${i})`);viewEl.style.setProperty('--ti',`var(--i${i})`);viewEl.onclick=null;viewEl.innerHTML='';
   [viewScore,viewFormula,viewWrite,viewCard,viewTypes,viewQ36][i]();
   try{history.replaceState(null,'','#'+TABS[i][0])}catch(e){}
   scrollTo(0,0)}
