@@ -382,7 +382,6 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 .aibody input[type=password]{flex:1;margin:0}
 .airow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.aimuted{color:var(--muted);font-size:12.5px;margin:4px 0}.aimsg{font-size:12.5px}.aimsg.err{color:var(--warn)}
 .aiol{margin:4px 0 8px;padding-left:20px;font-size:13px}
-.aiset{margin-left:auto;font-size:12.5px;padding:3px 10px}
 
 /* ===== 앱 스킬(헬퍼탐 UX/UI): 탭 컬러 칩 + 색 제목 띠 ===== */
 #tab1,#view1{--tc:#1E7BC4}#tab2,#view2{--tc:#16A085}#tab8,#view8{--tc:#6B7A8F}#tab4,#view4{--tc:#7A5AC8}#tab7,#view7{--tc:#E07B24}#tab5,#view5{--tc:#D6477A}#tab6,#view6{--tc:#6B7A8F}
@@ -3510,15 +3509,6 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     },
     isLocal:function(){return cache===null}
   };
-  /* Claude 화면이 아니면 상단에 'AI 연결' 링크 표시 */
-  (async function(){
-    var s=null;try{if(window.claude&&window.claude.use)s=await window.claude.use('sample')}catch(e){}
-    if(s)return;
-    var h=document.querySelector('.note-head');if(!h)return;
-    var b=document.createElement('button');b.type='button';b.className='btn ghost aiset';b.textContent='AI 연결 설정';
-    b.onclick=function(){build();pend=null;$('aiManual').style.display='none';$('aiKeySec').style.display='';$('aiKeyMsg').textContent=getKey()?'저장된 키가 있습니다.':'';dlg.hidden=false;$('aiKey').focus()};
-    h.appendChild(b);
-  })();
 })();
 </script>
 <script>
