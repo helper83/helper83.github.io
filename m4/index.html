@@ -703,12 +703,33 @@ function qJobOf(){
   const hit=KWJ.find(([j,re])=>re.test(name));if(hit)return hit[0];
   if(role==='custom')return '경영지원';
   return G2J[JOB_BY[role].g]||'경영지원'}
+/* 선택한 세부 직무의 이름·KSA·성과지표로 만든 맞춤 질문 (유형별 2개, 직무마다 다른 조합) */
+const josa=(w,a,b)=>{const c=w.charCodeAt(w.length-1);return (c>=0xAC00&&c<=0xD7A3)?w+(((c-0xAC00)%28)?a:b):w+a+'('+b+')'};
+const shortL=x=>{const t=String(x||'').split(/[(（,，/]/)[0].trim();return t.length>18?t.split('·')[0].trim().slice(0,18):t};
+function genQs(R,k){
+  const J=R.name||'지원 직무',g=c=>(R[c]||[]).map(x=>shortL(x[0])).filter(Boolean);
+  const Ks=g('K'),Ss=g('S'),As=g('A'),kp=(R.kpi||'').split(/[,，]/).map(shortL).filter(Boolean);
+  const h=[...String(role)+J].reduce((a,c)=>a+c.charCodeAt(0),0);
+  const pk=(arr,d,o=0)=>arr.length?arr[(h+o)%arr.length]:d;
+  const K1=pk(Ks,'핵심 직무지식'),S1=pk(Ss,'핵심 직무기술',1),A1=pk(As,'책임감',2),P1=pk(kp,'핵심 성과지표');
+  const T={
+   인성:[[`${J} 직무에서 ${josa(A1,'이','가')} 중요한 이유와, 이를 보여 준 경험을 말씀해 주세요.`,'상황 설명→본인 행동→결과→직무 연결'],[`${josa(J,'으로','로')} 일할 때 ${josa(A1,'이','가')} 필요했던 경험과, 그때 본인이 한 행동은 무엇입니까?`,'상황→내 역할→행동→배운 점'],[`${J} 직무를 준비하며 ${K1} 관련 학습이나 활동에서 가장 힘들었던 경험은 무엇입니까?`,'어려움→극복 행동→결과→배운 점']],
+   직무:[[`${J} 업무에서 ${josa(K1,'은','는')} 왜 중요하며, 어떻게 활용해 보았습니까?`,'핵심 개념→활용 경험→성과·기여'],[`${J}의 핵심 성과지표인 ${josa(P1,'을','를')} 높이려면 무엇부터 하겠습니까?`,'지표 정의→원인 가설→개선 행동→기대효과'],[`${josa(S1,'을','를')} ${J} 업무에 어떻게 활용할 수 있습니까?`,'기술 설명→활용 경험→업무 적용'],[`${J} 신입이 입사 후 3개월 안에 ${josa(K1,'을','를')} 업무에 쓰려면 무엇을 준비해야 합니까?`,'현재 수준→준비 계획→업무 적용']],
+   상황:[[`${J} 업무 중 ${P1} 목표를 맞추기 어려운 상황이 생기면 어떻게 대응하겠습니까?`,'상황 파악→판단기준→단계별 행동→확인·재발방지'],[`${josa(J,'으로','로')} 일하며 ${A1} 때문에 팀원과 의견이 갈린다면 어떻게 하겠습니까?`,'상황 파악→판단기준→조율 행동→결과 확인'],[`${J} 업무에서 ${K1} 관련 실수를 발견했다면 어떻게 하겠습니까?`,'사실 확인→보고→수정 행동→재발방지']],
+   PT:[[`${J} 관점에서 ${josa(P1,'을','를')} 개선하는 전략을 발표하시오. (5분)`,'문제정의→분석→대안→실행계획·KPI'],[`${josa(K1,'을','를')} 활용한 ${J} 업무 개선안을 발표하시오. (5분)`,'현황→분석→개선안→기대효과'],[`${J} 업무에 ${S1} 활용을 확대하는 방안을 발표하시오. (5분)`,'필요성→도입안→실행계획→리스크']],
+   토론:[[`${J} 업무에서 ${josa(P1,'과','와')} 업무 속도 중 무엇을 우선해야 하는가?`,'입장→근거→상대 반박→절충안'],[`${J} 업무의 ${S1} 영역에 AI·자동화를 확대해야 하는가?`,'입장→근거→상대 반박→합의안'],[`${J} 직무에서 ${josa(A1,'과','와')} 성과 중 무엇이 더 중요한가?`,'입장→근거→사례→절충안']],
+   AI:[[`${J}에 지원한 이유와 ${josa(K1,'을','를')} 준비한 경험을 80초 안에 말씀하세요.`,'지원 이유→준비 경험→입사 후 기여'],[`${J} 업무에서 예상치 못한 문제가 생겼을 때 ${josa(S1,'을','를')} 활용해 해결한 경험을 80초로 말씀하세요.`,'상황→행동→결과→배운 점'],[`${J} 직무에서 ${josa(A1,'을','를')} 보여 준 경험을 80초로 말씀하세요.`,'상황→행동→결과→직무 연결']]}[k]||[];
+  const GEN={인성:`${J} 직무에 지원한 이유와, 그 직무에 맞는 본인의 강점을 경험으로 말씀해 주세요.`,직무:`${J} 업무에서 가장 중요한 역량은 무엇이며 어떻게 준비했습니까?`,상황:`${J} 업무 중 예상치 못한 문제가 생기면 어떻게 대응하겠습니까?`,PT:`${J} 업무의 효율을 높이는 개선안을 발표하시오. (5분)`,토론:`${J} 업무에서 AI·자동화를 확대해야 하는가?`,AI:`${J} 직무에 지원한 이유와 준비한 경험을 80초 안에 말씀하세요.`};
+  const GEN2={인성:`${J} 직무에서 본인이 가장 자신 있는 역량과 그 근거를 말씀해 주세요.`,직무:`${J} 직무에서 본인이 가장 자신 있는 역량과 그 근거를 말씀해 주세요.`,AI:`${J} 직무에서 본인이 가장 자신 있는 역량을 80초 안에 말씀하세요.`,상황:`${J} 업무에서 선배의 지시가 비효율적으로 보인다면 어떻게 하겠습니까?`,PT:`${J} 관련 최근 이슈를 분석하고 대응 전략을 발표하시오. (5분)`,토론:`${J} 직무에서 성과 평가는 개인보다 팀 중심이어야 하는가?`};
+  const bad=/핵심 성과지표|핵심 직무지식|핵심 직무기술/;
+  let T2=T.filter(t=>!bad.test(t[0]));if(T2.length<2)T2=T2.concat([[GEN[k],T[0]?T[0][1]:'상황→행동→결과→직무 연결'],[GEN2[k],T[0]?T[0][1]:'상황→행동→결과→직무 연결']]);
+  return T2.map((x,i)=>({x:i,t:x})).sort((a,b)=>((a.x+h)%T2.length)-((b.x+h)%T2.length)).slice(0,2).map((o,n)=>({k,i:'g'+n,x:{q:o.t[0],a:o.t[1],m:'',f:''},c:0,gen:true}))}
 function recQs(R,jb,k){
   const words=new Set([...kwOf(R.name||''),...R.K.concat(R.S,R.A).flatMap(x=>x[1]),...(R.kpi||'').split(/[,，]/).flatMap(x=>kwOf(x))].filter(w=>w.length>=2));
   const h=[...String(role)].reduce((a,c)=>a+c.charCodeAt(0),0);
   const its=qItems(jb,k),n=its.length;
   const sc=its.map((x,i)=>{const t=synNorm(x.q+' '+x.a+' '+x.m);let c=0;words.forEach(w=>{if(t.includes(synNorm(w)))c++});return {k,i,x,c,r:((i-h)%n+n)%n}});
-  sc.sort((a,b)=>b.c-a.c||a.r-b.r);return sc.slice(0,3)}
+  sc.sort((a,b)=>b.c-a.c||a.r-b.r);return genQs(R,k).concat(sc.slice(0,3))}
 function selQ(k){
   const jb=qJobOf(),recs=recQs(curRole(),jb,k),si=store.get('wq_'+role+'_'+k,null);
   const r=recs.find(x=>x.i===si)||recs[0];return r.x.q}
@@ -717,12 +738,12 @@ function renderRQ(){
   const k=wType,jb=qJobOf(),R=curRole(),recs=recQs(R,jb,k);
   let si=store.get('wq_'+role+'_'+k,null);if(si==null||!recs.some(r=>r.i===si))si=recs[0].i;
   const sel=recs.find(r=>r.i===si);
-  box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">위에서 고른 세부 직무(${esc(R.name||'직무 미입력')})에 맞춰 ${esc(jb)} 예시 질문을 자동 연결했고, 직무 KSA·성과지표 용어와 겹치는 질문을 먼저 추천합니다. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
-   ${recs.map(r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${esc(r.x.q)}</b><span class="steps">${r.x.a.split('→').map((s,i)=>(i?'<u>→</u>':'')+`<i>${esc(s)}</i>`).join('')}</span><small>${r.c>0?'직무 용어 '+r.c+'개와 연결된 질문':'기본 추천 질문'} · 예시 탭 Q${r.i+1}</small></button>`).join('')}
+  box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">위에서 고른 세부 직무(${esc(R.name||'직무 미입력')})의 이름·KSA·성과지표로 맞춤 질문 2개를 만들고, ${esc(jb)} 예시 질문 3개를 함께 추천합니다. 직무를 바꾸면 질문도 바뀝니다. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
+   ${recs.map(r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${esc(r.x.q)}</b><span class="steps">${r.x.a.split('→').map((s,i)=>(i?'<u>→</u>':'')+`<i>${esc(s)}</i>`).join('')}</span><small>${r.gen?'선택한 직무에 맞춘 질문 · 직무명·KSA·성과지표로 생성':(r.c>0?'직무 용어 '+r.c+'개와 연결된 질문':'기본 추천 질문')+' · 예시 탭 Q'+(r.i+1)}</small></button>`).join('')}
    <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 ${esc(jb)} ${esc(k)} 질문 더 보기</button></div>
    <p class="note">세부 직무 이름과 직무 분류로 6개 예시 직군에 자동 연결한 것(추정)이라 직무와 완전히 같지 않을 수 있습니다.</p>`;
   const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
-  box.onclick=e=>{const b=e.target.closest('.qpick');if(b){store.set('wq_'+role+'_'+k,+b.dataset.i);renderRQ()}};
+  box.onclick=e=>{const b=e.target.closest('.qpick');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^g/.test(d)?d:+d);renderRQ()}};
   $('#rqm').onclick=()=>{qJob=jb;qType=k;go(5)};if(typeof cm3G==='function'&&cm3G)cm3G()}
 /* 면접 준비 카드 내보내기 — Word(.docx)·PDF 파일을 브라우저에서 직접 생성 (외부 라이브러리 없음) */
 function cardBlocks(txt){const out=[];txt.split('\n').forEach(l=>{
