@@ -415,6 +415,24 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
   .note-head{margin-bottom:4px}
 }
+
+/* ===== 헬퍼탐 탭 UI(m2 v12.64 파스텔 route 방식) ===== */
+#tab1,#view1{--tc:#6F86E0}#tab2,#view2{--tc:#3FA595}#tab8,#view8{--tc:#8A94A5}#tab4,#view4{--tc:#9A7BDB}#tab7,#view7{--tc:#D08A45}#tab5,#view5{--tc:#DE6A97}#tab6,#view6{--tc:#8A94A5}
+.tabs{gap:0;padding:6px 6px 0;align-items:flex-start;background:linear-gradient(#E3E8EF,#E3E8EF) no-repeat 34px 25px/calc(100% - 68px) 2px,var(--bg);border-bottom:0}
+.tab{flex-direction:column;align-items:center;justify-content:flex-start;gap:3px;min-height:0;padding:4px 12px 10px;border-radius:0;border-bottom:3px solid transparent;color:var(--ink,#2B3545);font-weight:600;font-size:13px;flex:1 0 auto}
+.tab .dot{width:28px;height:28px;border-radius:9px;background:color-mix(in srgb,var(--tc) 20%,#fff);color:color-mix(in srgb,var(--tc) 62%,#000);position:relative;z-index:1}
+.tab .dot.nb::before{background:color-mix(in srgb,var(--tc) 62%,#000)}
+.tab[aria-selected="true"]{background:transparent;color:color-mix(in srgb,var(--tc) 62%,#000);font-weight:800;border-bottom:3px solid color-mix(in srgb,var(--tc) 55%,#fff)}
+.tab[aria-selected="true"] .dot{box-shadow:0 0 0 2px #fff,0 0 0 4px color-mix(in srgb,var(--tc) 50%,#fff)}
+.panel>h2{background:color-mix(in srgb,var(--tc,var(--accent)) 13%,#fff);color:var(--fg);border-bottom:1px solid color-mix(in srgb,var(--tc,var(--accent)) 26%,#fff)}
+.panel>h2 small{color:var(--muted)}
+@media (pointer:coarse){.tab{min-height:48px}}
+@media (max-width:640px){
+  .tabs{background:rgba(255,255,255,.97);box-shadow:0 -4px 18px rgba(24,33,47,.08);padding:5px 5px calc(5px + env(safe-area-inset-bottom))}
+  .tab{flex:initial;padding:4px 1px 2px;border-bottom:0;gap:2px;min-height:54px;justify-content:center;font-size:inherit}
+  .tab[aria-selected="true"]{border-bottom:0}
+  .tab .dot{width:26px;height:26px;font-size:13px}
+}
 </style>
 
 <div class="wrap">
