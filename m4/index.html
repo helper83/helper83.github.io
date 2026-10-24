@@ -233,6 +233,27 @@ select,textarea,input[type=text]{border:1.5px solid var(--edge)}
 .fl,.fr{min-width:0}
 @media(min-width:860px){.fcard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px}.fcard .fr{border-left:1px solid var(--line);padding-left:28px}.fcard .fr .ex:first-of-type{margin-top:12px}}
 @media(max-width:859px){.fcard .fr{margin-top:12px}}
+/* v22: 글자 크기를 헬퍼탐 스케일로 통일 (본문 15px/1.65, 제목 24·20·16, 보조 14·13) */
+:root{--font:"IBM Plex Sans KR",-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',system-ui,sans-serif}
+body{font-size:15px;line-height:1.65;word-break:keep-all;overflow-wrap:anywhere}
+.brand h1{font-size:16px;font-weight:700}
+.page-head h2{font-size:24px}.page-head p{font-size:14px}
+.sec{font-size:16px}.sub{font-size:14px}
+.card h2,.card h3{font-size:16px}.q{font-size:15px}
+dl{font-size:14px}.tag{font-size:13px}
+.chip{font-size:14px;font-weight:600}.chip[aria-pressed="true"]{font-weight:700}
+.btn{font-size:14px;font-weight:600}
+.ri b{font-size:16px}.ri em{font-size:14px}.ri small{font-size:13px}
+.note,.sample,.meter,footer,.g-where,.score-row p,th{font-size:13px}
+.steps i,.formula span,.ex b,.fu b{font-size:13px}
+.ex,.ev-emph,.lockmsg,.g-eg,.fu,.qs,.ma summary,.draft,table,td{font-size:14px}
+.draft{font-size:15px}
+label{font-size:13px;font-weight:600}
+select,textarea,input[type=text]{font-size:15px}
+.score-row .h,.acc-h,.g-m b{font-size:15px}
+.acc-h .sm,.pill{font-size:13px}
+.stop{font-size:13px}
+@media(max-width:640px){.page-head h2{font-size:22px}select,textarea,input[type=text]{font-size:16px}}
 </style>
 
 <div class="wrap">
