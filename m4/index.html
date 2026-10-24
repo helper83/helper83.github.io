@@ -228,6 +228,11 @@ select,textarea,input[type=text]{border:1.5px solid var(--edge)}
   .stop.active{border-bottom-color:var(--tc)}
 }
 @media(max-width:640px){nav#tabs{box-shadow:0 -4px 18px rgba(24,33,47,.08);border-top:1px solid var(--edge)}header.top{box-shadow:0 1px 8px rgba(24,33,47,.06)}}
+/* v21: 카드 1개짜리 그리드는 전체 폭, 공식 카드는 PC에서 2단 */
+.grid>.card:only-child{grid-column:1/-1}
+.fl,.fr{min-width:0}
+@media(min-width:860px){.fcard{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 28px}.fcard .fr{border-left:1px solid var(--line);padding-left:28px}.fcard .fr .ex:first-of-type{margin-top:12px}}
+@media(max-width:859px){.fcard .fr{margin-top:12px}}
 </style>
 
 <div class="wrap">
@@ -360,13 +365,13 @@ function viewTypes(){
  $$('.ri',viewEl).forEach(b=>b.onclick=()=>{qType=b.dataset.t;go(5)})}
 
 function _vf(){
- viewEl.innerHTML=pageHead(1)+`<div class="chips" id="fc" role="group" aria-label="면접유형 선택">${TYPES.map(t=>`<button type="button" class="chip" aria-pressed="${t.k===fType}" data-k="${t.k}">${esc(t.n)}</button>`).join('')}</div><div class="grid">${FORM.filter(f=>f.k===fType).map(f=>`<article class="card"><span class="tag">${esc(f.k)}면접</span><h3>${esc(f.f)}</h3>
+ viewEl.innerHTML=pageHead(1)+`<div class="chips" id="fc" role="group" aria-label="면접유형 선택">${TYPES.map(t=>`<button type="button" class="chip" aria-pressed="${t.k===fType}" data-k="${t.k}">${esc(t.n)}</button>`).join('')}</div><div class="grid">${FORM.filter(f=>f.k===fType).map(f=>`<article class="card fcard"><div class="fl"><span class="tag">${esc(f.k)}면접</span><h3>${esc(f.f)}</h3>
  <div class="formula">${f.s.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
  <dl><dt>연습시간</dt><dd>${esc(f.t)}</dd></dl><p style="font-size:15px;margin:8px 0 0">${esc(f.tip)}</p>
  ${f.k==='인성'?`<div class="bar" aria-label="답변 비중"><span style="width:20%;background:var(--ink-sub)">상황·과제 20%</span><span style="width:50%;background:var(--accent)">본인 행동 50%</span><span style="width:30%;background:var(--ok)">결과·학습 30%</span></div>`:''}
- <p class="q" style="margin:12px 0 0">실전 질문 · ${esc(f.q)}</p>
+ </div><div class="fr"><p class="q" style="margin:0">실전 질문 · ${esc(f.q)}</p>
  <div class="ex bad"><b>나쁜 답변</b>${esc(f.bad)}</div><div class="ex good"><b>좋은 답변 방향</b>${esc(f.good)}</div>
- <p class="sample">교육용 가상 사례입니다. 본인 경험으로 바꿔 쓰세요.</p></article>`).join('')}</div>
+ <p class="sample">교육용 가상 사례입니다. 본인 경험으로 바꿔 쓰세요.</p></div></article>`).join('')}</div>
  <h2 class="sec">추상적 강점 → 검증 가능한 근거</h2>
  <div class="card tw"><table><thead><tr><th>이렇게 말하면</th><th>이렇게 바꾼다</th></tr></thead><tbody>
  <tr><td>“책임감이 강합니다”</td><td>구체적인 책임 수행 행동</td></tr><tr><td>“문제해결력이 뛰어납니다”</td><td>분석 방법과 해결 과정</td></tr>
