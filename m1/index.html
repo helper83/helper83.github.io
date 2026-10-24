@@ -557,7 +557,7 @@ function areaTab(a){return function(el){
 APP.key='m1-v1';APP.tag='M1';APP.title='자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
 APP.sample=sample;
 APP.done=function(id){if(id==='home')return AREAS.every(areaComplete);if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;return false};
-APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'M1_자기이해_결과.pdf')}}];
+APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'자기이해_결과.pdf')}}];
 APP.tcolor=function(id){return id==='home'?'var(--t0)':id==='syn'?'var(--t2)':id==='cand'?'var(--t3)':'var(--t6)'};
 APP.reset=function(){APP.area=null};
 </script>
