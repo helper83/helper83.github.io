@@ -397,6 +397,12 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 .panel>h2{background:var(--tc,var(--accent));color:#fff;border-bottom:0;padding:14px 16px;font-size:15px}
 .panel>h2 small{color:rgba(255,255,255,.88)}
 @media (max-width:640px){.panel>h2{padding:12px 14px}.tab{padding-right:9px;gap:5px}}
+
+/* ===== QA: 가이드 패널 내용 잘림 방지(그리드 열이 내용 폭으로 늘어나는 문제) ===== */
+.sidebody{grid-template-columns:minmax(0,1fr)}.sidebody>*{min-width:0;max-width:100%}
+/* ===== QA: 터치 영역·iOS 확대 방지 ===== */
+@media (pointer:coarse){button,select,summary,[role=button],.tab,.btn,.btn.sm2,.xa .sm,.xa select,.hbd .sm,.chip,.pager button,.foot button,.tag.link,.lk,.dt,.ct,.hbsug .sm,.pubtbl .sm{min-height:44px}}
+@media (max-width:640px){input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea{font-size:16px}}
 </style>
 
 <div class="wrap">
@@ -728,7 +734,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
             </div>
             <div id="t7paste" hidden>
               <div class="drop drop7" id="t7drop" tabindex="0" role="button">여기에 파일을 끌어다 놓거나 <button type="button" class="btn">불러오기</button><div style="font-size:12px;margin-top:3px">docx · pdf · hwp(x) · xlsx · pptx 파일의 글을 아래 칸으로 가져옵니다</div></div>
-              <input type="file" id="t7file" hidden multiple>
+              <input type="file" id="t7file" hidden multiple aria-label="경험 자료 파일 선택">
               <div class="fld full"><label for="t7pt">기존에 써 둔 경험 내용 붙여넣기</label><textarea id="t7pt" rows="7" placeholder="경험마다 빈 줄로 나누거나 1. / - 로 시작하세요. '상황:', '행동:', '성과:' 표시가 있으면 자동으로 나눕니다."></textarea></div>
               <div class="runbtns" style="margin-top:8px"><button type="button" class="btn" id="t7parse">STAR로 정리하기</button><button type="button" class="btn ghost" id="t7sample">예시 넣기</button></div>
             </div>
@@ -746,7 +752,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
             <div class="runbtns" style="margin-bottom:8px"><button type="button" class="btn" id="t7ai">AI로 STAR 나누기</button><button type="button" class="btn ghost" id="t7q">AI 발굴 질문 받기</button><button type="button" class="btn ghost" id="t7stop" hidden>중지</button></div>
             <div id="t7qs" hidden></div>
             <div id="t7list"></div>
-            <div class="runbtns" style="margin-top:8px"><button type="button" class="btn ghost" id="t7save">작업 내용 .json 저장</button><button type="button" class="btn ghost" id="t7load">불러오기</button><input type="file" id="t7json" accept=".json,application/json" hidden></div>
+            <div class="runbtns" style="margin-top:8px"><button type="button" class="btn ghost" id="t7save">작업 내용 .json 저장</button><button type="button" class="btn ghost" id="t7load">불러오기</button><input type="file" id="t7json" accept=".json,application/json" hidden aria-label="저장한 작업 내용 .json 파일 선택"></div>
             <div class="expbar" id="t7exp" style="margin-top:10px"></div>
           </div>
         </div>
@@ -3387,7 +3393,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   var dlg=null,pend=null;
   function build(){
     if(dlg)return;
-    dlg=document.createElement('div');dlg.className='aidlg';dlg.hidden=true;dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');
+    dlg=document.createElement('div');dlg.className='aidlg';dlg.hidden=true;dlg.setAttribute('role','dialog');dlg.setAttribute('aria-modal','true');dlg.setAttribute('aria-label','AI 연결');
     dlg.innerHTML='<div class="aibox">'+
       '<div class="aihd"><b>AI 연결</b><button type="button" class="btn ghost" id="aiX">닫기</button></div>'+
       '<div class="aibody">'+
@@ -3424,7 +3430,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     $('aiDel').onclick=function(){setKey('');$('aiKeyMsg').textContent='저장된 키를 삭제했습니다.'};
   }
   function close(e,rejectIt,val,keep){
-    dlg.hidden=true;var p=pend;pend=null;if(!p)return;
+    dlg.hidden=true;try{if(dlg._ret&&dlg._ret.focus)dlg._ret.focus()}catch(e){}var p=pend;pend=null;if(!p)return;
     if(keep)return
     if(e)p.rej(e);else p.res(val);
   }
@@ -3439,7 +3445,7 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     }
   }
   function showDlg(p,note){
-    build();pend=p;
+    build();pend=p;try{dlg._ret=document.activeElement}catch(e){}
     $('aiPrompt').value=p.prompt;$('aiPaste').value='';$('aiCopyMsg').textContent='';$('aiMsg').textContent=note||'';$('aiMsg').className='aimsg'+(note?' err':'');
     $('aiKeyMsg').textContent='';$('aiKeySec').style.display='';
     dlg.hidden=false;
