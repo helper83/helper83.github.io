@@ -554,7 +554,7 @@ function areaTab(a){return function(el){
   nextBox.innerHTML='';
   if(areaComplete(a)){var i0=AREAS.indexOf(a),nx=AREAS[i0+1];nextBox.appendChild(K.btn(nx?'다음 영역 · '+AN[nx]+' ›':'종합 성찰로 ›',function(){if(nx)go(nx);else K.show('syn')},'gold'))}}
  K.reg(function(){var c=cur();if(lastCur!==null&&c!==lastCur){var ob=items[lastCur];if(ob&&ob.body.contains(document.activeElement))pin[lastCur]=true;if(c>=0)closed[c]=false}lastCur=c;paint()})}}
-APP.key='m1-v1';APP.tag='M1';APP.title='자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
+APP.key='self-v1';APP.tag='';APP.title='자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
 APP.sample=sample;
 APP.done=function(id){if(id==='home')return AREAS.every(areaComplete);if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;return false};
 APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'자기이해_결과.pdf')}}];
