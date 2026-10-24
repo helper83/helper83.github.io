@@ -433,6 +433,17 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
   .tab[aria-selected="true"]{border-bottom:0}
   .tab .dot{width:26px;height:26px;font-size:13px}
 }
+
+/* ===== 헬퍼탐(m2) 버튼·선택·카드 파스텔 톤 ===== */
+:root{--bg:#F4F6FA;--fg:#2B3545;--muted:#5F6B7D;--accent:#1F5F94;--accent-soft:#EAF4FC;--pf:#DCEBF8;--pf-line:#8FB4D4;--pf-ink:#1F5F94;--prim:#4A94CF}
+.btn{background:var(--pf);border-color:var(--pf-line);color:var(--pf-ink);border-radius:8px;font-weight:600}
+.btn:hover{background:#CDE3F5;border-color:#9EC6E6}
+.btn.ghost{background:transparent;color:var(--pf-ink);border-color:var(--pf-line)}
+.btn.ghost:hover{background:var(--accent-soft)}
+.chip[aria-pressed="true"],.modebar .chip[aria-pressed=true],.pager button.next{background:var(--pf);border-color:var(--pf-line);color:var(--pf-ink)}
+.ev th{background:var(--pf);color:var(--pf-ink);border-color:var(--pf-line)}
+.bar i,.meter i{background:var(--prim)}
+.panel{border-color:#E8ECF2;box-shadow:0 1px 3px rgba(40,60,90,.05);border-radius:14px}
 </style>
 
 <div class="wrap">
