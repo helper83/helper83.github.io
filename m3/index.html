@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%279%27%20fill%3D%27%231E7BC4%27/%3E%3Cpath%20d%3D%27M10%207h8l5%205v13a1%201%200%200%201-1%201H10a1%201%200%200%201-1-1V8a1%201%200%200%201%201-1z%27%20fill%3D%27%23fff%27/%3E%3Cpath%20d%3D%27M12.5%2019.5l2.6%202.6%205-5.4%27%20fill%3D%27none%27%20stroke%3D%27%231E7BC4%27%20stroke-width%3D%272.2%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E"><title>헬퍼손 지원서</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2032%2032%27%3E%3Crect%20width%3D%2732%27%20height%3D%2732%27%20rx%3D%279%27%20fill%3D%27%232456b8%27/%3E%3Cpath%20d%3D%27M9.5%208v16M9.5%2016.5h8%27%20fill%3D%27none%27%20stroke%3D%27%23fff%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M22.5%2024V10.5%27%20fill%3D%27none%27%20stroke%3D%27%23F2B800%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27/%3E%3Cpath%20d%3D%27M17.8%2014.2l4.7-5.4%204.7%205.4%27%20fill%3D%27none%27%20stroke%3D%27%23F2B800%27%20stroke-width%3D%273%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27/%3E%3C/svg%3E"><title>헬퍼손 지원서</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@400;600&display=swap">
 <style>
@@ -403,11 +403,23 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 /* ===== QA: 터치 영역·iOS 확대 방지 ===== */
 @media (pointer:coarse){button,select,summary,[role=button],.tab,.btn,.btn.sm2,.xa .sm,.xa select,.hbd .sm,.chip,.pager button,.foot button,.tag.link,.lk,.dt,.ct,.hbsug .sm,.pubtbl .sm{min-height:44px}}
 @media (max-width:640px){input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea{font-size:16px}}
+
+/* ===== 앱 스킬: 모바일 하단 탭바(헬퍼탐 방식) ===== */
+.tab .lbl-short{display:none}
+@media (max-width:640px){
+  .tabs{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:40;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:0;padding:4px 2px calc(4px + env(safe-area-inset-bottom));overflow:visible;box-shadow:0 -1px 3px rgba(24,33,47,.06)}
+  .tab{flex-direction:column;justify-content:center;gap:3px;padding:3px 0;min-height:52px;border-radius:10px;text-align:center}
+  .tab .lbl-long{display:none}
+  .tab .lbl-short{display:block;font-size:10px;line-height:1.1;font-weight:700;white-space:nowrap}
+  .tab .dot{width:26px;height:26px;font-size:13px}
+  body{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  .note-head{margin-bottom:4px}
+}
 </style>
 
 <div class="wrap">
   <div class="note-head">
-    <h1 style="display:flex;align-items:center;gap:8px"><svg class="appico" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="헬퍼손 지원서 아이콘"><rect width="32" height="32" rx="9" fill="#1E7BC4"/><path d="M10 7h8l5 5v13a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1z" fill="#fff"/><path d="M18 7v5h5" fill="#BFDDF3"/><path d="M12.5 19.5l2.6 2.6 5-5.4" fill="none" stroke="#1E7BC4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="color:inherit;font-size:inherit">헬퍼손 지원서</span></h1>
+    <h1 style="display:flex;align-items:center;gap:8px"><svg class="appico" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="헬퍼손 로고"><defs><linearGradient id="lg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2F6FD6"/><stop offset="1" stop-color="#173F93"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg1)"/><path d="M9.5 8v16M9.5 16.5h8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M22.5 24V10.5" fill="none" stroke="#F2B800" stroke-width="3" stroke-linecap="round"/><path d="M17.8 14.2l4.7-5.4 4.7 5.4" fill="none" stroke="#F2B800" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span style="color:inherit;font-size:inherit">헬퍼손 지원서</span></h1>
     <span id="sub">미션1 · 사람 평가 (5분) · 정량·정성 평가를 평가표에 기록하고, 컨설팅 보기에서 고칠 부분을 확인합니다</span>
   </div>
 
@@ -3481,11 +3493,12 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 })();
 </script>
 <script>
-/* 앱 스킬: 탭 번호를 컬러 칩 안으로 */
-(function(){var M={'①':'1','②':'2','③':'3','④':'4','⑤':'5'};
+/* 앱 스킬: 탭 번호를 컬러 칩 안으로 + 모바일 하단 탭바용 짧은 이름 */
+(function(){var M={'①':'1','②':'2','③':'3','④':'4','⑤':'5'},SH={tab1:'사람평가',tab2:'AI평가',tab8:'직무탐색',tab4:'이력서',tab7:'경험발굴',tab5:'자소서',tab6:'포트폴리오'};
 document.querySelectorAll('.tabs .tab').forEach(function(t){var tx=t.textContent.trim(),m=/^([①②③④⑤])\s*(.*)$/.exec(tx);
 t.setAttribute('aria-label',tx);var d=document.createElement('span');d.className='dot'+(m?'':' nb');d.setAttribute('aria-hidden','true');if(m)d.textContent=M[m[1]];
-var l=document.createElement('span');l.textContent=m?m[2]:tx;t.textContent='';t.appendChild(d);t.appendChild(l)})})();
+var l=document.createElement('span');l.className='lbl-long';l.textContent=m?m[2]:tx;var sh=document.createElement('span');sh.className='lbl-short';sh.setAttribute('aria-hidden','true');sh.textContent=SH[t.id]||l.textContent;
+t.textContent='';t.appendChild(d);t.appendChild(l);t.appendChild(sh)})})();
 </script>
 
 </html>
