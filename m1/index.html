@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>자기 이해</title>
+<title>헬퍼손 자기이해</title>
 <meta name="theme-color" content="#ffffff">
 <style>:root{--brand:#1E7BC4;--bg:#EDF0F5;--fg:#18212F;--mute:#5B6675;--line:#E1E5EC;--line2:#B8C2D1;--card:#FFFFFF;--acc:#1E7BC4;--accfg:#FFFFFF;--gold:#D9A400;--goldtx:#7A5A00;--ok:#1D774B;--warn:#B42318;--sel:#EAF3FB;--bar:#1E7BC4;--bar2:#DCE6F2;--input:#FFFFFF;--signal:#E5484D;--t0:#1E7BC4;--t1:#0E8670;--t2:#7A5AC8;--t3:#B85609;--t4:#C23A6B;--t5:#1F7F45;--t6:#5B6A80;--r-card:13px;--r-btn:10px;--r-chip:9px;--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
 *{box-sizing:border-box}
@@ -411,7 +411,7 @@ function candTab(el){
   K.reg(function(){var p=document.getElementById('m2line');if(p)p.textContent=m2line()})})()}
 function m2line(){var v=cardTopKeys('value').map(function(k){return nm('value',k)}).join('·'),ri=res('interest');var ic=ri.done?ri.rk.top.slice(0,2).join('')+' (Top3 '+ri.rk.top.join('')+')':'';return '전공·학년: '+(g('info.major','')||'(미입력)')+' '+(g('info.grade','')||'')+' / 가치 키워드: '+(v||'(미입력)')+' / 흥미 코드: '+(ic||'(미입력)')}
 /* ---------- 시작·출력 ---------- */
-function reportSecs(){var s=[];s.push({t:'자기 이해 · 헤더',kv:[['전공·학년',(g('info.major','')+' '+g('info.grade','')).trim()],['작성일',new Date().toLocaleDateString('ko-KR')]]});
+function reportSecs(){var s=[];s.push({t:'헬퍼손 자기이해 · 헤더',kv:[['전공·학년',(g('info.major','')+' '+g('info.grade','')).trim()],['작성일',new Date().toLocaleDateString('ko-KR')]]});
  AREAS.forEach(function(a){var R=res(a),P='card.'+a;var kv=[];if(a==='eff'){EFF.forEach(function(e){var sc=g(P+'.score.'+e[0]);kv.push([e[0],(sc?sc+'점':'')+(g(P+'.exp.'+e[0])?' / 근거: '+g(P+'.exp.'+e[0]):'')])});kv.push(['가장 낮은 과제',(g(P+'.low','')||'')+(g(P+'.src','')?' / 원천: '+g(P+'.src',''):'')]);kv.push(['이번 주 작은 행동',g(P+'.act','')]);if(effPicked().length)kv.push(['찜한 작은 행동 예시',effPicked().join('\n')]);if(R.done)kv.push(['점수와 사실이 맞은 과제',cmp('eff').count+'/5'])}
   else if(a==='pers'){PERS.forEach(function(p){var sd=g(P+'.side.'+p[0]);kv.push([p[0]+' 카드',(sd?(sd==='A'?p[1]:p[2]):'')+(g(P+'.exp.'+p[0])?' / '+g(P+'.exp.'+p[0]):'')])});if(R.done)kv.push(['검사 결과 일치',cmp('pers').count+'/5'])}
   else{g(P+'.top',[]).forEach(function(id,i){var line=(g(P+'.reason.'+id,'')||'');var ex=g(P+'.exp.'+id,'');if(ex)line+=' / 경험: '+ex;if(a==='strength')line+=' / '+(g(P+'.conf.'+id)==='have'?'자신 있음':'잠재(증거 없음)');kv.push([(i+1)+'위 '+idName(a,id),line])});if(R.done){kv.push(['검사 Top3',R.rk.top.map(function(k){return nm(a,k)}).join(', ')]);if(a==='interest')kv.push(['흥미 코드(상위 2)',R.rk.top.slice(0,2).join('')+' / Top3 '+R.rk.top.join('')]);var cm=cmp(a);kv.push(['일치 수',cm.count+'/'+cm.max])}}
@@ -554,7 +554,7 @@ function areaTab(a){return function(el){
   nextBox.innerHTML='';
   if(areaComplete(a)){var i0=AREAS.indexOf(a),nx=AREAS[i0+1];nextBox.appendChild(K.btn(nx?'다음 영역 · '+AN[nx]+' ›':'종합 성찰로 ›',function(){if(nx)go(nx);else K.show('syn')},'gold'))}}
  K.reg(function(){var c=cur();if(lastCur!==null&&c!==lastCur){var ob=items[lastCur];if(ob&&ob.body.contains(document.activeElement))pin[lastCur]=true;if(c>=0)closed[c]=false}lastCur=c;paint()})}}
-APP.key='self-v1';APP.tag='';APP.title='자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
+APP.key='self-v1';APP.tag='';APP.title='헬퍼손 자기이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
 APP.sample=sample;
 APP.done=function(id){if(id==='home')return AREAS.every(areaComplete);if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;return false};
 APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'자기이해_결과.pdf')}}];
