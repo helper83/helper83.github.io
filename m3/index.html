@@ -4,17 +4,11 @@
 <style>
 /* Layout: 노트 상단 탭 → 좌 지원서 열람(탭 6개) / 우 평가표(9항목·100점). 평가표 행을 누르면 해당 지원서 부분으로 이동 */
 :root{
-  --bg:#f1f5f9; --surface:#ffffff; --paper:#fffefb; --fg:#14232f; --muted:#5d6f7e; --line:#d3dde6;
-  --accent:#145c85; --accent-fg:#ffffff; --accent-soft:#e3eff7; --row-alt:#eef2f6; --warn:#a15c00; --warn-bg:#fdf1dc; --ok:#1d7a4d;
+  --bg:#EDF0F5; --surface:#ffffff; --paper:#fffefb; --fg:#18212F; --muted:#5B6675; --line:#E1E5EC;
+  --accent:#1E7BC4; --accent-fg:#ffffff; --accent-soft:#E6F1FA; --row-alt:#F3F5F9; --warn:#a15c00; --warn-bg:#fdf1dc; --ok:#1d7a4d;
   --sans:"Noto Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --serif:"Noto Serif KR","Batang","AppleMyungjo",serif;
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0e171f; --surface:#16232d; --paper:#1a2630; --fg:#e6edf3; --muted:#94a7b6; --line:#2b3d4b;
-  --accent:#6bb6e3; --accent-fg:#06222f; --accent-soft:#1b3446; --row-alt:#1a2a35; --warn:#f0b866; --warn-bg:#33270f; --ok:#6fd1a0; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0e171f; --surface:#16232d; --paper:#1a2630; --fg:#e6edf3; --muted:#94a7b6; --line:#2b3d4b;
-  --accent:#6bb6e3; --accent-fg:#06222f; --accent-soft:#1b3446; --row-alt:#1a2a35; --warn:#f0b866; --warn-bg:#33270f; --ok:#6fd1a0; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:14px;line-height:1.55;margin:0;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 32px}
@@ -389,6 +383,20 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
 .airow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.aimuted{color:var(--muted);font-size:12.5px;margin:4px 0}.aimsg{font-size:12.5px}.aimsg.err{color:var(--warn)}
 .aiol{margin:4px 0 8px;padding-left:20px;font-size:13px}
 .aiset{margin-left:auto;font-size:12.5px;padding:3px 10px}
+
+/* ===== 앱 스킬(헬퍼탐 UX/UI): 탭 컬러 칩 + 색 제목 띠 ===== */
+#tab1,#view1{--tc:#1E7BC4}#tab2,#view2{--tc:#16A085}#tab8,#view8{--tc:#6B7A8F}#tab4,#view4{--tc:#7A5AC8}#tab7,#view7{--tc:#E07B24}#tab5,#view5{--tc:#D6477A}#tab6,#view6{--tc:#6B7A8F}
+.tabs{gap:6px;border-bottom:0;padding:6px 2px 8px}
+.tab{display:inline-flex;align-items:center;gap:7px;min-height:44px;border:0;background:transparent;color:var(--muted);padding:4px 12px 4px 5px;border-radius:14px;font-weight:700}
+.tab .dot{width:28px;height:28px;border-radius:9px;background:var(--tc);color:#fff;display:inline-grid;place-items:center;font-size:14px;font-weight:800;flex:none}
+.tab .dot.nb::before{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.tab[aria-selected="true"]{background:transparent;color:var(--tc);border:0;font-weight:800}
+.tab[aria-selected="true"] .dot{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--tc)}
+.tab[aria-selected="true"]:focus-visible{outline-color:var(--tc)}
+.panel{border-radius:13px;box-shadow:0 1px 2px rgba(24,33,47,.04);overflow:hidden}
+.panel>h2{background:var(--tc,var(--accent));color:#fff;border-bottom:0;padding:14px 16px;font-size:15px}
+.panel>h2 small{color:rgba(255,255,255,.88)}
+@media (max-width:640px){.panel>h2{padding:12px 14px}.tab{padding-right:9px;gap:5px}}
 </style>
 
 <div class="wrap">
@@ -3465,6 +3473,13 @@ body{padding-bottom:max(32px,calc(env(safe-area-inset-bottom,0px) + 16px))}
     h.appendChild(b);
   })();
 })();
+</script>
+<script>
+/* 앱 스킬: 탭 번호를 컬러 칩 안으로 */
+(function(){var M={'①':'1','②':'2','③':'3','④':'4','⑤':'5'};
+document.querySelectorAll('.tabs .tab').forEach(function(t){var tx=t.textContent.trim(),m=/^([①②③④⑤])\s*(.*)$/.exec(tx);
+t.setAttribute('aria-label',tx);var d=document.createElement('span');d.className='dot'+(m?'':' nb');d.setAttribute('aria-hidden','true');if(m)d.textContent=M[m[1]];
+var l=document.createElement('span');l.textContent=m?m[2]:tx;t.textContent='';t.appendChild(d);t.appendChild(l)})})();
 </script>
 
 </html>
