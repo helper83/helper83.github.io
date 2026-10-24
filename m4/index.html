@@ -257,6 +257,17 @@ select,textarea,input[type=text]{font-size:15px}
 /* v25: 로고 크기·색을 헬퍼탐과 동일하게 (모양은 유지) */
 .logo{width:36px;height:36px;flex:0 0 36px;display:block}
 @media(max-width:640px){.logo{width:32px;height:32px;flex-basis:32px}}
+/* v26: 면접평가표 (평가영역·세부기준·배점·평가점수) */
+.ovt th,.ovt td{font-size:14px;vertical-align:middle}
+.ovt thead th{white-space:nowrap;padding:10px 6px;background:var(--tc);color:#fff;text-align:center;font-size:14px;font-weight:700;border:0}
+.ovt tbody th{background:var(--tc);color:#fff;text-align:center;font-weight:700;font-size:14px;border-bottom:1px solid #fff;min-width:84px}
+.ovt tbody td{background:var(--tb);border-bottom:1px solid #fff}
+.ovt td.c{text-align:center;white-space:nowrap}
+.ovt input[type=number]{width:64px;min-height:44px;text-align:center;font:inherit;font-size:16px;border:1.5px solid var(--edge);border-radius:var(--r-btn);background:#fff;padding:4px}
+.chip.dec[aria-pressed="true"]{color:#fff;font-weight:700}
+.chip.dec[data-d="합격"][aria-pressed="true"]{background:var(--ok);border-color:var(--ok)}
+.chip.dec[data-d="보류"][aria-pressed="true"]{background:#8a5000;border-color:#8a5000}
+.chip.dec[data-d="불합격"][aria-pressed="true"]{background:var(--bad);border-color:var(--bad)}
 </style>
 
 <div class="wrap">
@@ -851,10 +862,49 @@ function viewScore(){
   <div class="tw" style="margin-top:8px"><table><thead><tr><th>유형</th><th>점수</th><th>상태</th><th>보완 1순위</th></tr></thead><tbody>${rows}</tbody></table></div><div class="row"><button type="button" class="btn ghost" id="rsa">6개 유형 전체 초기화</button></div><p class="note">초기화하면 6개 유형의 점수·피드백·완료 표시가 모두 지워집니다. 작성 탭의 답변은 지워지지 않습니다.</p>`;
   if(weak)$('#gof').onclick=()=>go(1);
   arm($('#rsa'),()=>{KS.forEach(x=>{delete S[x]});store.set('sc2',S);evType=KS[0];render();scrollTo(0,0)})}
+ const OVI=[['직무 적합성','직무 지식·경험 근거가 문장에 있는가',10],['조직 적합성','협업·소통 사례가 드러나는가',10],['성장 가능성','실패·학습·개선 행동이 드러나는가',10]];
+ const OVD=['합격','보류','불합격'];
+ const getOv=()=>{let o=store.get('ov2',null);if(!o||typeof o!=='object'||Array.isArray(o))o={};const v=Array.isArray(o.v)&&o.v.length===3?o.v.map(x=>x===null||x===''||isNaN(+x)?null:Math.max(0,Math.min(10,Math.round(+x)))):[null,null,null];return {v,op:String(o.op||''),dec:OVD.includes(o.dec)?o.dec:'',who:String(o.who||'')}};
+ const chipsHtml=k=>`<button type="button" class="chip" aria-pressed="${k==='면접평가'}" data-k="면접평가">${getOv().dec?'✓ ':''}면접평가</button>`+KS.map((x,i)=>`<button type="button" class="chip" aria-pressed="${x===k}" data-k="${x}">${get(x).done?'✓ ':''}${TYPES[i].n}</button>`).join('');
+ function renderOv(){
+  const o=getOv(),doneN=KS.filter(x=>get(x).done).length;
+  viewEl.innerHTML=pageHead(0)+`<div class="prog"><span>유형별 평가 완료</span><b>${doneN}/6</b></div>
+  <div class="chips" style="margin-top:10px" id="evc" role="group" aria-label="평가 선택">${chipsHtml('면접평가')}</div>
+  <div class="split"><section class="card"><span class="tag">면접평가</span><h2>면접평가표</h2><p class="sub">면접관으로서 지원자의 답변을 세 영역으로 평가하고, 의견을 적어 합격·보류·불합격으로 표시합니다.</p>
+   <label for="ovw" style="margin-top:0">평가 대상 <small>선택 입력</small></label><input type="text" id="ovw" placeholder="예) 지원자 A" maxlength="30">
+   <div class="tw" style="margin-top:12px"><table class="ovt"><thead><tr><th>평가영역</th><th>세부기준</th><th>배점</th><th>평가점수</th></tr></thead><tbody>
+   ${OVI.map((r,i)=>`<tr><th scope="row">${r[0]}</th><td>${r[1]}</td><td class="c">${r[2]}</td><td class="c"><input type="number" id="ov${i}" min="0" max="${r[2]}" step="1" inputmode="numeric" aria-label="${r[0]} 점수 (0~${r[2]})"></td></tr>`).join('')}
+   <tr><th scope="row">합계</th><td></td><td class="c">30</td><td class="c" id="ovs">-</td></tr></tbody></table></div>
+   <label for="ovo">평가 의견</label><textarea id="ovo" placeholder="예) 직무 경험 근거는 충분했으나 협업 사례의 구체성이 부족함"></textarea>
+   <label style="margin-bottom:6px">결과 표시</label>
+   <div class="chips" id="ovd" role="group" aria-label="합격 여부" style="margin-bottom:0">${OVD.map(d=>`<button type="button" class="chip dec" data-d="${d}" aria-pressed="false">${d}</button>`).join('')}</div>
+   <div class="row"><button type="button" class="btn ghost" id="ovr">면접평가 초기화</button><span class="sample" id="ovm" role="status"></span></div>
+   <p class="note">점수는 각 영역 0~10점으로 입력합니다. 합격·보류·불합격은 평가자가 직접 선택하며, 점수 기준은 참고용입니다.</p></section>
+  <div class="stack"><section class="card"><h2>면접평가 결과</h2><div class="total"><span id="ovt">0</span><small> / 30</small></div><div class="band"><i id="ovb"></i></div>
+   <p><span class="pill" id="ovp"></span></p><p id="ovh" style="margin:6px 0"></p><p id="ovq" class="sample"></p>
+   <div class="tw"><table><thead><tr><th>점수</th><th>참고 판정</th></tr></thead><tbody><tr><td>24점 이상</td><td>합격 검토</td></tr><tr><td>18~23점</td><td>보류 검토</td></tr><tr><td>17점 이하</td><td>불합격 검토</td></tr></tbody></table></div>
+   <p class="note">참고 판정은 교육용 예시(80%·60% 기준)이며 기관별 실제 합격 기준과 다를 수 있습니다.</p></section></div></div>`;
+  const ins=OVI.map((_,i)=>$('#ov'+i));
+  const sug=t=>t>=24?'합격':t>=18?'보류':'불합격';
+  const save=()=>{const cur={v:ins.map(x=>x.value===''?null:Math.max(0,Math.min(10,Math.round(+x.value)))),op:$('#ovo').value,who:$('#ovw').value,dec:getOv().dec};store.set('ov2',cur);return cur};
+  const paint=cur=>{const filled=cur.v.every(x=>x!==null),t=cur.v.reduce((a,b)=>a+(b||0),0),any=cur.v.some(x=>x!==null);
+   $('#ovs').textContent=any?String(t):'-';$('#ovt').textContent=t;$('#ovb').style.width=Math.round(t/30*100)+'%';
+   const p=$('#ovp');if(cur.dec){p.className='pill '+(cur.dec==='합격'?'p90':cur.dec==='보류'?'p70':'p0');p.textContent=cur.dec}else{p.className='pill';p.textContent='결과 미표시'}
+   $('#ovh').textContent=filled?`참고 판정: ${sug(t)} 검토 (${t}/30점)`:'세 영역의 점수를 모두 입력하면 참고 판정이 나옵니다.';
+   $('#ovq').textContent=cur.op.trim()?'평가 의견: '+cur.op.trim():'';
+   $$('#ovd .dec').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.d===cur.dec)));
+   const c0=$('#evc .chip');if(c0)c0.textContent=(cur.dec?'✓ ':'')+'면접평가'};
+  const o2=getOv();ins.forEach((x,i)=>{x.value=o2.v[i]===null?'':o2.v[i];x.oninput=()=>{if(x.value!==''&&+x.value>10)x.value=10;if(x.value!==''&&+x.value<0)x.value=0;paint(save())}});
+  $('#ovo').value=o2.op;$('#ovo').oninput=()=>paint(save());$('#ovw').value=o2.who;$('#ovw').oninput=()=>save();
+  $('#ovd').onclick=e=>{const b=e.target.closest('.dec');if(!b)return;const cur=save();cur.dec=cur.dec===b.dataset.d?'':b.dataset.d;store.set('ov2',cur);paint(cur)};
+  arm($('#ovr'),()=>{store.set('ov2',{v:[null,null,null],op:'',dec:'',who:''});renderOv()});
+  paint(o2);
+  $('#evc').onclick=e=>{const b=e.target.closest('button');if(b){evType=b.dataset.k;render()}}}
  function render(){
+  if(evType==='면접평가')return renderOv();
   const k=evType,R=RUB[k],o=get(k),T=TYPES.find(t=>t.k===k),doneN=KS.filter(x=>get(x).done).length;
   viewEl.innerHTML=pageHead(0)+`<div class="prog"><span>유형별 평가 완료</span><b>${doneN}/6</b></div>
-  <div class="chips" style="margin-top:10px" id="evc" role="group" aria-label="면접유형 선택">${KS.map((x,i)=>`<button type="button" class="chip" aria-pressed="${x===k}" data-k="${x}">${get(x).done?'✓ ':''}${TYPES[i].n}</button>`).join('')}</div>
+  <div class="chips" style="margin-top:10px" id="evc" role="group" aria-label="면접유형 선택">${chipsHtml(k)}</div>
   <div class="split"><section class="card"><span class="tag">${k}면접</span><h2>${T.n.slice(2)} 평가표</h2><p class="sub">면접관의 핵심 질문 · “${esc(T.q)}”</p>
    <p class="ev-emph">${esc(R.emph)}</p>
    ${R.items.map((r,i)=>`<div class="score-row"><div class="h"><label for="s${i}" style="margin:0">${r[0]}</label><em id="v${i}"></em></div><p>${r[1]}</p><input type="range" id="s${i}" min="0" max="${r[2]}" step="1"></div>`).join('')}
