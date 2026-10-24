@@ -254,12 +254,15 @@ select,textarea,input[type=text]{font-size:15px}
 .acc-h .sm,.pill{font-size:13px}
 .stop{font-size:13px}
 @media(max-width:640px){.page-head h2{font-size:22px}select,textarea,input[type=text]{font-size:16px}}
+/* v25: 로고 크기·색을 헬퍼탐과 동일하게 (모양은 유지) */
+.logo{width:36px;height:36px;flex:0 0 36px;display:block}
+@media(max-width:640px){.logo{width:32px;height:32px;flex-basis:32px}}
 </style>
 
 <div class="wrap">
 <header class="top"><div class="in">
   <div class="brand">
-    <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A63C9"/><stop offset="1" stop-color="#0B2F73"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M9 9v14M17 9v14M9 16h8" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M19 23l5-7M24 16v4M24 16h-4" stroke="#F2C230" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+    <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#3678F2"/><stop offset="1" stop-color="#2358D8"/></linearGradient></defs><rect width="32" height="32" rx="8" fill="url(#lg)"/><path d="M9 9v14M17 9v14M9 16h8" stroke="#fff" stroke-width="3" stroke-linecap="round" fill="none"/><path d="M19 23l5-7M24 16v4M24 16h-4" stroke="#F9CB5E" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
     <div><h1>헬퍼손 면접</h1></div>
   </div>
   <nav role="tablist" aria-label="헬퍼손 면접 탭" id="tabs"></nav>
