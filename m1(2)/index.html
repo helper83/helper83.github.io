@@ -1,0 +1,186 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff"><title>헬퍼손 경험이해 | 경험 기반 산업·직무 탐색</title><style>
+:root{--brand:#1E7AC3;--brand-d:#14598F;--brand-pale:#E8F3FB;--bg:#EDF0F5;--line:#E1E5EC;--line2:#C9D1DD;--card:#fff;--ink:#18212F;--sub:#5B6675;--signal:#E5484D;--gold:#D9A400;--ok:#16794C;--t0:#1E7AC3;--t1:#12856E;--t2:#7A5AC8;--t3:#B1611C;--t4:#CB4374;--t5:#28864D;--t6:#68768B;--r-card:13px;--r-btn:10px;--r-chip:9px;--font:-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--font);-webkit-text-size-adjust:100%;word-break:keep-all;overflow-wrap:anywhere}.wrap{max-width:880px;margin:auto;padding:18px 14px 60px}
+.header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{display:flex;align-items:center;gap:11px}.logo{position:relative;background:linear-gradient(135deg,#17479E,#2F7FE0);color:#fff;font-weight:900;font-size:22px;width:44px;height:44px;border-radius:13px;display:grid;place-items:center}.logo svg{position:absolute;right:3px;bottom:3px}.brand h1{margin:0;font-size:20px;letter-spacing:-.4px;line-height:1.2}.sub{color:var(--sub);font-size:13px}
+.link{color:var(--sub);font-weight:700;background:none;border:0;cursor:pointer;font:inherit;font-size:14px;text-decoration:underline;min-height:44px;padding:0 6px;white-space:nowrap;flex-shrink:0}.brand{min-width:0}
+.home-top{background:var(--t0);color:#fff;border-radius:14px;padding:20px;margin-bottom:14px}.home-top small{font-size:13px;opacity:.9}.home-top h2{font-size:22px;line-height:1.35;margin:0 0 8px}.home-top p{margin:0;font-size:15px}
+.todo{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:0 1px 2px rgba(24,33,47,.04);padding:12px 16px;margin-bottom:12px}.todo>div:first-child{display:flex;justify-content:space-between;gap:10px;align-items:baseline}.todo b{color:var(--brand);font-size:15px}.todo span{font-size:14px;color:var(--sub)}.pbar{height:6px;border-radius:6px;background:#E3EAF3;margin-top:8px;overflow:hidden}.pbar b{display:block;height:100%;background:var(--brand);border-radius:6px;transition:width .3s}
+/* 순차 아코디언 */
+.acc{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);margin-bottom:10px;box-shadow:0 1px 2px rgba(24,33,47,.04)}.acc.row{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:10px 14px;text-align:left;font:inherit;color:inherit}.acc.done{cursor:pointer}.acc.done:hover{border-color:var(--tc)}.acc.locked{background:#F5F7FA;opacity:.6}.acc.locked .num{background:#B3BDCB}
+.num{width:30px;height:30px;border-radius:var(--r-chip);background:var(--tc);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center;flex-shrink:0}.txt{min-width:0}.txt b{display:block;font-size:15px}.txt small{display:block;font-size:13px;color:var(--sub);overflow-wrap:anywhere}.edit{margin-left:auto;font-size:14px;color:var(--brand);font-weight:800;flex-shrink:0}.acc.locked svg{margin-left:auto;color:#7B8798;flex-shrink:0}
+.acc.open{overflow:hidden;scroll-margin-top:12px}.page-head{background:var(--tc);color:#fff;padding:13px 18px;display:flex;align-items:center;gap:10px}.page-head .num{background:rgba(0,0,0,.25)}.page-head h2{margin:0;font-size:18px;font-weight:800;line-height:1.3}.page-head h2:focus{outline:none}.acc-body{padding:18px}.lead{margin:0 0 18px;color:var(--sub);font-size:15px}
+label{font-weight:700;display:block;margin-bottom:6px;font-size:15px}input,textarea,select{font:inherit;font-size:16px;width:100%;border:1px solid var(--line2);border-radius:var(--r-btn);padding:12px 13px;background:#fff;color:var(--ink);min-height:46px}textarea{min-height:110px;resize:vertical}input:focus,textarea:focus,select:focus,button:focus-visible,summary:focus-visible{outline:3px solid #BFDDF3;border-color:var(--brand)}
+.fields{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin:14px 0}.help{font-size:13px;color:var(--sub);margin:6px 0}.actions{display:flex;justify-content:space-between;align-items:center;gap:9px;margin-top:20px;flex-wrap:wrap}
+.btn{border:1px solid var(--line2);background:#fff;min-height:46px;padding:0 20px;border-radius:var(--r-btn);font-weight:800;color:var(--ink);cursor:pointer;font:inherit;font-size:15px;font-weight:800}.btn.primary{background:var(--brand);border-color:var(--brand);color:#fff}.btn.text{border-color:transparent;background:none;color:var(--brand);padding:0 10px}.btn:hover{filter:brightness(.97)}.btn:disabled{opacity:.45;cursor:not-allowed}
+/* 경험 선택: 리스트형 */
+.catlist{display:grid;gap:10px}.cat{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;border:1px solid var(--line);border-radius:var(--r-card);padding:10px 14px;text-align:left;background:#fff;cursor:pointer;font:inherit;color:inherit}.cat:hover{border-color:var(--tc)}.cat.active{border:2px solid var(--brand);background:var(--brand-pale);padding:9px 13px}.cat .ic{width:40px;height:40px;border-radius:var(--r-chip);background:var(--tc);color:#fff;display:grid;place-items:center;flex-shrink:0}.cat .tx{flex:1;min-width:0}.cat strong{display:block;font-size:16px}.cat .tx span{font-size:13px;color:var(--sub)}.cat .ck{width:26px;height:26px;border-radius:50%;border:2px solid var(--line2);display:grid;place-items:center;flex-shrink:0;color:#fff}.cat.active .ck{background:var(--brand);border-color:var(--brand)}.cat .ck svg{width:16px;height:16px}
+.experience{border:1px solid var(--line);border-radius:var(--r-card);padding:16px;margin-top:14px;background:#FAFBFD}.experience h4{margin:0 0 10px;font-size:16px}.qbox{background:var(--brand-pale);padding:15px;border-radius:var(--r-card);margin-top:14px;border-left:4px solid var(--brand)}.qbox strong{display:block;margin-bottom:6px}
+.chip{display:inline-block;border:1px solid #CFE5F5;background:var(--brand-pale);padding:4px 11px;border-radius:30px;margin:4px 5px 4px 0;font-size:13px;font-weight:700;color:var(--brand-d)}.chip.soft{font-weight:500;background:#fff}
+.note{background:#FFF8E6;border-left:4px solid var(--gold);border-radius:8px;padding:12px 15px;font-size:14px;color:#6B5200}.results{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}.results h3{font-size:17px;margin:0 0 4px}.resultrow{display:flex;gap:12px;border-bottom:1px solid var(--line);padding:12px 0}.resultrow:last-child{border:0}.rank{background:var(--brand-pale);width:32px;height:32px;border-radius:var(--r-chip);display:grid;place-items:center;flex-shrink:0;font-weight:800;color:var(--brand-d)}.resultrow h4{margin:0;font-size:16px}.resultrow p{font-size:13px;color:var(--sub);margin:2px 0 0}
+.statement{padding:16px;border-radius:var(--r-card);background:var(--brand-pale);margin-top:14px}.statement h3{margin:0 0 6px;font-size:17px}.footer{margin-top:20px;font-size:12px;color:var(--sub)}.hidden{display:none!important}
+.err{color:#B42318;background:#FFF1F0;border:1px solid #F5C2C0;border-radius:var(--r-btn);padding:10px 14px;font-size:14px;margin-top:14px}.err:empty{display:none}
+.guide{background:#fff;border:1px solid var(--line);border-radius:var(--r-btn);padding:12px 15px;font-size:14px}
+details.exbox>summary{cursor:pointer;font-weight:700;font-size:14px;color:var(--brand-d);padding:10px 0;min-height:44px}.star{background:#F3F9FD;border:1px dashed #9CC9E8;border-radius:var(--r-btn);padding:13px 15px;margin:4px 0 10px;font-size:14px}.star .cap{margin:0 0 8px;font-size:13px;color:var(--sub)}.star .row{display:flex;gap:9px;margin:6px 0}.star .tag{flex-shrink:0;width:64px;font-weight:800;color:#fff;background:var(--brand);border-radius:7px;text-align:center;padding:2px 0;font-size:12px;height:fit-content}.star .row span.t{flex:1;min-width:0}.star .kws{margin-top:9px;font-size:13px;color:var(--sub)}
+.sfield{margin-top:12px}.sfield label{display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:4px}.sk{background:var(--brand);color:#fff;border-radius:7px;padding:1px 9px;font-size:13px;font-weight:800}.sfield textarea{min-height:72px}.sfield.main textarea{min-height:108px}.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.bd{font-size:12px;padding:3px 10px;border-radius:20px;background:#EEF1F6;color:var(--sub)}.bd.ok{background:#E3F6EC;color:var(--ok)}
+.scard{border:1px solid var(--line);border-radius:var(--r-card);padding:13px 15px;margin:10px 0;background:#FAFBFD}.scard h4{margin:0;font-size:16px}.scard p{margin:2px 0 0;font-size:13px;color:var(--sub)}.bar{height:6px;border-radius:6px;background:#E3EAF3;margin:8px 0 6px;overflow:hidden}.bar b{display:block;height:100%;background:var(--brand);border-radius:6px}.srow{margin:5px 0;font-size:14px}.srow b{display:inline-block;min-width:54px;color:var(--brand-d)}
+@media(max-width:640px){.header{flex-direction:row;align-items:center}.brand h1{font-size:18px}.sub{display:none}.wrap{padding:12px 10px 40px}.home-top{padding:16px 14px}.home-top h2{font-size:21px}.acc-body{padding:15px 14px}.page-head{padding:12px 14px}.fields,.results{grid-template-columns:1fr}.actions .btn{flex:1}.actions .btn.text{flex:0 0 auto}.sfield label{flex-wrap:wrap}.star .tag{width:58px}}
+@media print{body{background:#fff}.no-print,.header,.todo,.home-top,.page-head,.acc.row,.acc-body>.lead{display:none!important}.wrap{max-width:100%;padding:0}.acc{box-shadow:none;border:0}.acc-body{padding:0}.experience,.statement{break-inside:avoid}}
+</style></head><body><div class="wrap"><header class="header"><div class="brand"><div class="logo">경<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 9l6-6M4 3h4v4" fill="none" stroke="#F2C230" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h1>헬퍼손 경험이해</h1></div></div><button type="button" class="link no-print hidden" id="resetBtn" onclick="resetAll()">처음부터 다시</button></header><div class="home-top no-print" id="hero"><h2>내가 해온 일에서<br>내가 잘할 수 있는 일을 찾다.</h2><p>경험 선택 → STAR 작성 → 심화 질문 → 강점 해석 → 산업·직무 추천 → 목표 선언</p></div><main id="app"></main><footer class="footer">교육용 시제품 · 답변에 기반한 탐색 제안이며 공인 심리검사 또는 검증된 직무 적합도 진단이 아닙니다. 입력값은 이 브라우저 안에서만 처리·임시 저장되며 외부 서버로 전송되지 않습니다. 공용 PC에서는 사용 후 '처음부터 다시'로 지워 주세요. 산업·직무 후보는 교육용 예시 목록이며 전체 산업·직무를 대표하지 않습니다.</footer></div><script>
+'use strict';
+const CATS=[['학업·전공','전공과목·과제·팀 프로젝트'],['대외활동·서포터즈·공모전','대외활동·홍보·공모전'],['아르바이트·인턴·현장실습','현장 업무·고객 대응'],['동아리·학생회·봉사','협업·운영·지원'],['취미·자기계발','자발적 몰입과 학습'],['위기·실패·극복','문제해결·변화·성찰']];
+const STEPS=['기본 정보','경험 선택','경험 작성','심화 질문','강점·추천','목표 설정','결과보고서'];
+const MIN_SEL=2,MAX_SEL=6;
+// 역량 키워드 사전: '목표·성과·배웠다·학생·문제'처럼 STAR 문장에 누구나 쓰는 일반어는 제외(과대 추천 방지)
+const FEATURES=[
+{id:'analysis',name:'분석·탐구',desc:'자료와 근거를 모아 원인을 파악하고 판단하는 힘',keywords:['데이터','분석','통계','설문','조사','연구','원인','논리','근거','측정','실험','검증','수치','엑셀','sql','파이썬'],question:'어떤 자료나 근거를 어떻게 해석했고, 그 결과 어떤 판단을 내렸나요?'},
+{id:'creative',name:'창의·기획',desc:'새로운 아이디어를 내고 결과물로 만드는 힘',keywords:['기획','아이디어','디자인','영상','콘텐츠','홍보','포스터','브랜딩','창작','제작','편집','스토리','촬영','기획안'],question:'본인이 직접 제안하거나 만든 결과물은 무엇이고, 기존 방식과 무엇이 달랐나요?'},
+{id:'social',name:'소통·협업',desc:'사람과 함께 일하고 돕고 조율하는 힘',keywords:['소통','협업','팀원','협력','조율','회의','봉사','상담','교육','지도','멘토','도움','갈등','관계','응대'],question:'다른 사람과 협업하거나 지원할 때 본인이 구체적으로 맡은 행동과 그 결과는 무엇인가요?'},
+{id:'lead',name:'주도·설득',desc:'목표를 세우고 사람을 이끌거나 설득하는 힘',keywords:['리더','팀장','주도','설득','협상','영업','판매','제안','발표','유치','매출','행사','총괄','이끌'],question:'목표를 달성하기 위해 누구를 어떻게 설득하거나 어떤 결정을 주도했나요?'},
+{id:'organize',name:'체계·관리',desc:'기준과 절차로 일을 정확하고 효율적으로 처리하는 힘',keywords:['정리','관리','예산','일정','계획','문서','회계','검수','정확','기록','반복','절차','품질','운영','표준','재고','체크','매뉴얼'],question:'어떤 기준이나 절차를 만들어 업무의 정확성·효율성을 높였나요?'},
+{id:'technical',name:'실물·기술',desc:'장비·기술·시스템을 직접 다루며 문제를 푸는 힘',keywords:['기계','설비','장비','회로','반도체','공정','기술','조립','정비','현장','코딩','시스템','장치','기구','시제품','센서','실습','개발','프로그래밍'],question:'어떤 장비·기술·도구를 직접 사용했고 어떤 문제를 해결했나요?'},
+{id:'adapt',name:'개선·극복',desc:'실패나 변화 앞에서 방법을 바꿔 다시 해내는 힘',keywords:['개선','해결','실패','극복','변경','수정','보완','대안','도전','피드백','시도','회복','효율','위기'],question:'예상과 달랐던 점은 무엇이고, 이후 행동을 어떻게 바꿨으며 무엇을 배웠나요?'},
+{id:'service',name:'이용자 이해',desc:'고객·이용자의 요구를 발견해 서비스에 반영하는 힘',keywords:['사용자','고객','수요','니즈','만족','민원','불편','서비스','시장','소비자','피드백','요구','이용자','후기'],question:'누구의 어떤 요구를 발견했고 그것을 반영해 무엇을 바꿨나요?'}
+];
+// 교육용 실습 후보군. 전체 산업·직무 분류의 완전한 목록이 아님.
+const INDUSTRIES=[
+['IT·디지털 서비스',['analysis','creative','service','technical']],['반도체·전자',['technical','analysis','organize']],['자동차·모빌리티',['technical','analysis','organize']],['바이오·제약',['analysis','technical','organize']],['금융서비스',['analysis','organize','service']],['유통·소비재',['service','lead','analysis','creative']],['광고·마케팅',['creative','service','lead','analysis']],['미디어·콘텐츠',['creative','social','service']],['게임·엔터테인먼트',['creative','technical','analysis']],['교육·HRD',['social','creative','service','organize']],['보건·복지',['social','service','organize']],['공공행정',['organize','social','analysis']],['물류·운송',['organize','analysis','lead']],['제조·생산',['technical','organize','analysis']],['건설·인프라',['technical','organize','lead']],['에너지·환경',['analysis','technical','adapt']],['관광·호텔',['social','service','lead']],['경영·컨설팅',['analysis','lead','social']],['식품·외식',['service','organize','creative']],['부동산·도시개발',['analysis','lead','organize']]
+];
+const JOBS=[
+['데이터 분석',['analysis','organize','adapt']],['서비스기획',['service','creative','analysis']],['마케팅 기획',['creative','service','analysis','lead']],['품질관리',['organize','analysis','technical']],['교육기획·HRD',['social','creative','organize']],['생산기술',['technical','analysis','adapt']],['설비기술',['technical','organize','adapt']],['연구개발',['analysis','technical','creative']],['UX·UI 디자인',['creative','service','analysis']],['콘텐츠 기획',['creative','service','social']],['브랜드 마케팅',['creative','lead','service']],['경영지원',['organize','social','lead']],['인사·채용',['social','organize','service']],['사업개발',['lead','analysis','service']],['B2B 영업',['lead','social','service']],['재무·회계',['organize','analysis']],['구매·자재관리',['organize','analysis','lead']],['물류·SCM',['organize','analysis','adapt']],['프로젝트 관리',['organize','lead','social']],['고객경험(CX) 관리',['service','social','adapt']],['소프트웨어 개발',['technical','analysis','creative']],['정보보안',['technical','analysis','organize']],['생산관리',['organize','technical','analysis']],['기술영업',['lead','technical','social']],['시장조사·리서치',['analysis','service','creative']],['공공행정·사업운영',['organize','social','service']],['사회복지 서비스',['social','service','adapt']],['행사·전시기획',['creative','lead','organize']],['기술기획',['technical','analysis','creative']],['환경·안전관리',['organize','technical','adapt']]
+];
+// 카테고리 순서(CATS)와 같은 순서의 가상 STAR 예시
+const STAR_EX=[
+{S:"전공 수업 '마케팅조사론' 4인 팀 프로젝트에서 교내 카페 매출이 감소한 원인을 조사하는 과제를 맡았다.",T:"데이터로 원인을 검증하고 개선안을 제안하는 것이 목표였고, 나는 팀장으로 일정과 역할을 관리했다.",A:"학생 120명에게 설문조사를 실시해 엑셀로 통계 분석을 했다. 팀원 간 의견 갈등을 조율하며 회의를 주도해 역할을 나누고 일정을 관리했다. 분석 결과 '대기 시간'이 핵심 원인임을 논리적 근거로 발표했다.",R:"개선안이 교수 피드백에서 A+ 평가를 받았고 학과 우수 발표로 선정되었다. 근거 중심으로 소통하며 문제를 해결하는 법을 배웠다."},
+{S:"교내 브랜드 서포터즈 12명 중 SNS 콘텐츠 제작 파트에 지원해 활동했다.",T:"한 달 안에 신입생 인지도를 높이는 홍보 콘텐츠 기획과 제작을 맡았다.",A:"신입생 설문으로 니즈를 파악하고 카드뉴스와 숏폼 영상을 직접 기획·촬영·편집했다. 팀원과 협업해 포스터 디자인을 개선했고, 게시물 반응을 분석해 업로드 시간대를 변경했다.",R:"조회수가 평균 3배 늘었고 서포터즈 우수 활동자로 뽑혔다. 사용자 피드백을 반영하면 성과가 달라진다는 점을 배웠다."},
+{S:"대학 근처 카페에서 6개월간 아르바이트하며 주말 피크타임 고객 응대와 재고 관리를 맡았다.",T:"주문 지연 민원이 잦아 응대 품질과 재고 정확도를 높여야 했다.",A:"고객 불편 사항을 기록해 반복 문제를 정리하고, 재고 체크리스트와 마감 절차를 직접 만들어 관리했다. 신입 직원에게 업무를 교육하고 지도했으며 매장 점장에게 개선안을 제안했다.",R:"주문 오류가 월 15건에서 4건으로 줄었고 고객 만족 평가가 올랐다. 점장 추천으로 파트 리더를 맡았다."},
+{S:"교내 봉사 동아리에서 총무로 활동하며 지역 아동센터 학습 멘토링 행사를 운영하게 되었다.",T:"30명 규모 행사의 예산·일정 계획을 세우고 자원봉사자를 조직하는 역할이었다.",A:"예산을 항목별로 관리하고 일정표와 문서를 정리했다. 참가자 상담을 통해 요구를 파악하고, 자원봉사자 간 갈등을 조율하며 협력 체계를 만들었다. 행사 후 설문으로 보완점을 찾아 수정했다.",R:"행사를 예산 내에서 마무리했고 참가 만족도 92%를 얻었다. 다음 학기 운영 매뉴얼로 채택되었다."},
+{S:"방학 동안 취미로 파이썬 코딩과 영상 편집을 독학하며 자기계발을 이어갔다.",T:"학교 행사 기록용 영상을 직접 제작하고 반복 작업을 자동화하는 것이 목표였다.",A:"온라인 강의로 코딩 기초를 익혀 엑셀 자료 정리 스크립트를 개발했고, 촬영·편집한 영상을 스토리 중심으로 제작했다. 오류가 나면 원인을 찾아 수정하며 시스템을 개선했다.",R:"월 2시간 걸리던 자료 정리가 10분으로 줄었고 영상은 학과 행사에서 상영되었다. 꾸준히 시도하며 성장하는 습관을 얻었다."},
+{S:"공모전 팀 프로젝트에서 중간 발표 때 심사위원에게 근거 부족이라는 피드백을 받고 실패 위기에 놓였다.",T:"남은 2주 안에 문제를 보완해 최종 제안서를 완성해야 했다.",A:"실패 원인을 팀원과 회의로 정리하고 시장 자료와 수치를 추가 조사해 논리를 보완했다. 대안을 여러 개 만들어 피드백을 받아 수정했고, 발표를 직접 맡아 설득했다.",R:"최종 발표에서 장려상을 받았다. 실패를 극복하는 과정에서 피드백을 빠르게 반영하는 도전 자세를 배웠다."}
+];
+const STAR_KEYS=[['S','S 상황','언제·어디서·어떤 활동이었나요? (예: 3학년 1학기, 전공 팀 프로젝트 4인)'],['T','T 과제','내가 맡은 역할과 달성해야 했던 목표는 무엇이었나요?'],['A','A 행동 (가장 중요)','내가 직접 한 행동을 구체적으로 적어 주세요. 분석했다·기획했다·조율했다처럼 행동 동사로 쓰면 강점이 잘 드러납니다. (15자 이상)'],['R','R 결과·배운 점','결과는 어땠나요? 숫자(인원·횟수·%)와 배운 점을 함께 적어 주세요.']];
+const KEY='career_growth_draft';
+const fresh=()=>({step:0,major:'',year:'3학년',selected:[],star:{},follow:{},sector:'',job:'',reason:'',action:''});
+const state=fresh();
+const app=document.getElementById('app');
+const $=id=>document.getElementById(id);
+const v=id=>{const e=$(id);return e?e.value:null};
+function esc(s){return String(s??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+function entryText(i){const s=state.star[i]||{};return [s.S,s.T,s.A,s.R].filter(Boolean).join(' ')}
+function fail(msg,focusId){const e=$('err');if(e){e.textContent=msg;e.scrollIntoView({behavior:'smooth',block:'center'})}if(focusId&&$(focusId))$(focusId).focus()}
+
+/* ---------- 입력 수집 / 이동 ---------- */
+function collect(){
+ if(state.step===0){const m=v('major');if(m!==null)state.major=m.trim();const y=v('year');if(y!==null)state.year=y}
+ if(state.step===2)state.selected.forEach(i=>{const o={};STAR_KEYS.forEach(([k])=>{const x=v(`st_${k}_${i}`);o[k]=x===null?((state.star[i]||{})[k]||''):x.trim()});state.star[i]=o});
+ if(state.step===3)state.selected.forEach(i=>{const x=v('follow'+i);if(x!==null)state.follow[i]=x.trim()});
+ if(state.step===5)['sector','job','reason','action'].forEach(k=>{const x=v(k);if(x!==null)state[k]=x.trim()});
+}
+function advance(n){collect();state.step=n;render();if(n===0){window.scrollTo({top:0,behavior:'smooth'});const h=document.querySelector('#open h2');if(h)h.focus({preventScroll:true})}else focusOpen()}
+function toggleCat(i){const s=state.selected;if(s.includes(i)){state.selected=s.filter(x=>x!==i)}else{if(s.length>=MAX_SEL){return fail(`최대 ${MAX_SEL}개까지 선택할 수 있습니다. 다른 경험을 고르려면 기존 선택을 해제해 주세요.`)}state.selected=[...s,i].sort((a,b)=>a-b)}render();const bt=document.querySelectorAll('.cat')[i];if(bt)bt.focus({preventScroll:true})}
+function toFollow(){collect();for(const i of state.selected){if(((state.star[i]||{}).A||'').length<15)return fail(`'${CATS[i][0]}' 경험의 A(행동)를 15자 이상 구체적으로 작성해 주세요.`,`st_A_${i}`)}advance(3)}
+function toResult(){collect();for(const i of state.selected){if((state.follow[i]||'').length<10)return fail(`'${CATS[i][0]}' 추가 질문에 10자 이상 답해 주세요.`,'follow'+i)}advance(4)}
+function resetAll(){if(!confirm('작성한 내용을 모두 지우고 처음부터 시작할까요?'))return;try{localStorage.removeItem(KEY)}catch(e){}Object.assign(state,fresh());render();window.scrollTo({top:0})}
+
+/* ---------- 분석 로직 ---------- */
+function analyze(){
+ const sc={},ev={},ex={};FEATURES.forEach(f=>{sc[f.id]=0;ev[f.id]=new Set();ex[f.id]=[]});
+ state.selected.forEach(i=>{
+  const main=entryText(i).toLowerCase(),fu=(state.follow[i]||'').toLowerCase();
+  FEATURES.forEach(f=>{
+   const hm=f.keywords.filter(k=>main.includes(k.toLowerCase())),hf=f.keywords.filter(k=>fu.includes(k.toLowerCase()));
+   const all=[...new Set([...hm,...hf])];if(!all.length)return;
+   sc[f.id]+=Math.min(all.length,4)+(hf.length?1:0); // 경험별 상한 4 + 심화 답변에서 재확인되면 +1
+   all.forEach(k=>ev[f.id].add(k));ex[f.id].push(CATS[i][0]);
+  });
+ });
+ FEATURES.forEach(f=>{if(ex[f.id].length>1)sc[f.id]+=(ex[f.id].length-1)*1.5}); // 여러 경험에서 반복되면 가산
+ return {sc,ev,ex};
+}
+function strengths(){const {sc,ev,ex}=analyze();return FEATURES.map(f=>({...f,score:sc[f.id],found:[...ev[f.id]],from:ex[f.id]})).filter(f=>f.score>0).sort((a,b)=>b.score-a.score).slice(0,5)}
+function ranked(list){
+ const {sc}=analyze(),names=Object.fromEntries(FEATURES.map(f=>[f.id,f.name]));
+ return list.map(([name,keys],idx)=>({name,idx,score:keys.reduce((s,k,i)=>s+(sc[k]||0)*(i===0?1.25:1),0),matched:keys.filter(k=>sc[k]>0).sort((a,b)=>sc[b]-sc[a]).map(k=>names[k])}))
+  .filter(x=>x.score>0).sort((a,b)=>b.score-a.score||b.matched.length-a.matched.length||a.idx-b.idx).slice(0,5)
+  .map((x,i)=>({...x,rank:i+1,reason:'연결된 강점: '+x.matched.slice(0,3).join(' · ')}));
+}
+function mainQ(i){const t=entryText(i).toLowerCase();let best=null,bh=0;FEATURES.forEach(f=>{const h=f.keywords.filter(k=>t.includes(k.toLowerCase())).length;if(h>bh){bh=h;best=f}});return best?best.question:'그 경험에서 본인이 직접 한 행동, 맡은 역할, 결과를 구체적으로 알려주세요.'}
+function gaps(i){const s=state.star[i]||{},g=[];if(!s.S)g.push('상황(S)이 비어 있습니다.');if(!s.T)g.push('내가 맡은 역할·목표(T)가 비어 있습니다.');if(!s.R)g.push('결과(R)가 비어 있습니다.');else if(!/\d/.test(s.R))g.push('결과(R)에 숫자(인원·횟수·% 등)가 없습니다.');return g}
+
+/* ---------- 화면 조각 ---------- */
+function exKeywords(ex){const t=(ex.S+ex.T+ex.A+ex.R).toLowerCase();return FEATURES.map(f=>({n:f.name,k:f.keywords.filter(k=>t.includes(k.toLowerCase()))})).filter(x=>x.k.length)}
+function starBox(i){const e=STAR_EX[i],kws=exKeywords(e);return `<div class="star"><p class="cap">※ 가상의 예시입니다. 문장을 따라 쓰지 말고 본인의 실제 경험으로 바꿔 쓰세요.</p>${['S','T','A','R'].map((k,n)=>`<div class="row"><span class="tag">${['S 상황','T 과제','A 행동','R 결과'][n]}</span><span class="t">${esc(e[k])}</span></div>`).join('')}<div class="kws">이 예시에서 읽히는 강점: ${kws.map(x=>`<span class="chip">${x.n}</span>`).join('')}</div></div>`}
+function badgeHtml(i){const s=state.star[i]||{};return STAR_KEYS.map(([k,l])=>{const ok=k==='A'?(s[k]||'').length>=15:!!s[k];return `<span class="bd ${ok?'ok':''}">${l.split(' (')[0]} ${ok?'✓':'○'}</span>`}).join('')}
+function updateBadges(){if(state.step===2)state.selected.forEach(i=>{const e=$('bd'+i);if(e)e.innerHTML=badgeHtml(i)})}
+function nav(prev,nextCode,label='다음 단계',dis=false){return `<button type="button" class="btn" onclick="advance(${prev})">← 이전</button><button type="button" class="btn primary" ${dis?'disabled':''} onclick="${nextCode}">${label} →</button>`}
+function opts(all,top,cur){const o=n=>`<option ${n===cur?'selected':''}>${esc(n)}</option>`,tn=top.map(x=>x.name);return `<optgroup label="추천 TOP 5">${top.map(x=>o(x.name)).join('')}</optgroup><optgroup label="그 밖의 후보 (직접 선택)">${all.map(x=>x[0]).filter(n=>!tn.includes(n)).map(o).join('')}</optgroup>`}
+function rankTag(top,name){const r=top.find(x=>x.name===name);return r?`(추천 ${r.rank}위)`:'(직접 선택)'}
+function resultRows(list){return list.map(x=>`<div class="resultrow"><div class="rank">${x.rank}</div><div><h4>${esc(x.name)}</h4><p>${esc(x.reason)}</p></div></div>`).join('')}
+function strengthCards(sg){const max=Math.max(...sg.map(s=>s.score));return sg.map(s=>`<div class="scard"><h4>${esc(s.name)}</h4><p>${esc(s.desc)}</p><div class="bar" aria-hidden="true"><b style="width:${Math.max(12,Math.round(s.score/max*100))}%"></b></div><div>${s.found.slice(0,8).map(k=>`<span class="chip soft">${esc(k)}</span>`).join('')}</div><p>근거 경험: ${esc([...new Set(s.from)].join(', '))}</p></div>`).join('')}
+
+/* ---------- 렌더 (순차 아코디언) ---------- */
+const TITLES=['나의 기본 정보','경험 선택','경험 구체적으로 작성','경험 깊이 알아보기','강점과 추천 결과','진로 목표 정하기','결과보고서'];
+const SVG=p=>`<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
+const ICONS=['<path d="M4 19V5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zm0 0a2 2 0 0 0 2 2h13"/>','<path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1zM15 9a4 4 0 0 1 0 6M18 6a8 8 0 0 1 0 12"/>','<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>','<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M16 5a3 3 0 0 1 0 6M18 20a6 6 0 0 0-2-4.5"/>','<path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>','<path d="M3 17l6-6 4 4 8-8M15 7h6v6"/>'];
+const CHECK=SVG('<path d="M5 12l5 5 9-10"/>');
+const LOCK=SVG('<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/>');
+function summary(i){switch(i){
+ case 0:return esc((state.major||'전공 미입력')+' · '+state.year);
+ case 1:return esc(`경험 ${state.selected.length}개: `+state.selected.map(k=>CATS[k][0].split('·')[0]).join(', '));
+ case 2:return `STAR ${state.selected.length}개 작성 완료`;
+ case 3:return `심화 답변 ${state.selected.filter(k=>state.follow[k]).length}개 완료`;
+ case 4:return esc('주요 강점: '+strengths().slice(0,3).map(s=>s.name).join(' · '));
+ case 5:return esc(state.sector+' · '+state.job);
+ default:return ''}}
+function panel(i,lead,body,buttons){return `<section class="acc open" id="open" style="--tc:var(--t${i})"><div class="page-head"><span class="num">${i+1}</span><h2 tabindex="-1">${TITLES[i]}</h2></div><div class="acc-body"><p class="lead">${lead}</p>${body}<div class="err" id="err" role="alert"></div><div class="actions no-print">${buttons}</div></div></section>`}
+function doneRow(i){return `<button type="button" class="acc row done no-print" style="--tc:var(--t${i})" onclick="advance(${i})" aria-label="${i+1}단계 ${TITLES[i]} 수정"><span class="num">${CHECK.replace('width="22" height="22"','width="18" height="18"')}</span><span class="txt"><b>${TITLES[i]}</b><small>${summary(i)}</small></span><span class="edit">수정</span></button>`}
+function lockedRow(i){return `<div class="acc row locked no-print" style="--tc:var(--t${i})" aria-disabled="true"><span class="num">${i+1}</span><span class="txt"><b>${TITLES[i]}</b><small>이전 단계를 완료하면 열립니다</small></span>${LOCK}</div>`}
+function focusOpen(){const e=$('open');if(!e)return;e.scrollIntoView({behavior:'smooth',block:'start'});const h=e.querySelector('h2');if(h)h.focus({preventScroll:true})}
+function stepBody(){
+ const s=state.step;
+ if(s===0)return panel(0,'개인정보 없이도 체험할 수 있습니다. 전공은 추천 해석의 참고 정보로만 사용합니다.',`<div class="fields"><div><label for="major">전공·학과 (선택)</label><input id="major" placeholder="예: 산업공학전공" value="${esc(state.major)}"></div><div><label for="year">학년</label><select id="year">${['1학년','2학년','3학년','4학년','졸업생'].map(x=>`<option ${state.year===x?'selected':''}>${x}</option>`).join('')}</select></div></div><div class="note">실습 중 이름·전화번호·학번은 입력하지 마세요. 입력 내용은 이 브라우저에만 임시 저장되며 외부 서버로 제출하지 않습니다.</div>`,`<span></span><button type="button" class="btn primary" onclick="advance(1)">경험 선택 시작 →</button>`);
+ if(s===1){const n=state.selected.length,ok=n>=MIN_SEL;return panel(1,`아래 6가지 경험 중 ${MIN_SEL}~${MAX_SEL}개를 선택해 주세요. 한 분야에 특별한 경험이 없어도 괜찮습니다.`,`<div class="catlist">${CATS.map(([nm,d],i)=>{const on=state.selected.includes(i);return `<button type="button" class="cat ${on?'active':''}" aria-pressed="${on}" onclick="toggleCat(${i})"><span class="ic">${SVG(ICONS[i])}</span><span class="tx"><strong>${nm}</strong><span>${d}</span></span><span class="ck" aria-hidden="true">${on?CHECK:''}</span></button>`}).join('')}</div><p class="help">선택 ${n}개 · 최소 ${MIN_SEL}개, 최대 ${MAX_SEL}개 (3~4개 권장: 많을수록 근거는 풍부해지지만 작성 시간이 늘어납니다)${ok?'':' — 2개 이상 선택하면 다음 단계로 갈 수 있습니다.'}</p>`,nav(0,'advance(2)','다음 단계',!ok))}
+ if(s===2)return panel(2,'STAR(상황·과제·행동·결과) 순서로 칸을 채워 주세요. 결과가 화려하지 않아도 좋습니다.',`<div class="guide">행동(A)에 행동 동사와 역량 키워드(분석·설문·기획·협업·조율·개선·관리 등)가 들어갈수록 강점이 정확하게 읽힙니다. 예시는 펼쳐서 참고만 하세요.</div>`+state.selected.map((i,k)=>`<div class="experience"><h4>${CATS[i][0]}</h4><details class="exbox" ${k===0?'open':''}><summary>📌 STAR 작성 예시 ${k===0?'접기/펼치기':'보기'}</summary>${starBox(i)}</details>${STAR_KEYS.map(([key,label,ph])=>`<div class="sfield ${key==='A'?'main':''}"><label for="st_${key}_${i}"><span class="sk">${label.split(' ')[0]}</span>${esc(label.replace(/^\w /,''))}</label><textarea id="st_${key}_${i}" placeholder="${esc(ph)}">${esc((state.star[i]||{})[key]||'')}</textarea></div>`).join('')}<div class="badges" id="bd${i}" aria-live="polite"></div></div>`).join(''),nav(1,'toFollow()','추가 질문 받기'));
+ if(s===3)return panel(3,'입력한 표현에 따라 질문이 달라집니다. 실제 행동과 결과를 확인하는 과정입니다.',state.selected.map(i=>{const st=state.star[i]||{},g=gaps(i);return `<div class="experience"><h4>${CATS[i][0]}</h4>${STAR_KEYS.map(([k,l])=>st[k]?`<div class="srow"><b>${l.split(' ')[0]}</b> ${esc(st[k])}</div>`:'').join('')}<div class="qbox"><strong>추가 질문</strong>${esc(mainQ(i))}${g.length?`<p class="help" style="margin-bottom:0">함께 보완하면 좋은 점: ${g.map(esc).join(' ')}</p>`:''}</div><label for="follow${i}" style="margin-top:12px">나의 답변</label><textarea id="follow${i}" placeholder="구체적인 행동과 결과를 작성해 주세요. (10자 이상)">${esc(state.follow[i]||'')}</textarea></div>`}).join(''),nav(2,'toResult()','나의 강점 분석하기'));
+ if(s===4){const sg=strengths(),ind=ranked(INDUSTRIES),jobs=ranked(JOBS),has=sg.length>0&&ind.length>0&&jobs.length>0;
+  return panel(4,'경험에서 발견된 행동 단서를 바탕으로 강점을 정리하고, 산업과 직무를 각각 최대 5개 추천합니다.',`<div class="note">${has?'여러 경험에서 반복되고 심화 답변에서 다시 확인된 표현일수록 비중이 큽니다. 추천 순위는 공인 적합도 점수가 아니라 탐색의 출발점입니다.':'분석할 구체적 행동 키워드가 부족해 추천을 만들 수 없습니다. 경험 작성으로 돌아가 행동(A)을 "무엇을 어떻게 했는지" 동사 중심으로 보완해 주세요.'}</div>${has?`<h3 style="margin:18px 0 2px;font-size:16px">경험에서 발견한 강점·직업적 특성</h3>${strengthCards(sg)}<div class="results"><div><h3>추천 산업 TOP 5</h3>${resultRows(ind)}</div><div><h3>추천 직무 TOP 5</h3>${resultRows(jobs)}</div></div>${ind.length<5||jobs.length<5?'<p class="help">근거가 확인된 후보만 표시했습니다. 경험을 더 구체적으로 쓰면 후보가 늘어납니다.</p>':''}`:''}`,has?nav(3,'advance(5)','목표 산업·직무 선택'):`<span></span><button type="button" class="btn primary" onclick="advance(2)">← 경험 작성으로 돌아가기</button>`)}
+ if(s===5){const top1=ranked(INDUSTRIES),top2=ranked(JOBS);if(!INDUSTRIES.some(x=>x[0]===state.sector))state.sector=top1[0].name;if(!JOBS.some(x=>x[0]===state.job))state.job=top2[0].name;
+  return panel(5,'추천 후보는 출발점입니다. 스스로 관심이 생기는 산업과 직무를 고르고(추천 밖의 후보도 선택 가능), 이유를 적어 보세요.',`<div class="fields"><div><label for="sector">목표 산업</label><select id="sector">${opts(INDUSTRIES,top1,state.sector)}</select></div><div><label for="job">목표 직무</label><select id="job">${opts(JOBS,top2,state.job)}</select></div></div><label for="reason">선택한 이유 (선택)</label><textarea id="reason" placeholder="내 경험과 어떤 점이 연결되나요?">${esc(state.reason)}</textarea><label for="action" style="margin-top:12px">30일 이내에 실행할 첫 행동 (선택)</label><textarea id="action" placeholder="예: 해당 직무 채용공고 3개를 읽고 필요한 역량을 정리한다.">${esc(state.action)}</textarea>`,nav(4,'advance(6)','결과보고서 완성'))}
+ return panel(6,'결과를 저장하거나 인쇄해 상담에 활용하세요.',reportBody(),`<button type="button" class="btn" onclick="advance(5)">← 목표 수정</button><button type="button" class="btn" onclick="downloadReport()">결과 HTML 저장</button><button type="button" class="btn" onclick="downloadJSON()">입력 데이터 저장</button><button type="button" class="btn primary" onclick="window.print()">인쇄 / PDF 저장</button><span style="flex-basis:100%"></span><button type="button" class="btn text" onclick="advance(4)">추천 다시 보기</button><button type="button" class="btn text" onclick="resetAll()">새로 시작하기</button>`);
+}
+function reportBody(){const sg=strengths(),ind=ranked(INDUSTRIES),jobs=ranked(JOBS);
+ return `<div id="report"><h3>나의 경험 기반 진로탐색 결과보고서</h3><p class="lead">헬퍼손 경험이해 · ${new Date().toLocaleDateString('ko-KR')} · ${esc(state.major||'전공 미입력')} · ${esc(state.year)}</p><h4>1. 내가 정리한 경험 (STAR)</h4>${state.selected.map(i=>{const s=state.star[i]||{};return `<div class="experience"><strong>${CATS[i][0]}</strong>${STAR_KEYS.map(([k,l])=>`<div class="srow"><b>${l.split(' ')[0]} ${['상황','과제','행동','결과'][STAR_KEYS.findIndex(z=>z[0]===k)]}</b> ${esc(s[k]||'(미작성)')}</div>`).join('')}<p class="help">심화 답변: ${esc(state.follow[i]||'없음')}</p></div>`}).join('')}<h4>2. 확인된 강점과 근거 키워드</h4>${sg.map(x=>`<div class="srow"><span class="chip">${esc(x.name)}</span> ${x.found.slice(0,8).map(esc).join(' · ')}</div>`).join('')}<h4>3. 추천 산업 TOP 5</h4>${resultRows(ind)}<h4>4. 추천 직무 TOP 5</h4>${resultRows(jobs)}<div class="statement"><h3>5. 나의 목표 선언문</h3><p>나는 <strong>${esc(state.sector)}</strong> ${rankTag(ind,state.sector)} 산업의 <strong>${esc(state.job)}</strong> ${rankTag(jobs,state.job)} 직무를 목표로 탐색한다.</p><p><b>선택 이유:</b> ${esc(state.reason||'추가 작성 필요')}</p><p><b>30일 실행계획:</b> ${esc(state.action||'추가 작성 필요')}</p></div><div class="note" style="margin-top:16px">본 결과는 경험 서술을 바탕으로 한 규칙 기반 탐색 결과입니다. 표준화된 심리검사 결과나 공식 직무적합도 판정이 아니며, 산업·직무 후보는 교육용 예시 목록입니다.</div></div>`}
+function render(){
+ state.selected=[...new Set((state.selected||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<CATS.length))].sort((a,b)=>a-b).slice(0,MAX_SEL);
+ if(state.step>=2&&state.selected.length<MIN_SEL)state.step=1;
+ if(state.step>=5&&(!strengths().length||!ranked(INDUSTRIES).length||!ranked(JOBS).length))state.step=4;
+ $('hero').classList.toggle('hidden',state.step>0);$('resetBtn').classList.toggle('hidden',state.step===0);
+ const s=state.step,cur=stepBody();
+ const todo=`<div class="todo no-print"><div><b>지금 할 일 ${s+1}/${TITLES.length}</b><span>${TITLES[s]}</span></div><div class="pbar" role="progressbar" aria-valuemin="1" aria-valuemax="${TITLES.length}" aria-valuenow="${s+1}"><b style="width:${Math.round((s+1)/TITLES.length*100)}%"></b></div></div>`;
+ app.innerHTML=todo+TITLES.map((_,i)=>i<s?doneRow(i):i===s?cur:lockedRow(i)).join('');
+ updateBadges();save();
+}
+
+/* ---------- 저장 / 내보내기 ---------- */
+function file(name,content,type){const a=document.createElement('a');const u=URL.createObjectURL(new Blob([content],{type}));a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),500)}
+function downloadJSON(){file('진로탐색_입력결과.json',JSON.stringify({student:{major:state.major,year:state.year},experiences:state.selected.map(i=>({type:CATS[i][0],star:state.star[i],followup:state.follow[i]})),strengths:strengths().map(f=>({name:f.name,keywords:f.found})),industries:ranked(INDUSTRIES).map(x=>({rank:x.rank,name:x.name,reason:x.reason})),jobs:ranked(JOBS).map(x=>({rank:x.rank,name:x.name,reason:x.reason})),goal:{industry:state.sector,job:state.job,reason:state.reason,action:state.action}},null,2),'application/json;charset=utf-8')}
+function downloadReport(){const r=$('report').cloneNode(true);r.querySelectorAll('.no-print').forEach(x=>x.remove());file('나의_산업직무_탐색보고서.html','<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>진로탐색 결과</title><style>body{font:15px/1.7 "Malgun Gothic",Arial,sans-serif;max-width:800px;margin:35px auto;color:#172b4d;word-break:keep-all;overflow-wrap:anywhere}h3{border-bottom:2px solid #195bcc;padding-bottom:8px}.experience,.statement{padding:15px;margin:12px 0;background:#f2f6fc;border-radius:9px}.chip{display:inline-block;background:#e8f1ff;padding:4px 10px;border-radius:12px;margin:3px}.resultrow{display:flex;border-bottom:1px solid #ddd;padding:7px;gap:15px}.resultrow h4{margin:0}.resultrow p{margin:0;font-size:12px}.rank{font-weight:bold}.srow{margin:4px 0}.srow b{display:inline-block;min-width:60px;color:#174a9a}.help,.lead,.note{color:#58677a;font-size:13px}</style></head><body>'+r.outerHTML+'</body></html>','text/html;charset=utf-8')}
+
+/* ---------- 초기화 ---------- */
+let timer;
+app.addEventListener('input',()=>{collect();updateBadges();clearTimeout(timer);timer=setTimeout(save,300)});
+window.addEventListener('pagehide',()=>{collect();save()});
+try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv&&typeof sv==='object'&&!Array.isArray(sv)){
+ Object.assign(state,sv);
+ const isObj=o=>o&&typeof o==='object'&&!Array.isArray(o);
+ if(!isObj(state.star))state.star={};if(!isObj(state.follow))state.follow={};
+ if(isObj(sv.entries)){Object.keys(sv.entries).forEach(k=>{if(!state.star[k])state.star[k]={S:'',T:'',A:String(sv.entries[k]||''),R:''}})} // 이전 버전 임시저장 이전
+ delete state.entries;
+ Object.keys(state.star).forEach(k=>{const o=state.star[k];state.star[k]=isObj(o)?{S:String(o.S||''),T:String(o.T||''),A:String(o.A||''),R:String(o.R||'')}:{S:'',T:'',A:'',R:''}});
+ Object.keys(state.follow).forEach(k=>{state.follow[k]=String(state.follow[k]??'')});
+ ['major','year','sector','job','reason','action'].forEach(k=>{if(typeof state[k]!=='string')state[k]=fresh()[k]});
+ if(!Array.isArray(state.selected))state.selected=[];
+ state.step=Math.min(6,Math.max(0,Math.floor(+state.step)||0));
+}}catch(e){}
+render();
+</script></body></html>
