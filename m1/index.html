@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>M1 자기 이해</title>
+<title>자기 이해</title>
 <meta name="theme-color" content="#ffffff">
 <style>:root{--brand:#1E7BC4;--bg:#EDF0F5;--fg:#18212F;--mute:#5B6675;--line:#E1E5EC;--line2:#B8C2D1;--card:#FFFFFF;--acc:#1E7BC4;--accfg:#FFFFFF;--gold:#D9A400;--goldtx:#7A5A00;--ok:#1D774B;--warn:#B42318;--sel:#EAF3FB;--bar:#1E7BC4;--bar2:#DCE6F2;--input:#FFFFFF;--signal:#E5484D;--t0:#1E7BC4;--t1:#0E8670;--t2:#7A5AC8;--t3:#B85609;--t4:#C23A6B;--t5:#1F7F45;--t6:#5B6A80;--r-card:13px;--r-btn:10px;--r-chip:9px;--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
 *{box-sizing:border-box}
@@ -406,12 +406,12 @@ function candTab(el){
   var names=C.jobs.map(function(o){return o.p.n}).concat(C.inds.map(function(o){return o.n}));wishList().forEach(function(p){if(names.indexOf(p.n)<0)names.push(p.n)});
   box.appendChild(K.card(h3('내 후보 정리 (관심 1~2개, 반대 1개)'),K.h('div',{class:'lab'},K.h('span',null,'관심 가는 후보 1~2개 (최대 2개)'),K.check('cand.pick',names,2)),K.lab('이유 (내 확정 키워드와 연결해 한두 문장)',null,K.field('cand.why',{rows:3})),K.lab('끌리지 않는 후보 1개',null,K.select('cand.dis',names,{ph:'선택'})),K.field('cand.disWhy',{rows:2,ph:'이유'}),K.lab('다음 차시(M2+M3)에서 확인할 것 1개',null,K.field('cand.m2',{rows:2,ph:'예: 이 직무의 신입 공고에서 요구하는 자격요건'}))));
   box.appendChild(K.card(h3('다음 차시(M2+M3) 내 정보 카드로 이월할 한 줄'),K.note('전공·학년을 쓰면 한 줄에 함께 들어가요. 실명·학번은 쓰지 않습니다.'),K.h('div',{class:'row'},K.lab('전공',null,K.field('info.major',{rows:0,ph:'예: 경영학과'})),K.lab('학년',null,K.field('info.grade',{rows:0,ph:'예: 4학년'}))),K.h('pre',{class:'prompt',id:'m2line'}),K.copyBtn(function(){return m2line()},'한 줄 복사')));
-  box.appendChild(K.card(h3('더 정확히 알고 싶다면 · 공식 검사(한국고용정보원 가이드 기준)'),K.table(['M1 영역','공식 검사','시간 · 대상'],[['흥미·성격','직업선호도검사 S형(흥미) · L형(흥미·성격·생활사)','S형 25분 · L형 60분 / 만 18세 이상'],['가치','직업가치관검사(13개 가치요인)','약 20분 / 만 15~50세'],['능력·적성','성인용 직업적성검사(11개 적성요인)','80~90분 / 만 18세 이상'],['취업 준비도','대학생 진로준비도검사','약 20분 / 대학생·만 29세 이하']]),K.note('가이드는 2013년경 자료로 보여 현재 제공 검사·시간·사이트는 고용24(www.work24.go.kr)·커리어넷(www.career.go.kr)에서 확인이 필요해요. 적성검사 시간은 가이드 안에서도 90분과 약 80분으로 다르게 적혀 있어요.','hint')));
+  box.appendChild(K.card(h3('더 정확히 알고 싶다면 · 공식 검사(한국고용정보원 가이드 기준)'),K.table(['영역','공식 검사','시간 · 대상'],[['흥미·성격','직업선호도검사 S형(흥미) · L형(흥미·성격·생활사)','S형 25분 · L형 60분 / 만 18세 이상'],['가치','직업가치관검사(13개 가치요인)','약 20분 / 만 15~50세'],['능력·적성','성인용 직업적성검사(11개 적성요인)','80~90분 / 만 18세 이상'],['취업 준비도','대학생 진로준비도검사','약 20분 / 대학생·만 29세 이하']]),K.note('가이드는 2013년경 자료로 보여 현재 제공 검사·시간·사이트는 고용24(www.work24.go.kr)·커리어넷(www.career.go.kr)에서 확인이 필요해요. 적성검사 시간은 가이드 안에서도 90분과 약 80분으로 다르게 적혀 있어요.','hint')));
   box.appendChild(K.card(h3('가치 · 우리 12가치와 공식 13요인 대응표(추정)'),K.table(['우리 12가치','공식 13요인'],[['성취 · 영향력 · 자율성 · 사회적 인정','성취 · 영향력 발휘 · 자율성 · 인정 (이름이 거의 같음)'],['안정성 · 보수 · 일과 삶의 균형 · 자기계발 · 도전성 · 사회적 기여','직업안정 · 금전적 보상 · 몸과 마음의 여유 · 지식추구 · 변화지향 · 봉사 (뜻이 비슷함)'],['즐거움 · 소속감','공식 13요인에 없음(수업용 추가)'],['(없음)','개별활동 · 애국 · 실내활동 (공식 검사에서 확인)']]),K.note('대응은 이름과 설명을 비교한 제 판단(추정)이며 공식 기준이 아닙니다.','hint')));
   K.reg(function(){var p=document.getElementById('m2line');if(p)p.textContent=m2line()})})()}
 function m2line(){var v=cardTopKeys('value').map(function(k){return nm('value',k)}).join('·'),ri=res('interest');var ic=ri.done?ri.rk.top.slice(0,2).join('')+' (Top3 '+ri.rk.top.join('')+')':'';return '전공·학년: '+(g('info.major','')||'(미입력)')+' '+(g('info.grade','')||'')+' / 가치 키워드: '+(v||'(미입력)')+' / 흥미 코드: '+(ic||'(미입력)')}
 /* ---------- 시작·출력 ---------- */
-function reportSecs(){var s=[];s.push({t:'M1 자기 이해 · 헤더',kv:[['전공·학년',(g('info.major','')+' '+g('info.grade','')).trim()],['작성일',new Date().toLocaleDateString('ko-KR')]]});
+function reportSecs(){var s=[];s.push({t:'자기 이해 · 헤더',kv:[['전공·학년',(g('info.major','')+' '+g('info.grade','')).trim()],['작성일',new Date().toLocaleDateString('ko-KR')]]});
  AREAS.forEach(function(a){var R=res(a),P='card.'+a;var kv=[];if(a==='eff'){EFF.forEach(function(e){var sc=g(P+'.score.'+e[0]);kv.push([e[0],(sc?sc+'점':'')+(g(P+'.exp.'+e[0])?' / 근거: '+g(P+'.exp.'+e[0]):'')])});kv.push(['가장 낮은 과제',(g(P+'.low','')||'')+(g(P+'.src','')?' / 원천: '+g(P+'.src',''):'')]);kv.push(['이번 주 작은 행동',g(P+'.act','')]);if(effPicked().length)kv.push(['찜한 작은 행동 예시',effPicked().join('\n')]);if(R.done)kv.push(['점수와 사실이 맞은 과제',cmp('eff').count+'/5'])}
   else if(a==='pers'){PERS.forEach(function(p){var sd=g(P+'.side.'+p[0]);kv.push([p[0]+' 카드',(sd?(sd==='A'?p[1]:p[2]):'')+(g(P+'.exp.'+p[0])?' / '+g(P+'.exp.'+p[0]):'')])});if(R.done)kv.push(['검사 결과 일치',cmp('pers').count+'/5'])}
   else{g(P+'.top',[]).forEach(function(id,i){var line=(g(P+'.reason.'+id,'')||'');var ex=g(P+'.exp.'+id,'');if(ex)line+=' / 경험: '+ex;if(a==='strength')line+=' / '+(g(P+'.conf.'+id)==='have'?'자신 있음':'잠재(증거 없음)');kv.push([(i+1)+'위 '+idName(a,id),line])});if(R.done){kv.push(['검사 Top3',R.rk.top.map(function(k){return nm(a,k)}).join(', ')]);if(a==='interest')kv.push(['흥미 코드(상위 2)',R.rk.top.slice(0,2).join('')+' / Top3 '+R.rk.top.join('')]);var cm=cmp(a);kv.push(['일치 수',cm.count+'/'+cm.max])}}
@@ -554,7 +554,7 @@ function areaTab(a){return function(el){
   nextBox.innerHTML='';
   if(areaComplete(a)){var i0=AREAS.indexOf(a),nx=AREAS[i0+1];nextBox.appendChild(K.btn(nx?'다음 영역 · '+AN[nx]+' ›':'종합 성찰로 ›',function(){if(nx)go(nx);else K.show('syn')},'gold'))}}
  K.reg(function(){var c=cur();if(lastCur!==null&&c!==lastCur){var ob=items[lastCur];if(ob&&ob.body.contains(document.activeElement))pin[lastCur]=true;if(c>=0)closed[c]=false}lastCur=c;paint()})}}
-APP.key='m1-v1';APP.tag='M1';APP.title='M1 자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
+APP.key='m1-v1';APP.tag='M1';APP.title='자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
 APP.sample=sample;
 APP.done=function(id){if(id==='home')return AREAS.every(areaComplete);if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;return false};
 APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'M1_자기이해_결과.pdf')}}];
