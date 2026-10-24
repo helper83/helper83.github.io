@@ -1,23 +1,14 @@
 <!doctype html>
 <html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>M1 자기 이해</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700&display=swap">
-<style>:root{--bg:#F5F2EA;--fg:#14213D;--mute:#44506A;--line:#D9D3C3;--card:#FBF9F3;--acc:#14213D;--accfg:#F5F2EA;--gold:#E3A92F;--goldtx:#8A5D00;--ok:#1F6F4A;--warn:#A03A2A;--sel:#E4EAF6;--bar:#14213D;--bar2:#B9C4DB;--input:#FFFFFF}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1830;--fg:#ECE8DC;--mute:#A9B4CC;--line:#2C3A5E;--card:#17234A;--acc:#E3A92F;--accfg:#14213D;--gold:#E3A92F;--goldtx:#E3A92F;--ok:#6FCF9D;--warn:#FF9B8A;--sel:#22335F;--bar:#E3A92F;--bar2:#2C3A5E;--input:#0F1830;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0F1830;--fg:#ECE8DC;--mute:#A9B4CC;--line:#2C3A5E;--card:#17234A;--acc:#E3A92F;--accfg:#14213D;--gold:#E3A92F;--goldtx:#E3A92F;--ok:#6FCF9D;--warn:#FF9B8A;--sel:#22335F;--bar:#E3A92F;--bar2:#2C3A5E;--input:#0F1830;color-scheme:dark}
+<meta name="theme-color" content="#ffffff">
+<style>:root{--brand:#1E7BC4;--bg:#EDF0F5;--fg:#18212F;--mute:#5B6675;--line:#E1E5EC;--line2:#B8C2D1;--card:#FFFFFF;--acc:#1E7BC4;--accfg:#FFFFFF;--gold:#D9A400;--goldtx:#7A5A00;--ok:#1D774B;--warn:#B42318;--sel:#EAF3FB;--bar:#1E7BC4;--bar2:#DCE6F2;--input:#FFFFFF;--signal:#E5484D;--t0:#1E7BC4;--t1:#0E8670;--t2:#7A5AC8;--t3:#B85609;--t4:#C23A6B;--t5:#1F7F45;--t6:#5B6A80;--r-card:13px;--r-btn:10px;--r-chip:9px;--font:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",system-ui,sans-serif}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--fg);font-family:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:16px;line-height:1.6;padding-inline:16px;padding-block:0;word-break:keep-all;overflow-wrap:anywhere}
 #app{max-width:980px;margin-inline:auto;padding-block:16px 80px}
 h1,h2,h3{font-family:'Noto Serif KR',Georgia,serif;line-height:1.3;text-wrap:balance}
 h1{font-size:26px;margin:0}h2{font-size:22px;margin:0}h3{font-size:18px;margin:0}
-header.top{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;justify-content:space-between;padding-block:8px 12px}
-header .eyebrow{font-size:13px;font-weight:700;letter-spacing:2px;color:var(--goldtx)}
-header .sub{color:var(--mute);font-size:14px;margin-top:4px}
 .tools{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-nav.tabs{display:flex;gap:6px;overflow-x:auto;padding-block:6px;border-bottom:2px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
-nav.tabs button{flex:none;border:1px solid var(--line);background:var(--card);color:var(--fg);padding:8px 14px;border-radius:999px;font:inherit;font-size:14px;font-weight:500;cursor:pointer}
-nav.tabs button[aria-selected=true]{background:var(--acc);color:var(--accfg);border-color:var(--acc);font-weight:700}
-nav.tabs button .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--gold);margin-left:6px}
 main{display:flex;flex-direction:column;gap:16px;padding-top:16px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .card.dark{background:var(--acc);color:var(--accfg);border-color:var(--acc)}
@@ -84,7 +75,7 @@ details>summary{cursor:pointer;font-weight:700}
  header.top,nav.tabs,.noprint,#pii{display:none!important}
  #app{max-width:none;padding:0}
  .card{border:1px solid #999;break-inside:avoid;background:#fff}
- main>.card:not(.rep-card){display:none}
+ main>:not(.rep-card){display:none!important}
  .rep .sec{break-inside:avoid}
  :root{--bg:#fff;--fg:#000;--mute:#333;--line:#999;--card:#fff;--sel:#eee;--input:#fff;--acc:#000;--accfg:#fff;--goldtx:#000;--bar:#000;--bar2:#ccc}
 }
@@ -93,6 +84,86 @@ p,ul{margin:0}ul{padding-left:20px}
 .num{max-width:110px}
 .diff{background:var(--gold);color:#14213D;font-weight:700}
 [id^=test-]{scroll-margin-top:72px}
+/* ===== 앱 스킬(헬퍼탐 UX/UI) v2 ===== */
+body{font-family:var(--font);padding-inline:0;font-size:16px;word-break:keep-all;overflow-wrap:anywhere}
+h1,h2,h3{font-family:var(--font);letter-spacing:-.01em}
+#app{max-width:980px;margin-inline:auto;padding:0 14px 96px}
+header.top{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;background:#fff;border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r-card) var(--r-card);margin-inline:-14px;padding:10px 14px;box-shadow:0 1px 2px rgba(24,33,47,.04)}
+header .logo{display:block;width:36px;height:36px;flex:none}
+header .logo svg{display:block;width:36px;height:36px}
+header .eyebrow{font-size:12px;font-weight:700;color:var(--mute);line-height:1.2}
+header h1{font-size:19px;margin:0}
+.tools{margin-left:auto;gap:4px}
+.tools button.btn{font-size:13px;padding:4px 10px;min-height:44px;border-color:transparent;background:none;color:var(--brand)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;display:flex;justify-content:space-around;gap:2px;background:#fff;border-top:1px solid var(--line);padding:6px 4px calc(8px + env(safe-area-inset-bottom,0px))}
+.stop{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:48px;border:0;background:none;color:var(--mute);font:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:2px 0;border-radius:10px}
+.stop .chp{position:relative;width:26px;height:26px;border-radius:var(--r-chip);background:var(--tc);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:800}
+.stop[aria-selected=true]{color:var(--fg);font-weight:800}
+.stop[aria-selected=true] .chp{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--tc)}
+.stop.has .chp::after{content:"";position:absolute;right:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--signal);border:2px solid #fff}
+@media(min-width:641px){
+ #app{padding-bottom:60px}
+ nav.tabs{position:sticky;top:8px;bottom:auto;justify-content:flex-start;gap:6px;border:1px solid var(--line);border-radius:var(--r-card);margin-top:10px;padding:6px;box-shadow:0 1px 2px rgba(24,33,47,.04)}
+ .stop{flex:0 0 auto;flex-direction:row;gap:8px;padding:6px 14px 6px 8px;font-size:15px}
+ .stop[aria-selected=true]{background:#EEF4FA}
+}
+main{gap:12px;padding-top:12px}
+.card{border-color:var(--line);box-shadow:0 1px 2px rgba(24,33,47,.04)}
+.card.band,.card.dark{background:var(--tc,var(--t0));border-color:var(--tc,var(--t0));color:#fff;gap:4px}
+.card.band h2,.card.dark h2{color:#fff;font-size:22px}
+.card.band .mute,.card.dark .mute{color:#fff;opacity:.95;font-size:14px}
+textarea,input[type=text],input[type=number],select{font-size:16px;border:1.5px solid var(--line2)}
+.opt{border:1.5px solid var(--line2);min-height:44px}
+.pick,.ab button,.q .mc button{border-color:var(--line2)}
+.q{border-color:var(--line)}
+.pick[aria-pressed=true],.ab button[aria-pressed=true],.q .mc button[aria-pressed=true]{border-color:var(--brand);background:var(--sel)}
+.pick.top{border-color:var(--gold)}
+button.btn{min-height:44px;border-radius:var(--r-btn)}
+button.btn.sm{min-height:44px;padding:6px 12px}
+button.btn.gold{background:var(--brand);border-color:var(--brand);color:#fff}
+button.btn.ghost{background:#fff;color:var(--fg);border-color:var(--line2)}
+button.btn:disabled{background:#E1E5EC;border-color:#E1E5EC;color:#6B7684;opacity:1}
+.tag.gold{background:#FBEFC4;color:#5C4400}
+.hint{border-left-color:var(--brand);background:var(--sel)}
+.hero{background:var(--t0);color:#fff;border-radius:14px;padding:18px 16px;display:flex;flex-direction:column;gap:8px}
+.hero h1{font-size:23px;margin:0;color:#fff}
+.hero p{margin:0;font-size:15px;opacity:.97}
+.hero .now{background:rgba(255,255,255,.2);border-radius:10px;padding:9px 12px;font-weight:700;font-size:14px}
+.hero button.btn{background:#fff;color:var(--brand);border-color:#fff;align-self:flex-start}
+.sec{font-size:15px;font-weight:800;margin:10px 2px 0}
+.list{background:var(--card);border:1px solid var(--line);border-radius:var(--r-card);box-shadow:0 1px 2px rgba(24,33,47,.04);overflow:hidden}
+.item{display:flex;gap:12px;align-items:center;width:100%;text-align:left;font:inherit;color:inherit;background:none;border:0;border-top:1px solid var(--line);padding:12px 14px;min-height:64px;cursor:pointer}
+.item:first-child{border-top:0}
+.item .chip{width:40px;height:40px;border-radius:var(--r-chip);background:var(--tc);color:#fff;font-weight:800;display:grid;place-items:center;flex:none;font-size:17px}
+.item .t{font-weight:700;font-size:16px;line-height:1.3;display:block}
+.item .d{font-size:13px;color:var(--mute);line-height:1.35;display:block}
+.item .st{margin-left:auto;text-align:right;font-size:12.5px;font-weight:700;color:var(--mute);white-space:nowrap;flex:none}
+.item .st.ok{color:var(--ok)}.item .st.go{color:var(--tc)}
+.item.lock{opacity:.55;cursor:not-allowed}
+.item .chev{width:8px;height:8px;border-right:2px solid #8A96A8;border-top:2px solid #8A96A8;transform:rotate(45deg);flex:none;margin-left:4px}
+button.back{align-self:flex-start;color:var(--brand);border-color:transparent;background:none;font-weight:700;padding-inline:4px}
+.todo{background:#EAF3FB;border:1px solid #CFE2F3;border-radius:10px;padding:10px 12px;font-size:14px;font-weight:700;color:#14507F}
+.accs{display:flex;flex-direction:column;gap:8px}
+.acc{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(24,33,47,.04)}
+.acc .h{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;font:inherit;color:inherit;padding:10px 12px;min-height:52px;cursor:pointer}
+.acc .num{width:28px;height:28px;border-radius:50%;background:var(--tc);color:#fff;font-weight:800;font-size:13px;display:grid;place-items:center;flex:none}
+.acc .h b{font-size:15.5px;display:block;line-height:1.3}
+.acc .h small{display:block;font-size:13px;color:var(--mute);font-weight:500;line-height:1.35}
+.acc .chv{width:8px;height:8px;border-right:2px solid #8A96A8;border-bottom:2px solid #8A96A8;transform:rotate(45deg);flex:none;margin-right:4px;transition:transform .15s}
+.acc.exp .chv{transform:rotate(-135deg)}
+.acc.done .num{background:var(--ok)}
+.acc.done .h small{color:var(--ok)}
+.acc.locked{opacity:.6;background:#F6F8FB}
+.acc.locked .num{background:#8A96A8}
+.acc.locked .h{cursor:not-allowed}
+.acc.cur{border-color:var(--tc);box-shadow:0 0 0 1px var(--tc)}
+.acc-b{display:none;padding:4px 12px 14px;border-top:1px solid var(--line)}
+.acc.exp .acc-b{display:block}
+.acc-b .card{border:0;padding:0;margin:0;background:transparent;box-shadow:none}
+.acc-b .card>h3:first-child{display:none}
+.nextbox{display:flex}
+.nextbox button.btn{width:100%}
+@media(prefers-reduced-motion:reduce){.acc .chv{transition:none}}
 </style>
 </head><body>
 <div id="app"></div>
@@ -267,11 +338,11 @@ function cmpArea(a,box){var c=K.card(h3('④ 간이 비교 ('+MIN[a][3]+'분)'))
   if(a==='eff'){out.appendChild(K.h('p',null,K.h('b',null,'믿음과 근거가 맞은 과제 '+m.count+'/5')));out.appendChild(K.table(['과제','카드의 믿음','검사의 사실','읽는 법'],m.rows));out.appendChild(K.note('목표는 점수를 올리는 것이 아니라 믿음과 근거를 맞추는 것이에요. 자기 평가는 실제와 어긋나기 쉬워서(Dunning et al., 2004) 점수에는 근거 한 줄을 붙여요. 비표준 점검이라 비교·평가에 쓰지 않아요.'))}
   else if(a==='pers'){out.appendChild(K.h('p',null,K.h('b',null,'일치한 요인 '+m.count+'/5')));out.appendChild(K.table(['요인','카드에서 고른 쪽','검사에서 고른 쪽','결과'],m.rows));out.appendChild(K.note('성격 일치 수는 참고로만 읽으세요.'))}
   else{out.appendChild(K.h('p',null,K.h('b',null,'일치 '+m.count+'/'+m.max),' · 카드: '+m.ck.map(function(k){return nm(a,k)}).join(', ')+' · 검사 Top3: '+m.tk.map(function(k){return nm(a,k)}).join(', ')));if(m.disc.length)out.appendChild(K.h('p',null,K.h('span',{class:'tag gold'},'발견 후보'),' 검사에는 있고 카드엔 없는 것: '+m.disc.map(function(k){return nm(a,k)}).join(', ')));if(a==='strength'){var lack=g('card.strength.top',[]).filter(function(id){return g('card.strength.conf.'+id)!=='have'});if(lack.length)out.appendChild(K.note('증거 경험이 없는 카드는 "잠재"로 표시돼요: '+lack.join(', ')))}}})}
-function areaTab(a){return function(el){var H=K.card('cls:dark',K.h('h2',null,AN[a]+' · 사례 → 카드 → 검사 → 간이 비교 → '+(a==='eff'?'작은 행동 찜':'추천 직무 찜')),K.h('p',{class:'mute'},'권장 '+MIN[a].reduce(function(x,y){return x+y})+'분 · 정답이 없고 좋고 나쁨도 없어요. 카드를 저장하면 잠기고, 그 뒤 검사가 열려요.'));el.appendChild(H);el.appendChild(hookCard(a));var cb=K.h('div');el.appendChild(cb);if(a==='pers')persCard(cb);else if(a==='eff')effCard(cb);else cardArea(a,cb);var tb=K.h('div',{id:'test-'+a});el.appendChild(tb);testArea(a,tb);var mb=K.h('div');el.appendChild(mb);cmpArea(a,mb);var wb=K.h('div');el.appendChild(wb);recoArea(a,wb);var sb=K.h('div');el.appendChild(sb);shareCard(a,sb)}}
 /* ---------- 종합 성찰 ---------- */
 function keywords(a){var ck=cardTopKeys(a),R=res(a),tk=R.done&&R.rk?R.rk.top:[];var u=ck.slice();tk.forEach(function(k){if(u.indexOf(k)<0)u.push(k)});u=u.filter(function(k,i){return u.indexOf(k)===i});return u.map(function(k){var inC=ck.indexOf(k)>=0,inT=tk.indexOf(k)>=0;var ev=true;var topIds=g('card.'+a+'.top',[]);if(a==='value'){ev=!!g('card.value.exp.'+k)}else if(a==='strength'){ev=g('card.strength.conf.'+k)==='have'&&!!g('card.strength.exp.'+k)}else{ev=true}var sug=inC&&inT&&ev?'확정':inT&&!inC?'발견':'재검토';return {a:a,k:k,name:nm(a,k),inC:inC,inT:inT,sug:sug}})}
 function synTab(el){
- el.appendChild(K.card('cls:dark',K.h('h2',null,'종합 성찰 (16분)'),K.h('p',{class:'mute'},'6영역 결과를 나란히 보고, 찜한 직무를 모아 성찰하고, 확정·재검토·발견을 고른 뒤, 성찰 3문항과 나의 한 문장을 직접 씁니다.')));
+ if(gate(el,'종합 성찰'))return;
+ el.appendChild(K.card('cls:band',K.h('h2',null,'종합 성찰 (16분)'),K.h('p',{class:'mute'},'6영역 결과를 나란히 보고, 찜한 직무를 모아 성찰하고, 확정·재검토·발견을 고른 뒤, 성찰 3문항과 나의 한 문장을 직접 씁니다.')));
  var t1=K.h('div');el.appendChild(K.card(h3('① 결과표 (3분)'),t1));
  K.reg(function(){t1.innerHTML='';var rows=AREAS.map(function(a){var R=res(a);if(!areaDone(a))return [AN[a],'카드 미저장','-','-'];if(a==='eff'){var m=R.done?cmp('eff'):null;return [AN[a],EFF.map(function(e){var s=g('card.eff.score.'+e[0]);return s?e[0]+' '+s+'점':''}).filter(Boolean).join(', '),R.done?'검사 완료':'검사 미완료',m?m.count+'/5 맞음':'-']}if(a==='pers'){var m=R.done?cmp('pers'):null;return [AN[a],PERS.map(function(p){var s=g('card.pers.side.'+p[0]);return s?p[0]+'('+PSH[p[0]][s==='A'?0:1]+')':''}).filter(Boolean).join(', '),R.done?'검사 완료':'검사 미완료',m?m.count+'/5 일치':'-']}var ck=cardTopKeys(a).map(function(k){return nm(a,k)}).join(', ');if(!R.done)return [AN[a],ck,'검사 미완료','-'];var m=cmp(a);return [AN[a],ck,R.rk.top.map(function(k){return nm(a,k)}).join(', '),m.count+'/'+m.max+' 일치']});t1.appendChild(K.table(['영역','카드 Top3','검사 결과','일치'],rows))});
  var t2=K.h('div');el.appendChild(K.card(h3('① 보충 · 사례 6개 선택 패턴 (참고용 · 점수 아님)'),K.note('"이런 장면에서 이런 선택을 했다"는 관찰입니다. 단정하지 마세요.'),t2));
@@ -326,7 +397,8 @@ function cand(){var rv=res('value'),ri=res('interest'),re=res('env');if(!(rv.don
   var t=W.i*fi+W.v*fv+W.e*fe+W.s*fs;var ax=[['흥미',fi],['가치',fv],['환경',fe],['업무방식',fs]].sort(function(x,y){return y[1]-x[1]});return {p:p,t:t,ax:ax}}).sort(function(x,y){return y.t-x.t});
  var jobs=out.slice(0,3);var byc={};out.forEach(function(o){byc[o.p.c]=o});var inds=INDS.map(function(x){var s=x.j.map(function(c){return byc[c]}).sort(function(a,b){return b.t-a.t});var top=s.slice(0,2);var avg=top.reduce(function(a,b){return a+b.t},0)/top.length;return {n:x.n,t:avg,jobs:top.map(function(o){return o.p.n}),ax:top[0].ax}}).sort(function(x,y){return y.t-x.t}).slice(0,3);return {jobs:jobs,inds:inds,byc:byc}}
 function candTab(el){
- el.appendChild(K.card('cls:dark',K.h('h2',null,'적합 산업·직무 후보 (10분)'),K.h('p',{class:'mute'},'추천이 아니라 탐색 후보입니다. 직무·산업 정보는 공식 사이트(고용24·커리어넷·헬퍼탐)에서 확인하세요.')));
+ if(gate(el,'적합 산업·직무 후보'))return;
+ el.appendChild(K.card('cls:band',K.h('h2',null,'적합 산업·직무 후보 (10분)'),K.h('p',{class:'mute'},'추천이 아니라 탐색 후보입니다. 직무·산업 정보는 공식 사이트(고용24·커리어넷·헬퍼탐)에서 확인하세요.')));
  var box=K.h('div');el.appendChild(box);
  (function(){box.innerHTML='';var C=cand();if(!C){box.appendChild(K.card(K.note('가치·흥미·환경 검사를 모두 마치면 후보가 나타나요. (성격·강점은 계산에서 제외합니다)','hint')));return}
   box.appendChild(K.card(h3('직무 후보 TOP3 (내가 찜한 직무도 아래 ‘내 후보 정리’에서 고를 수 있어요)'),K.note('계산: 흥미 37.5% + 가치 25% + 환경 25% + 업무방식 12.5% (제안). 직무별 태깅은 수업용 임의 초안이라 근거 수준은 "참고"입니다. 강점·성격은 계산에서 제외했습니다.'),K.table(['직무','한 줄 설명','적합 근거(높은 축)','근거 수준'],C.jobs.map(function(o){return [o.p.n,o.p.d,o.ax.slice(0,2).map(function(x){return x[0]}).join('·'),'참고']}))));
@@ -407,10 +479,87 @@ function shareCard(a,box){var nmA=a==='syn'?'종합':AN[a];
      fetch(SHARE_CFG.url,{method:'POST',mode:'no-cors',body:fd}).then(function(){K.set('share.'+a+'.at',new Date().toLocaleTimeString('ko-KR'));K.persist();stat.textContent=sentTxt();prev.innerHTML='';prev.appendChild(K.h('p',{class:'hint'},'제출 요청을 보냈어요. 공유 슬라이드에 내 닉네임 슬라이드가 생겼는지 잠시 뒤 확인해 보세요(몇 초 걸릴 수 있어요). 안 보이면 인터넷 연결을 확인하고 다시 제출하세요.'))}).catch(function(){sb.disabled=false;sb.textContent='이 내용으로 제출';prev.appendChild(K.h('p',{class:'hint',style:'border-left-color:var(--warn)'},'전송하지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.'))})});
    prev.appendChild(K.h('h3',null,'미리보기 · '+nmA+' (아직 전송 전)'));prev.appendChild(K.table(['항목','보낼 내용'],rows));prev.appendChild(K.h('div',{class:'row',style:'gap:8px'},sb,cb))},'gold');
  c.appendChild(K.h('div',{class:'row',style:'align-items:center'},pb,stat));c.appendChild(prev)}
-APP.key='m1-v1';APP.tag='M1';APP.title='M1 자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역 · 사례 → 카드 → 검사 → 비교 → 후보';
+
+/* ---------- 앱 스킬 화면: 홈 · 순차 영역 · 순차 아코디언 ---------- */
+var AC={value:'var(--t1)',interest:'var(--t2)',strength:'var(--t3)',eff:'var(--t4)',env:'var(--t5)',pers:'var(--t6)'};
+var AD={value:'일에서 중요하게 여기는 것',interest:'끌리는 활동의 유형',strength:'내가 잘 쓰는 능력',eff:'취업 준비 과제를 해낼 수 있다는 믿음',env:'힘이 나는 일터의 모습',pers:'일하는 방식의 성향'};
+var STP=['사례','카드 선택','웹앱 검사','간이 비교','추천 직무 찜하기','수업 나눔'];
+var LKT=['','사례를 고르면 열려요','카드를 저장하면 열려요','검사를 마치면 열려요','간이 비교 한 줄을 쓰면 열려요','간이 비교 한 줄을 쓰면 열려요'];
+APP.area=null;
+function STPL(a,i){return (i===4&&a==='eff'?'이번 주 작은 행동 찜하기':STP[i])+' · '+MIN[a][i]+'분'}
+function hookDone(a){var c=g('hook.'+a+'.c');return c!=null&&c!==''}
+function wishCount(a){return POOL.filter(function(p){return g('wish.'+p.c+'.'+a,false)}).length}
+function effPickCount(){var n=0;for(var i=0;i<4;i++)if(g('eff.act.'+i,false))n++;return n}
+function stepDone(a,i){switch(i){case 0:return hookDone(a);case 1:return areaDone(a);case 2:return !!res(a).done;case 3:return !!String(g('cmp.'+a,'')||'').trim();case 4:return (a==='eff'?effPickCount():wishCount(a))>0;case 5:return !!g('share.'+a+'.at','')}return false}
+function stepUnlocked(a,i){var lim=Math.min(i,4);for(var k=0;k<lim;k++)if(!stepDone(a,k))return false;return true}
+function areaComplete(a){return stepDone(a,0)&&stepDone(a,1)&&stepDone(a,2)}
+function areaUnlocked(i){return AREAS.slice(0,i).every(areaComplete)}
+function nextArea(){for(var i=0;i<AREAS.length;i++)if(!areaComplete(AREAS[i]))return AREAS[i];return null}
+function stepCount(a){var n=0;for(var i=0;i<6;i++)if(stepDone(a,i))n++;return n}
+function firstOpenStep(a){for(var i=0;i<6;i++)if(!stepDone(a,i))return i;return -1}
+function go(a){APP.area=a;K.show('home')}
+function stepSum(a,i){
+ if(i===0){var c=g('hook.'+a+'.c');return c!=null&&c!==''?HOOK[a].o[+c][0]:''}
+ if(i===1){if(a==='pers')return '5요인 선택 완료';if(a==='eff')return '가장 낮은 과제: '+(g('card.eff.low','')||'');return g('card.'+a+'.top',[]).map(function(id){return idName(a,id)}).join(' · ')}
+ if(i===2){if(a==='pers'||a==='eff')return '5문항 완료';var R=res(a);return R.rk?'Top3: '+R.rk.top.map(function(k){return nm(a,k)}).join(' · '):'완료'}
+ if(i===3)return String(g('cmp.'+a,'')||'').trim();
+ if(i===4)return (a==='eff'?effPickCount():wishCount(a))+'개 찜';
+ return '제출 요청 '+g('share.'+a+'.at','')}
+function gate(el,title){if(AREAS.every(areaComplete))return false;var n=nextArea();
+ el.appendChild(K.card('cls:band',K.h('h2',null,title),K.h('p',{class:'mute'},'6영역을 모두 마치면 열려요.')));
+ el.appendChild(K.card(K.note('남은 영역: '+AREAS.filter(function(a){return !areaComplete(a)}).map(function(a){return AN[a]}).join(' · ')),K.btn('이어서 하기 · '+AN[n]+' 영역',function(){go(n)},'gold')));return true}
+function homeTab(el){
+ var hero=K.h('div',{class:'hero'}),list=K.h('div',{class:'list'}),fin=K.h('div',{class:'list'});
+ el.appendChild(hero);el.appendChild(K.h('div',{class:'sec'},'자기 이해 6영역 · 순서대로'));el.appendChild(list);el.appendChild(K.h('div',{class:'sec'},'정리하기'));el.appendChild(fin);
+ function item(color,chip,title,desc,st,stCls,locked,fn){var b=K.h('button',{type:'button',class:'item'+(locked?' lock':''),style:'--tc:'+color,'aria-disabled':locked?'true':null},K.h('span',{class:'chip','aria-hidden':'true'},chip),K.h('span',null,K.h('span',{class:'t'},title),K.h('span',{class:'d'},desc)),st?K.h('span',{class:'st '+(stCls||'')},st):null,locked?null:K.h('i',{class:'chev','aria-hidden':'true'}));if(!locked)b.addEventListener('click',fn);return b}
+ K.reg(function(){hero.innerHTML='';list.innerHTML='';fin.innerHTML='';
+  var n=nextArea(),k=AREAS.filter(areaComplete).length;
+  hero.appendChild(K.h('h1',null,'나를 알면 직무가 보여요'));
+  hero.appendChild(K.h('p',null,APP.sub+' · 정답은 없고, 영역은 순서대로 열려요.'));
+  hero.appendChild(K.h('div',{class:'now'},n?'지금 할 일 · '+AN[n]+' 영역 · '+STP[firstOpenStep(n)<0?5:firstOpenStep(n)]+'  |  완료 '+k+'/6':'6영역 완료 ✓ 종합 성찰로 이동하세요  |  완료 6/6'));
+  hero.appendChild(K.btn(n?(k||stepCount(n)?'이어서 하기':'시작하기'):'종합 성찰 하기',function(){if(n)go(n);else K.show('syn')}));
+  AREAS.forEach(function(a,i){var un=areaUnlocked(i),done=areaComplete(a),c=stepCount(a);
+   var st=!un?'잠김':done?'완료 ✓':c>0?'진행 중 '+c+'/6':'시작 전';
+   list.appendChild(item(AC[a],AN[a].charAt(0),AN[a],un?AD[a]:'앞 영역을 마치면 열려요',st,done?'ok':(un&&c>0?'go':''),!un,function(){go(a)}))});
+  var all=AREAS.every(areaComplete);
+  fin.appendChild(item('var(--t2)','종','종합 성찰',all?'6영역 결과를 모아 나의 한 문장 쓰기':'6영역을 모두 마치면 열려요',g('syn.one','')?'작성함':'',g('syn.one','')?'ok':'',!all,function(){K.show('syn')}));
+  fin.appendChild(item('var(--t3)','후','적합 산업·직무 후보',all?'탐색 후보와 다음 차시 이월 한 줄':'6영역을 모두 마치면 열려요',(g('cand.pick',[])||[]).length?'작성함':'',(g('cand.pick',[])||[]).length?'ok':'',!all,function(){K.show('cand')}));
+  fin.appendChild(item('var(--t6)','출','결과 출력 (PDF)','지금까지 쓴 내용을 한 장으로 저장','','',false,function(){K.show('out')}))})}
+function areaTab(a){return function(el){
+ el.style.setProperty('--tc',AC[a]);
+ var back=K.btn('‹ 6영역 목록',function(){APP.area=null;K.show('home')},'ghost');back.classList.add('back','noprint');el.appendChild(back);
+ var tot=MIN[a].reduce(function(x,y){return x+y});
+ el.appendChild(K.card('cls:band',K.h('h2',null,AN[a]),K.h('p',{class:'mute'},AD[a]+' · 권장 '+tot+'분')));
+ var todo=K.h('div',{class:'todo',role:'status'});el.appendChild(todo);
+ var bodies=[0,1,2,3,4,5].map(function(){return K.h('div')});
+ bodies[0].appendChild(hookCard(a));
+ if(a==='pers')persCard(bodies[1]);else if(a==='eff')effCard(bodies[1]);else cardArea(a,bodies[1]);
+ testArea(a,bodies[2]);cmpArea(a,bodies[3]);recoArea(a,bodies[4]);shareCard(a,bodies[5]);
+ var pin={},closed={},lastCur=null,items=[],wrap=K.h('div',{class:'accs'}),nextBox=K.h('div',{class:'nextbox noprint'});
+ function cur(){return firstOpenStep(a)}
+ function isExp(i,c){return stepUnlocked(a,i)&&((i===c&&!closed[i])||!!pin[i])}
+ STP.forEach(function(t,i){var num=K.h('span',{class:'num','aria-hidden':'true'}),tt=K.h('b'),sub=K.h('small'),chv=K.h('i',{class:'chv','aria-hidden':'true'});
+  var hd=K.h('button',{type:'button',class:'h'},num,K.h('div',{style:'flex:1;min-width:0'},tt,sub),chv);
+  var it=K.h('div',{class:'acc'},hd,K.h('div',{class:'acc-b',role:'region'},bodies[i]));if(i===2)it.id='test-'+a;
+  hd.addEventListener('click',function(){if(!stepUnlocked(a,i))return;var c=cur();if(isExp(i,c)){if(i===c)closed[i]=true;pin[i]=false}else{pin[i]=true;closed[i]=false}paint()});
+  wrap.appendChild(it);items.push({it:it,num:num,tt:tt,sub:sub,hd:hd,body:bodies[i]})});
+ el.appendChild(wrap);el.appendChild(nextBox);
+ function paint(){var c=cur();
+  items.forEach(function(x,i){var done=stepDone(a,i),un=stepUnlocked(a,i),ex=isExp(i,c);
+   x.it.className='acc'+(done?' done':'')+(!un?' locked':'')+(i===c?' cur':'')+(ex?' exp':'');
+   x.num.textContent=done?'✓':String(i+1);x.tt.textContent=(i+1)+'. '+STPL(a,i);
+   x.sub.textContent=!un?LKT[i]:done?(stepSum(a,i)||'완료'):(i===c?'지금 할 일':'선택 · 이번 주 안에 해도 좋아요');
+   x.hd.setAttribute('aria-expanded',ex?'true':'false');if(!un)x.hd.setAttribute('aria-disabled','true');else x.hd.removeAttribute('aria-disabled')});
+  todo.textContent=c<0?'모든 단계를 마쳤어요 ✓':'지금 할 일 '+(c+1)+'/6 · '+STPL(a,c);
+  nextBox.innerHTML='';
+  if(areaComplete(a)){var i0=AREAS.indexOf(a),nx=AREAS[i0+1];nextBox.appendChild(K.btn(nx?'다음 영역 · '+AN[nx]+' ›':'종합 성찰로 ›',function(){if(nx)go(nx);else K.show('syn')},'gold'))}}
+ K.reg(function(){var c=cur();if(lastCur!==null&&c!==lastCur){var ob=items[lastCur];if(ob&&ob.body.contains(document.activeElement))pin[lastCur]=true;if(c>=0)closed[c]=false}lastCur=c;paint()})}}
+APP.key='m1-v1';APP.tag='M1';APP.title='M1 자기 이해';APP.sub='가치·흥미·강점·효능감·환경·성격 6영역을 사례 → 카드 → 검사 순서로 살펴봐요';
 APP.sample=sample;
-APP.done=function(id){if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;if(id==='out')return false;return areaDone(id)&&res(id).done};
-APP.tabs=[].concat(AREAS.map(function(a){return {id:a,label:AN[a],render:areaTab(a)}})).concat([{id:'syn',label:'종합 성찰',render:synTab},{id:'cand',label:'후보',render:candTab},{id:'out',label:'출력',render:function(el){K.outputTab(el,reportSecs,'M1_자기이해_결과.pdf')}}]);
+APP.done=function(id){if(id==='home')return AREAS.every(areaComplete);if(id==='syn')return !!String(g('syn.one','')||'').trim();if(id==='cand')return (g('cand.pick',[])||[]).length>0;return false};
+APP.tabs=[{id:'home',label:'홈',chip:'홈',render:function(el){if(APP.area)areaTab(APP.area)(el);else homeTab(el)}},{id:'syn',label:'종합 성찰',chip:'종',render:synTab},{id:'cand',label:'후보',chip:'후',render:candTab},{id:'out',label:'출력',chip:'출',render:function(el){K.outputTab(el,reportSecs,'M1_자기이해_결과.pdf')}}];
+APP.tcolor=function(id){return id==='home'?'var(--t0)':id==='syn'?'var(--t2)':id==='cand'?'var(--t3)':'var(--t6)'};
+APP.reset=function(){APP.area=null};
 </script>
 <script>/* ---- 공통 코어: 상태·저장·DOM·프롬프트 카드·타이머·출력 ---- */
 (function(){
@@ -423,7 +572,7 @@ function load(){try{var r=store.get(APP.key);if(r)S=JSON.parse(r)||{}}catch(e){S
 function persist(){var ok=store.set(APP.key,JSON.stringify(S));var el=document.getElementById('savest');if(el)el.textContent=ok?'자동 저장됨(이 브라우저에만)':'저장소를 쓸 수 없어요. 화면을 닫으면 사라지니 [텍스트 복사]를 해 두세요'}
 function changed(){clearTimeout(saveT);saveT=setTimeout(persist,300);run()}
 var navEl=null;
-function markNav(){if(!navEl||!APP.done)return;Array.prototype.forEach.call(navEl.children,function(b){var id=b.dataset.id,t=APP.tabs.filter(function(x){return x.id===id})[0];if(!t)return;var ok=false;try{ok=!!APP.done(id)}catch(e){}var d=b.querySelector('.dot');if(ok&&!d){b.appendChild(h('span',{class:'dot','aria-hidden':'true'}));b.setAttribute('aria-label',t.label+' (완료)')}else if(!ok&&d){d.remove();b.removeAttribute('aria-label')}})}
+function markNav(){if(!navEl||!APP.done)return;Array.prototype.forEach.call(navEl.children,function(b){var id=b.dataset.id,t=APP.tabs.filter(function(x){return x.id===id})[0];if(!t)return;var ok=false;try{ok=!!APP.done(id)}catch(e){}b.classList.toggle('has',ok);if(ok)b.setAttribute('aria-label',t.label+' (완료)');else b.removeAttribute('aria-label')})}
 function run(){for(var i=0;i<watchers.length;i++){try{watchers[i]()}catch(e){console.error(e)}}markNav()}
 function reg(fn){watchers.push(fn);try{fn()}catch(e){console.error(e)}}
 function get(p,d){var o=S,a=p.split('.');for(var i=0;i<a.length;i++){if(o==null||typeof o!=='object')return d;o=o[a[i]]}return o===undefined?d:o}
@@ -484,15 +633,15 @@ function datalist(id,vals){return h('datalist',{id:id},vals.map(function(v){retu
 /* 틀 */
 function mount(){load();
   var root=document.getElementById('app');
-  var themeBtn=btn('테마',function(){var cur=document.documentElement.getAttribute('data-theme');var dark=cur?cur==='dark':window.matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-theme',dark?'light':'dark')},'ghost sm');
-  var tools=h('div',{class:'tools noprint'},APP.sample?confirmBtn('예시 채우기','한 번 더 누르면 현재 입력이 예시로 바뀝니다',function(){APP.sample(S,set,get);persist();curTab&&show(curTab)},'ghost sm'):null,confirmBtn('모두 지우기','한 번 더 누르면 모두 지워집니다',function(){S={};persist();curTab&&show(APP.tabs[0].id)},'ghost sm'),themeBtn);
-  root.appendChild(h('header',{class:'top'},h('div',null,h('div',{class:'eyebrow'},'AI 활용 취업 마스터 클래스 · '+APP.tag),h('h1',null,APP.title),h('div',{class:'sub'},APP.sub)),tools));
+  var tools=h('div',{class:'tools noprint'},APP.sample?confirmBtn('예시 채우기','한 번 더 누르면 현재 입력이 예시로 바뀝니다',function(){APP.sample(S,set,get);persist();curTab&&show(curTab)},'ghost sm'):null,confirmBtn('모두 지우기','한 번 더 누르면 모두 지워집니다',function(){S={};persist();if(APP.reset)APP.reset();curTab&&show(APP.tabs[0].id)},'ghost sm'));
+  var logo=h('span',{class:'logo'});logo.innerHTML='<svg viewBox="0 0 36 36" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2A5FD0"/><stop offset="1" stop-color="#16348F"/></linearGradient></defs><rect width="36" height="36" rx="9" fill="url(#lg)"/><path d="M11 9v18M11 18h10M21 9v18" stroke="#fff" stroke-width="3.2" stroke-linecap="round" fill="none"/><path d="M18 29l6-8 3 3 5-9" stroke="#F2B50F" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+  root.appendChild(h('header',{class:'top'},logo,h('div',{style:'min-width:0;flex:1 1 150px'},h('div',{class:'eyebrow'},'AI 활용 취업 마스터 클래스 · '+APP.tag),h('h1',null,APP.title)),tools));
   root.appendChild(h('div',{id:'pii',role:'alert'},'전화번호·이메일·주민등록번호 형태가 감지됐어요. 빨간 칸의 해당 내용을 지워 주세요.'));
   var nav=h('nav',{class:'tabs',role:'tablist'});navEl=nav;var main=h('main');
-  root.appendChild(nav);root.appendChild(main);root.appendChild(h('p',{class:'sticky-save noprint'},h('span',{id:'savest'},'자동 저장됨(이 브라우저에만)'),' · 탭의 노란 점은 그 단계를 마쳤다는 표시예요 · 이 도구는 수업용 참고 도구입니다'));
-  APP.tabs.forEach(function(t){var b=h('button',{type:'button',role:'tab','aria-selected':'false','data-id':t.id},t.label);b.addEventListener('click',function(){show(t.id)});nav.appendChild(b)});
+  root.appendChild(nav);root.appendChild(main);root.appendChild(h('p',{class:'sticky-save noprint'},h('span',{id:'savest'},'자동 저장됨(이 브라우저에만)'),' · 탭의 빨간 점은 그 단계를 마쳤다는 표시예요 · 이 도구는 수업용 참고 도구입니다 · v2'));
+  APP.tabs.forEach(function(t){var b=h('button',{type:'button',role:'tab',class:'stop','aria-selected':'false','data-id':t.id},h('span',{class:'chp','aria-hidden':'true'},t.chip||t.label.charAt(0)),h('span',{class:'lbl'},t.label));b.style.setProperty('--tc',APP.tcolor?APP.tcolor(t.id):'var(--t0)');b.addEventListener('click',function(){if(t.id==='home')APP.area=null;show(t.id)});nav.appendChild(b)});
   window.__show=show;
-  function show(id,keep){curTab=id;watchers.length=0;main.innerHTML='';Array.prototype.forEach.call(nav.children,function(b){b.setAttribute('aria-selected',b.dataset.id===id?'true':'false')});var t=APP.tabs.filter(function(x){return x.id===id})[0];try{t.render(main)}catch(e){console.error(e);main.appendChild(h('p',null,'화면을 그리는 중 문제가 생겼어요: '+e.message))}run();if(!keep)window.scrollTo(0,0)}
+  function show(id,keep){curTab=id;watchers.length=0;main.innerHTML='';Array.prototype.forEach.call(nav.children,function(b){b.setAttribute('aria-selected',b.dataset.id===id?'true':'false')});var t=APP.tabs.filter(function(x){return x.id===id})[0];main.style.setProperty('--tc',APP.tcolor?APP.tcolor(id):'var(--t0)');try{t.render(main)}catch(e){console.error(e);main.appendChild(h('p',null,'화면을 그리는 중 문제가 생겼어요: '+e.message))}run();if(!keep)window.scrollTo(0,0)}
   show(APP.tabs[0].id)}
 window.K={picker:picker,stepHead:stepHead,checks:checks,listField:listField,datalist:datalist,h:h,add:add,get:get,set:set,field:field,lab:lab,btn:btn,confirmBtn:confirmBtn,card:card,radio:radio,check:check,select:select,bars:bars,table:table,note:note,copyBtn:copyBtn,copyText:copyText,promptCard:promptCard,timer:timer,aiLog:aiLog,outputTab:outputTab,reportText:reportText,reportView:reportView,reg:reg,changed:changed,S:function(){return S},show:function(id,keep){window.__show(id,keep)},cur:function(){return curTab},aiLinks:aiLinks,persist:persist};
 window.addEventListener('DOMContentLoaded',function(){mount()});
