@@ -452,6 +452,32 @@ body{font-size:15px;line-height:1.65}
 
 .appico{width:36px;height:36px;display:block;object-fit:contain;flex:0 0 auto}
 @media (max-width:640px){.appico{width:32px;height:32px}}
+/* QA-MAJOR:BEGIN 학과별 진로 가이드 */
+#majbox{border:1px solid var(--pf-line,#8FB4D4);background:var(--pf,#DCEBF8);border-radius:12px;padding:14px;margin-bottom:14px}
+#majbox .majnew{font-weight:400;color:var(--muted);font-size:13px}
+#majbox .majsum{background:#fff;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:8px;padding:10px 12px;margin:10px 0;font-size:15px;line-height:1.65}
+#majbox h4{margin:14px 0 6px;font-size:15px}
+#majbox .majchips{display:flex;flex-wrap:wrap;gap:6px}
+#majbox .majchip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 12px;font-size:13px;cursor:pointer;color:var(--fg);min-height:32px}
+#majbox .majchip.ext{border-style:dashed;color:var(--muted)}
+#majbox .majchip.ind{cursor:default;background:var(--accent-soft,#EAF4FC)}
+#majbox .majrow{background:#fff;border:1px solid var(--line);border-radius:8px;padding:9px 12px;margin-bottom:6px;font-size:14px;line-height:1.6;min-width:0;overflow-wrap:anywhere}
+#majbox .majrow b{font-size:14px}
+#majbox .majrow .mt{display:block;color:var(--muted);font-size:13px}
+#majbox .majbadge{display:inline-block;font-size:12px;font-weight:700;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:1px}
+#majbox .majbadge.ok{background:#E3F4EA;color:#17653A}
+#majbox .majbadge.chk{background:#FFF1D6;color:#7A4B00}
+#majbox a{color:var(--accent);text-decoration:underline;overflow-wrap:anywhere}
+#majbox .majnote{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.6}
+#majbox ul{margin:4px 0 0 18px;padding:0;font-size:14px;line-height:1.7}
+#majbox .majov{width:100%;border-collapse:collapse;font-size:13px}
+#majbox .majov th,#majbox .majov td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}
+#majbox .majov tbody tr{cursor:pointer}
+#majbox .majov tbody tr:hover{background:var(--accent-soft,#EAF4FC)}
+#majbox .majact{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+@media print{#majbox .majact{display:none}}
+@media (pointer:coarse){#majbox .majchip:not(.ind),#majbox .majact button,#majbox .majov tbody tr{min-height:44px}#majbox .majchip:not(.ind){display:inline-flex;align-items:center}}
+/* QA-MAJOR:END */
 /* QA-APPSKILL:BEGIN (AS-02/03/04/12) */
 body{word-break:keep-all;overflow-wrap:break-word}
 small{font-size:13px}
@@ -706,6 +732,13 @@ body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;p
       <section class="panel" style="grid-column:1/-1" aria-label="직무 탐색">
         <h2>헬퍼탐 직무탐색 <small>직무대영역 21개 · 직무 107개 · 세부직무와 필요 역량</small></h2>
         <div class="t4body">
+          <div class="t4blk" id="majbox">
+            <h3>0. 내 학과로 시작하기 <small class="majnew">수강 학과 18개 · 31명</small></h3>
+            <div class="subt" style="margin-bottom:8px">학과를 고르면 앱의 직무·산업 연결, 학과 특화 직무, 자격·시험 정보, 경험 소재를 한 화면에 보여 줍니다. 아래 1번부터는 기존 직무탐색입니다.</div>
+            <div class="fld"><label for="majsel">내 학과(전공)</label><select id="majsel"></select></div>
+            <details class="hbd" id="majov"><summary>수강 학과 한눈에 보기</summary><div id="majovbody" class="hbp"></div></details>
+            <div id="majdetail" aria-live="polite"></div>
+          </div>
           <div class="t4blk">
             <div class="gblk" style="margin-bottom:10px"><h4>직무는 ‘무슨 일을 해서 어떤 결과를 내는가’로 이해합니다</h4>
               <ol class="flow8"><li>역할</li><li>업무</li><li>역량</li><li>성과</li><li>신입 진입경로</li></ol>
@@ -728,6 +761,358 @@ body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;p
       </section>
     </div>
   </div>
+
+  <script>
+/* 학과별 진로 가이드 데이터 — 2026-10-25 조사. st: ok=공식 자료로 확인, chk=확인 필요(비공식·미확인) */
+var MAJ={
+verified:'2026-10-25',
+groups:[
+ ['상경·사회',['biz','econ']],
+ ['데이터·보안',['ds','sec']],
+ ['디자인·패션',['design','fashion']],
+ ['식품·생명·환경',['foodnut','foodeng','bioenv']],
+ ['복지·교육·정보',['sw','child','lis']],
+ ['미디어·인문',['video','journ','kor','fr','cn','hist']]
+],
+d:{
+foodnut:{n:'식품영양학과',cnt:1,
+ sum:'영양사 면허 트랙(국가시험)과 식품기업 R&D·품질·마케팅 트랙으로 나뉩니다. 앱에 영양사·급식 직무가 없어 아래에 보완했습니다.',
+ core:['소재·화학·바이오 연구개발','산업·건설안전·보건'],
+ ext:['품질관리·품질보증','시험·평가·검증·인증','마케팅·브랜드'],
+ inds:['식품·음료·푸드테크','외식·프랜차이즈','유통·리테일','화장품·뷰티','바이오의약·CDMO','병원·헬스케어서비스','농림축산·수산·그린바이오'],
+ gap:[
+  ['영양사(급식·임상·지역사회)','집단급식소 식단·위생·영양관리. 진출처: 산업체, 병원, 학교, 보건복지시설, 건강상담, 어린이·사회복지 급식관리지원센터','ok'],
+  ['영양교사','학교 급식·영양교육. 자격 요건은 교육부 기준 확인 필요','chk'],
+  ['식품안전·품질(HACCP)','제조·유통 단계 위생·안전 관리. 식품안전기사와 연결','chk'],
+  ['식품 R&D·제품개발','레시피·배합·공정 개발, 관능평가. 앱의 소재·바이오 R&D와 연계','chk'],
+  ['건강기능식품·푸드테크 기획·마케팅','제품 기획, 영양 클레임 설계, 채널 운영','chk']],
+ lic:[
+  ['영양사(국가시험·보건복지부 면허)','식품학 또는 영양학 전공 졸업 + 영양 관련 18과목 52학점(전공 이수), 현장실습 80시간 이상. 합격: 총점 60% 이상·과목별 40% 이상','ok','https://www.dietitian.or.kr/work/introduction/ki_dietitian.do'],
+  ['영양사 이수기준(영역별 학점)','기초 6학점·영양 19학점·식품 및 조리 14학점·급식 및 위생 11학점·실습 2학점 이상. 학과 확인 필수','ok','https://foodnutrition.snu.ac.kr/%EC%98%81%EC%96%91%EC%82%AC-%EC%9D%B4%EC%88%98%EA%B8%B0%EC%A4%80/'],
+  ['영양사 시험 일정','대학 안내 기준 접수는 매년 10월경, 합격 발표 2월경. 올해 접수는 지났을 수 있으니 국시원에서 확인','chk','https://www.kuksiwon.or.kr/subcnt/c_2020/2/view.do?seq=7'],
+  ['식품안전기사','식품의약품안전처 소관, 한국산업인력공단 시행. 응시자격·시험과목은 Q-Net 확인','chk','https://www.q-net.or.kr/crf005.do?id=crf00503&jmCd=1530']],
+ star:[['급식·식단 현장실습(80시간)','위생·원가·잔반·만족도 중 하나를 숫자로 개선한 경험을 S→R로 정리'],['식품 실험·제품개발 과제','배합이나 공정을 바꾼 근거와 관능평가 결과를 데이터로 제시'],['영양상담·건강 캠페인','대상 분석 → 메시지 설계 → 참여율·행동 변화']],
+ pf:['식단표·레시피 개발 노트(원가·영양성분 계산 포함)','관능평가 결과표와 개선 전후 비교','영양사 지원 시 면허 취득(예정) 시기와 현장실습 내용을 이력서에 명시']},
+
+biz:{n:'경영학과',cnt:2,
+ sum:'앱 직무 대부분이 맞는 폭넓은 학과라, 과제는 “직무를 좁히는 것”입니다. 숫자형·사람형·운영형 3유형으로 먼저 압축하세요.',
+ core:['경영기획·전략기획','사업개발·신사업기획','인사(HRM)·채용·노무','재무기획·관리회계','회계·세무','마케팅·브랜드','영업·영업관리·기술영업','해외영업·무역','MD·상품운영·이커머스','구매·조달·소싱','SCM·수요·공급계획','데이터분석·BI','공공행정·정책·공공사업','컴플라이언스·감사·내부통제'],
+ ext:[],
+ inds:['은행·여신금융','증권·자산운용·투자','무역·상사·글로벌비즈니스','유통·리테일','이커머스·커머스플랫폼','물류·SCM·택배'],
+ gap:[
+  ['① 숫자형','재무·회계·데이터분석·금융. 엑셀·SQL·재무제표 이해가 기본','chk'],
+  ['② 사람·시장형','인사·마케팅·영업·해외영업. 커뮤니케이션·고객 이해가 기본','chk'],
+  ['③ 운영·흐름형','SCM·구매·물류·생산관리. 프로세스 개선 경험이 기본','chk']],
+ lic:[
+  ['한국사능력검정시험 제81회','2026-11-28(토) 10:00, 심화만 시행. 원서접수 11/3~11/10(지역별 상이). 공공기관·공무원 준비 시 확인','ok','https://www.historyexam.go.kr/main/examSchedChk.do'],
+  ['공기업·공공기관 지원 시','필수·우대 자격은 기관마다 다름. 공고문(잡알리오)에서 직접 확인','chk','https://job.alio.go.kr'],
+  ['컴활·전산회계·ADsP 등','직무별 우대 여부는 지원 공고에서 확인','chk','']],
+ star:[['학회·창업 공모전·사례분석 팀프로젝트','맡은 역할, 의사결정 기준, 결과 수치 중심'],['아르바이트·인턴의 운영 개선','매출·시간·불만 등 지표 변화를 전후로 비교'],['데이터를 쓴 의사결정','분석 방법과 그 결과로 바뀐 행동']],
+ pf:['지원 직무별 STAR 2개 이상(같은 경험 재사용 금지)','이론 나열보다 의사결정 사례 중심','직무 3유형 중 하나를 골라 일관된 스토리로 구성']},
+
+econ:{n:'경제학과',cnt:3,
+ sum:'금융·정책·데이터 3갈래가 대표 진로입니다. 통계·계량 역량을 직무 언어(분석·예측·정책 영향)로 바꿔 쓰는 것이 핵심입니다.',
+ core:['경영기획·전략기획','사업개발·신사업기획','제품·서비스기획','재무기획·관리회계','회계·세무','ESG·지속가능경영','은행·여신·금융영업','보험·보험심사·금융리스크','공공행정·정책·공공사업','마케팅·브랜드','영업·영업관리·기술영업','해외영업·무역','데이터분석·BI','데이터엔지니어링','AI·머신러닝'],
+ ext:[],
+ inds:['은행·여신금융','증권·자산운용·투자','보험','핀테크·디지털금융','무역·상사·글로벌비즈니스','에너지·전력·가스'],
+ gap:[
+  ['금융권(은행·증권·보험)','신용·시장 분석, 리스크, 기업금융. 앱의 금융 직무와 연결','chk'],
+  ['공공·정책(공공기관·공무원)','정책 분석·예산·통계. 공무원 응시자격은 학력 제한 없음(인사혁신처)','ok'],
+  ['데이터·리서치','통계·계량 분석을 업무로. 앱의 데이터분석·BI와 연결','chk']],
+ lic:[
+  ['공무원(9급 국가직 기준)','학력 제한 없음, 18세 이상. 필기: 국어·영어·한국사 + 직렬별 2과목. 자격증 소지자 가산점 가능. 직렬별 과목은 시험 공고문 확인','ok','https://www.mpm.go.kr/mpm/info/infoJobs/HrProcedures/recruit/recruit02/'],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행','ok','https://www.historyexam.go.kr/main/examSchedChk.do'],
+  ['금융·데이터 관련 자격','투자권유·ADsP·SQLD 등은 직무별 우대 여부를 공고에서 확인','chk','']],
+ star:[['계량·통계 분석 과제','가설 → 데이터 → 방법 → 시사점을 한 문단으로 요약'],['경제·정책 보고서·학회 발표','결론이 어떤 의사결정에 쓰였는지 연결'],['금융·소비 관련 활동(대외활동·공모전)','분석 근거와 수치로 성과 표현']],
+ pf:['분석 보고서 1~2편(데이터 출처·방법 명시)','엑셀·R·Python 사용 범위를 구체적으로','전공 용어를 직무 용어로 번역한 한 줄 요약']},
+
+ds:{n:'데이터사이언스학과',cnt:3,
+ sum:'앱의 데이터·AI·개발 직무와 가장 직접 연결됩니다. 직무별 “필수 도구”와 “프로젝트 증거”로 차별화하세요.',
+ core:['데이터분석·BI','데이터엔지니어링','AI·머신러닝','소프트웨어개발','클라우드·서버·DevOps','정보보안·개인정보보호','네트워크·통신','제품·서비스기획','마케팅·브랜드','SCM·수요·공급계획','은행·여신·금융영업','보험·보험심사·금융리스크','경영기획·전략기획','품질관리·품질보증'],
+ ext:[],
+ inds:['반도체','핀테크·디지털금융','이커머스·커머스플랫폼','의료기기·디지털헬스','은행·여신금융','증권·자산운용·투자','통신·네트워크','로봇·스마트팩토리'],
+ gap:[
+  ['데이터분석·BI','지표 정의·대시보드·의사결정 지원','chk'],
+  ['데이터엔지니어링','수집·적재·파이프라인 구축','chk'],
+  ['AI·ML 개발·AI 서비스 기획','모델링부터 서비스 적용·평가까지','chk']],
+ lic:[
+  ['빅데이터분석기사','관련부처 국가데이터처·과학기술정보통신부, 시행처 한국데이터산업진흥원. 응시자격·일정은 Q-Net 확인','ok','https://www.q-net.or.kr/crf005.do?id=crf00505&jmCd=1324'],
+  ['ADsP·SQLD 등 데이터 자격검정','한국데이터산업진흥원 데이터자격검정센터. 시험일정은 사이트에서 직접 확인','chk','https://www.dataq.or.kr/www/sub/a_07.do'],
+  ['정보처리기사','2026년 3회 실기 시험 10/24~11/13, 최종 발표 12/18. 2027.1.1~2029.12.31 새 출제기준. 2027년 일정은 공지 후 확인','ok','https://www.q-net.or.kr/crf005.do?id=crf00503s02&jmCd=1320']],
+ star:[['캡스톤·공모전(Kaggle·공공데이터 등)','문제 정의 → 데이터 → 모델 → 지표 개선(전후 수치)'],['데이터 정제·분석 과제','결측·이상치 처리 같은 판단 근거를 명시'],['팀 프로젝트 협업(GitHub)','역할 분담·코드 리뷰·일정 관리 경험']],
+ pf:['GitHub 저장소(README에 문제·방법·결과 수치)','분석 노트북 또는 대시보드 링크','사용 도구·언어 범위와 직접 구현한 부분을 구분']},
+
+sec:{n:'정보보호학과·사이버보안전공',cnt:5,
+ sum:'앱의 정보보안·개인정보보호 직무가 중심입니다. 자격증 + 실습·대회·침해 대응 경험 3박자를 준비하세요.',
+ core:['정보보안·개인정보보호','컴플라이언스·감사·내부통제','네트워크·통신','소프트웨어개발','클라우드·서버·DevOps','데이터분석·BI','데이터엔지니어링','AI·머신러닝','전기·전자·회로설계'],
+ ext:[],
+ inds:['정보보안','통신·네트워크','은행·여신금융','증권·자산운용·투자','핀테크·디지털금융','항공·우주·방산','의료기기·디지털헬스','컨설팅·회계·법률·인증 전문서비스'],
+ gap:[
+  ['보안관제·침해대응','탐지·분석·대응 운영(관제센터)','chk'],
+  ['취약점 진단·모의해킹','시스템·웹·앱 점검과 보고서','chk'],
+  ['개인정보보호·정보보호 인증(컴플라이언스)','법령·인증 기준 대응, 내부 점검','chk'],
+  ['공공 보안(기관)','공공기관 보안 직무는 기관별 공고(잡알리오)에서 직접 확인','chk']],
+ lic:[
+  ['정보보안기사·정보보안산업기사','국가기술자격. 안내 페이지는 KISA 보안자격 사이트(KISQ). 응시자격은 Q-Net·KISQ에서 확인','ok','https://www.q-net.or.kr/crf005.do?id=crf00503&jmCd=1325'],
+  ['정보보안산업기사 2026 일정(비공식 정리)','필기 4회 접수 8/31~9/3(종료). 실기 4회 접수 10/19~22, 시험 11/14~29, 발표 12/18. 반드시 Q-Net에서 재확인','chk','http://www.q-net.or.kr/crf005.do?id=crf00503&jmCd=2325'],
+  ['정보처리기사','2026년 3회 실기 10/24~11/13, 최종 발표 12/18','ok','https://www.q-net.or.kr/crf005.do?id=crf00503s02&jmCd=1320']],
+ star:[['보안 실습·CTF·모의해킹 대회','취약점 종류·발견 과정·조치 방안을 단계별로'],['보안 캡스톤·시스템 구축','위협 모델링 → 적용한 통제 → 점검 결과'],['개인정보 보호 점검·캠페인','점검 항목 설계 → 위반 사례 → 개선율']],
+ pf:['대회·실습 결과표(순위·분야)','취약점 분석 보고서 샘플(실제 시스템 정보 제거)','사용 도구(Wireshark·Burp 등)와 수행 범위를 구체적으로']},
+
+design:{n:'산업디자인학과',cnt:3,
+ sum:'앱에는 UX·UI 중심이라 제품(산업)디자인 직무가 약합니다. 제품·CMF·UX 3갈래와 포트폴리오가 승부처입니다.',
+ core:['UX·UI디자인','제품·서비스기획','기계·기구설계','MD·상품운영·이커머스'],
+ ext:['디지털콘텐츠 기획·제작'],
+ inds:['생활소비재·가구','화장품·뷰티','패션·섬유','이커머스·커머스플랫폼','인터넷·플랫폼','출판·인쇄·포장','게임'],
+ gap:[
+  ['제품(산업)디자이너','가전·생활용품·모빌리티 외관·사용성 디자인. 엔지니어와 협업','chk'],
+  ['CMF(색상·재질·마감) 디자이너','제품의 색상·소재·표면 처리 기획','chk'],
+  ['UX·UI·서비스 디자이너','사용자 리서치와 화면 설계. 앱 직무와 연결','chk'],
+  ['패키지·브랜드 디자이너','포장·브랜드 경험 디자인(출판·인쇄·포장 산업 연계)','chk']],
+ lic:[
+  ['제품디자인산업기사','산업통상부 소관, 한국산업인력공단 시행. 응시자격은 Q-Net 확인','ok','https://www.q-net.or.kr/crf005.do?id=crf00503&jmCd=2432'],
+  ['포트폴리오(자격보다 우선)','대부분의 디자인 채용은 포트폴리오로 평가. 지원 공고의 제출 형식 확인','chk','']],
+ star:[['제품 디자인 프로젝트(스케치→모형→발표)','문제 정의·사용자 인터뷰·수정 이력을 보여주기'],['공모전(디자인 공모)','주제 해석 → 차별점 → 결과(수상·피드백)'],['협업(공학·경영 학생과 팀)','디자인 의사결정 근거와 제약 조건 조율']],
+ pf:['프로젝트 3~5개(문제→과정→결과 순서, 과정 스케치 포함)','2D·3D 도구와 제작 범위 명시','제출 전 PDF 용량·파일명 규칙 확인']},
+
+fashion:{n:'패션산업학과',cnt:1,
+ sum:'앱의 “패션·섬유” 산업과 MD·소싱·마케팅 직무가 핵심 연결입니다. 디자인형과 상품·유통형 중 먼저 방향을 정하세요.',
+ core:['마케팅·브랜드','MD·상품운영·이커머스','구매·조달·소싱','디지털콘텐츠 기획·제작'],
+ ext:['제품·서비스기획','영업·영업관리·기술영업'],
+ inds:['패션·섬유','유통·리테일','화장품·뷰티','이커머스·커머스플랫폼'],
+ gap:[
+  ['패션 MD(상품기획)','시즌 기획·물량·가격·판매 분석','chk'],
+  ['VMD·매장 운영','매장 디스플레이와 판매 데이터 연계','chk'],
+  ['소싱·QC(품질)','원부자재·생산처 관리, 품질 점검','chk'],
+  ['패션 디자인·패턴','디자인 실무. 포트폴리오 중심 평가','chk']],
+ lic:[
+  ['관련 국가기술자격','패션디자인산업기사·컬러리스트기사 등은 Q-Net에서 응시자격 확인','chk','https://www.q-net.or.kr'],
+  ['포트폴리오·판매 데이터 분석 경험','직무별 우대 여부는 공고에서 확인','chk','']],
+ star:[['팝업스토어·마케팅 프로젝트','타깃 → 기획 → 판매·유입 수치'],['매장 아르바이트','고객 응대에서 매출·재고를 개선한 사례'],['트렌드 분석 과제','근거 데이터 출처와 제안한 상품 방향']],
+ pf:['시즌 기획안 1편(컨셉·타깃·가격·MD 구성)','브랜드 분석 리포트','디자인 지원 시 작품집, 상품기획 지원 시 숫자 중심 자료']},
+
+foodeng:{n:'식품공학전공',cnt:1,
+ sum:'앱의 소재·바이오 R&D, 품질·공정 직무와 “식품·음료·푸드테크” 산업이 핵심입니다. 공정 이해와 시험·분석 경험이 평가 포인트입니다.',
+ core:['소재·화학·바이오 연구개발','시험·평가·검증·인증','생산관리','생산기술·공정기술','품질관리·품질보증','플랜트·건축설비'],
+ ext:[],
+ inds:['식품·음료·푸드테크','외식·프랜차이즈','농림축산·수산·그린바이오','화장품·뷰티','유통·리테일','화학·석유화학','바이오의약·CDMO'],
+ gap:[
+  ['식품 R&D·제품개발','배합·공정·저장성 개발','chk'],
+  ['식품 품질·안전(HACCP)','제조 단계 위해요소 관리, 검사','chk'],
+  ['생산·공정기술','라인 효율·수율 개선','chk']],
+ lic:[
+  ['식품안전기사','식품의약품안전처 소관, 한국산업인력공단 시행. 응시자격은 Q-Net 확인','chk','https://www.q-net.or.kr/crf005.do?id=crf00503&jmCd=1530'],
+  ['식품·위생 관련 기사류','Q-Net에서 종목별 응시자격 확인','chk','https://www.q-net.or.kr']],
+ star:[['식품 실험·분석 과제','조건 변화 → 결과 → 해석 → 개선'],['제품개발 프로젝트','배합 변경 근거와 시제품 평가'],['현장실습·인턴','공정 이해와 개선 제안']],
+ pf:['실험 노트·결과 그래프','제품개발 보고서(요약 1쪽)','사용한 분석 장비·방법 명시']},
+
+bioenv:{n:'생명환경공학전공',cnt:1,
+ sum:'앱의 환경·ESG·안전·소재 직무와 “환경·자원순환·수처리”, “바이오” 산업이 연결됩니다. 환경 규제와 ESG를 직무 언어로 바꾸세요.',
+ core:['ESG·지속가능경영','소재·화학·바이오 연구개발','시험·평가·검증·인증','품질관리·품질보증','생산기술·공정기술','플랜트·건축설비','에너지·전력','산업·건설안전·보건'],
+ ext:[],
+ inds:['환경·자원순환·수처리','화학·석유화학','에너지·전력·가스','신재생에너지·수소','제약','바이오의약·CDMO','식품·음료·푸드테크','건설·플랜트·엔지니어링'],
+ gap:[
+  ['환경관리·수처리·폐기물','배출·수질·폐기물 관리, 인허가 대응','chk'],
+  ['ESG·탄소관리','배출량 산정, 공시 대응','chk'],
+  ['바이오·소재 연구','실험 설계와 분석','chk']],
+ lic:[
+  ['환경 관련 기사류','환경기사 등은 Q-Net에서 종목별 응시자격 확인','chk','https://www.q-net.or.kr'],
+  ['안전·산업안전 관련 자격','직무별 우대 여부는 공고에서 확인','chk','']],
+ star:[['환경 분석·실험 과제','측정 기준·결과·개선 방안'],['ESG·탄소 관련 프로젝트','배출 원인 → 감축안 → 효과 추정'],['캡스톤·현장실습','문제 정의와 해결 과정']],
+ pf:['실험·분석 보고서','ESG·환경 사례 분석서 1편','사용 장비·소프트웨어와 수행 범위']},
+
+sw:{n:'사회복지학과',cnt:1,
+ sum:'사회복지사 자격 트랙과 공무원·공공 트랙이 중심입니다. 앱에는 직무가 1개뿐이라 기관 유형별로 보완했습니다.',
+ core:['사회복지·보육·돌봄·지역사회서비스'],
+ ext:['교육기획·교수설계·교육콘텐츠','공공행정·정책·공공사업','HRD·조직개발·조직문화'],
+ inds:['사회복지·비영리·사회서비스','반려·돌봄·실버 생활서비스','공공행정·치안·국방·안전','병원·헬스케어서비스'],
+ gap:[
+  ['사회복지 현장직(시설·기관)','상담·사례관리·프로그램 운영','chk'],
+  ['사회복지직 공무원','학력 제한 없음. 공고문으로 시험과목·가산점 확인(인사혁신처)','ok'],
+  ['의료·병원 사회복지','의료 현장 상담·연계','chk'],
+  ['기업·재단 사회공헌(CSR)','사회공헌 기획·운영','chk']],
+ lic:[
+  ['사회복지사 1급 국가시험(제24회)','복지부 시행계획 공고가 게시됨. 접수·시험일·응시자격은 공고와 Q-Net에서 직접 확인(비공식 정리에는 12월 접수 안내가 있음)','chk','https://www.mohw.go.kr/board.es?mid=a10501010000&bid=0003&list_no=1487633&act=view'],
+  ['청소년지도사 2급','대학 졸업자로서 별표 2의 2급 검정과목을 모두 이수한 사람. 인정 과목은 학과·고시에서 확인','ok','https://www.law.go.kr/LSW/flDownload.do?gubun=&flSeq=157645987&bylClsCd=110201'],
+  ['공무원 응시자격','학력 제한 없음, 18세 이상','ok','https://www.mpm.go.kr/mpm/info/infoJobs/HrProcedures/recruit/recruit02/']],
+ star:[['현장실습(기관 실습)','대상·과제·내가 한 지원·변화'],['봉사·프로그램 기획','기획 → 운영 → 참여자 변화'],['지역사회 조사·팀 프로젝트','문제 발견 → 개선안']],
+ pf:['실습 일지 요약(개인정보 완전 제거)','프로그램 기획안 1편','대상자 정보는 반드시 비식별 처리']},
+
+child:{n:'아동학과',cnt:2,
+ sum:'보육교사 자격 트랙과 아동 복지·교육 서비스 트랙이 중심입니다. 자격 취득 요건을 학점으로 먼저 점검하세요.',
+ core:['교육기획·교수설계·교육콘텐츠','사회복지·보육·돌봄·지역사회서비스','HRD·조직개발·조직문화'],
+ ext:['디지털콘텐츠 기획·제작'],
+ inds:['교육·에듀테크','학교·학원·교육기관(정규교육)','사회복지·비영리·사회서비스','반려·돌봄·실버 생활서비스'],
+ gap:[
+  ['어린이집 보육교사','영유아 보육·교육. 자격은 보육교사 1~3급','ok'],
+  ['아동복지·돌봄 기관','센터·시설의 상담·프로그램 운영','chk'],
+  ['교육콘텐츠·에듀테크 기획','아동 대상 콘텐츠·학습 설계','chk'],
+  ['방과후·교육 서비스','수업 운영·프로그램 기획','chk']],
+ lic:[
+  ['보육교사 2급','전문대학 이상에서 보육 관련 교과목 17과목 51학점 이상 이수 후 졸업(시행규칙 별표). 3급→2급은 경력 2년 + 승급교육','ok','https://central.childcare.go.kr/lcentral/d1_30000/d1_30005/d1_30016/d1_30035.jsp'],
+  ['보육교사 1급','2급 취득 후 보육업무 경력 3년 이상 + 승급교육, 또는 석사 + 경력 1년 + 승급교육','ok','https://central.childcare.go.kr/lcentral/d1_30000/d1_30005/d1_30016/d1_30035.jsp'],
+  ['청소년지도사 2급','대학 졸업자로서 검정과목을 모두 이수한 사람','ok','https://www.law.go.kr/LSW/flDownload.do?gubun=&flSeq=157645987&bylClsCd=110201']],
+ star:[['보육·교육 현장실습','영유아 관찰·활동 계획·반응 변화'],['아동 프로그램 기획·운영 봉사','대상 연령 → 활동 설계 → 참여 결과'],['부모·교사 소통 경험','갈등·요청을 조율한 과정']],
+ pf:['활동 계획안 샘플(연령·목표·준비물·평가)','실습 일지 요약(아동 정보 완전 비식별)','보육교사 지원 시 이수 교과목·학점 증빙을 미리 점검']},
+
+lis:{n:'문헌정보학과',cnt:1,
+ sum:'앱에는 사서·학예·기록 관리 직무가 없어 보완했습니다. 자격 트랙(사서·기록물관리전문요원)과 데이터·정보서비스 트랙으로 나뉩니다.',
+ core:['교육기획·교수설계·교육콘텐츠','데이터엔지니어링','정보보안·개인정보보호'],
+ ext:['소프트웨어개발','컴플라이언스·감사·내부통제'],
+ inds:['문화유산·도서관·박물관(문화기반시설)','학교·학원·교육기관(정규교육)','출판·인쇄·포장','IT서비스·클라우드·IDC'],
+ gap:[
+  ['사서(공공·대학·학교·전문도서관)','자료 수집·정리·정보서비스·독서교육','ok'],
+  ['기록물관리전문요원','공공기관 기록 평가·보존·서비스','ok'],
+  ['데이터 큐레이션·정보서비스','메타데이터·검색·지식관리. IT·콘텐츠 기업과 연결','chk'],
+  ['출판·콘텐츠 기획','자료 조사·편집','chk']],
+ lic:[
+  ['사서 자격(2급 정사서)','대학(전문대학 제외)에서 문헌정보학·도서관학 전공 졸업 등(도서관법 시행령 별표). 개정 여부는 법령 원문 확인','ok','https://www.law.go.kr/flDownload.do?gubun=&flSeq=133079309&bylClsCd=110201'],
+  ['기록물관리전문요원(국가기록원)','응시: 기록관리학 학사 또는 역사학·문헌정보학 학사 이상 + 기록관리학 교육과정 이수. 2026 시험: 4/25, 접수 3/4~3/6. 합격: 과목별 40%·총점 60% 이상. 2027 일정은 공고 확인','ok','https://www.archives.go.kr/next/newrecordsMngPro/recordsMngProInfo.do'],
+  ['정보처리기사(IT 진출 시)','2026년 3회 실기 10/24~11/13','ok','https://www.q-net.or.kr/crf005.do?id=crf00503s02&jmCd=1320']],
+ star:[['도서관·자료실 실습','이용자 요청 분석 → 서비스 개선 → 이용 지표'],['정리·분류·메타데이터 프로젝트','기준 설계와 오류율 감소'],['독서·정보활용 교육 운영','대상 → 교안 → 만족도']],
+ pf:['분류·목록·메타데이터 작업 샘플','정보서비스 개선 제안서','자격 요건 충족 여부(이수 교과목)를 입학·학과 기준으로 점검']},
+
+video:{n:'디지털영상전공',cnt:1,
+ sum:'앱의 디지털콘텐츠·마케팅·UX 직무와 “콘텐츠·엔터테인먼트” 산업이 연결됩니다. 영상 제작력은 포트폴리오(쇼릴)로 증명합니다.',
+ core:['디지털콘텐츠 기획·제작','마케팅·브랜드','UX·UI디자인','교육기획·교수설계·교육콘텐츠'],
+ ext:[],
+ inds:['콘텐츠·엔터테인먼트','미디어·광고·마케팅서비스','교육·에듀테크','게임','인터넷·플랫폼'],
+ gap:[
+  ['영상 PD·제작','기획·촬영·편집 총괄 또는 파트','chk'],
+  ['영상 편집·모션','편집·합성·그래픽','chk'],
+  ['브랜드·마케팅 콘텐츠 제작','광고·SNS 영상 기획·운영','chk'],
+  ['공공 콘텐츠 기관','한국콘텐츠진흥원 등 채용정보는 기관 공고에서 확인','ok']],
+ lic:[
+  ['한국콘텐츠진흥원 채용정보','채용 공고 게시판(공식)','ok','https://eng.kocca.kr/kocca/bbs/list/B0159004.do?menuNo=204803'],
+  ['포트폴리오(쇼릴) 우선','영상 길이·역할 표기 형식은 공고마다 다름','chk','']],
+ star:[['영상 제작 프로젝트(기획→촬영→편집)','역할·제작 기간·조회·반응 수치'],['클라이언트·공모전 작업','요구사항 해석과 결과'],['채널·SNS 운영','주제 선정 → 콘텐츠 → 성장 지표']],
+ pf:['쇼릴 1~2분 + 프로젝트 설명(역할 표기)','제작 과정 캡처(콘티·편집 타임라인)','저작권(음원·폰트) 출처 정리']},
+
+journ:{n:'저널리즘전공',cnt:2,
+ sum:'앱에는 기자·편집·PD 직무가 없어 보완했습니다. 언론사 트랙과 홍보·콘텐츠 트랙으로 나뉩니다.',
+ core:['디지털콘텐츠 기획·제작','마케팅·브랜드','교육기획·교수설계·교육콘텐츠','고객서비스·CX·고객성공'],
+ ext:[],
+ inds:['미디어·광고·마케팅서비스','콘텐츠·엔터테인먼트','출판·인쇄·포장','공공행정·치안·국방·안전'],
+ gap:[
+  ['언론사 기자·PD','공채 외 인턴·경력 채용 병행(한국기자협회 보도 제목 기준). 전형 단계는 사별 공고 확인','chk'],
+  ['기업·공공기관 홍보·PR','보도자료·미디어 대응·콘텐츠 운영','chk'],
+  ['콘텐츠 에디터·마케터','기획·편집·채널 운영','chk'],
+  ['미디어 공공기관','한국언론진흥재단은 정규직 신입 공고를 게시(2026년 1차 공고 확인)','ok']],
+ lic:[
+  ['한국언론진흥재단 채용 공고','2026년 1차 정규직 신입사원 채용 공고 게시. 전형 방식은 공고문 확인','ok','https://www.kpf.or.kr/front/board/boardContentsView.do?board_id=268&contents_id=13cd6c3d06ca41a3bed773f38f90b013'],
+  ['한국기자협회 보도(공채 동향)','“신입기자 공채 컴백” 제목 기사. 본문 미확인, 최신 동향은 직접 확인','chk','http://www.journalist.or.kr/news/article.html?no=54362'],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행. 공공기관 지원 시 확인','ok','https://www.historyexam.go.kr/main/examSchedChk.do']],
+ star:[['교내·대외 기사 작성·취재','주제 선정 → 취재 → 기사화 → 반응'],['콘텐츠 제작·편집 프로젝트','기획 의도와 조회·공유 지표'],['인터뷰·조사 활동','질문 설계와 정보 검증 과정']],
+ pf:['기사·콘텐츠 3편(링크 + 취재 과정 한 줄)','팩트체크 방식 설명','필기(상식·논술)·인턴 일정은 사별 공고로 관리']},
+
+kor:{n:'국어국문학과',cnt:1,
+ sum:'글쓰기·분석력이 강점입니다. 직무 언어로 번역하면 콘텐츠·마케팅·교육·공공 사무까지 폭넓게 지원할 수 있습니다.',
+ core:['디지털콘텐츠 기획·제작','마케팅·브랜드','교육기획·교수설계·교육콘텐츠','고객서비스·CX·고객성공','UX·UI디자인'],
+ ext:['공공행정·정책·공공사업','총무·사무행정·비서'],
+ inds:['미디어·광고·마케팅서비스','콘텐츠·엔터테인먼트','교육·에듀테크','출판·인쇄·포장','게임'],
+ gap:[
+  ['콘텐츠 에디터·카피라이터','기획·집필·교열','chk'],
+  ['UX 라이팅·서비스 문구','서비스 화면 문구 설계. UX·UI와 연결','chk'],
+  ['출판·편집','원고 검토·편집','chk'],
+  ['공공·교육 사무','공무원 응시자격은 학력 제한 없음','ok']],
+ lic:[
+  ['공무원 응시자격','학력 제한 없음, 18세 이상. 필기 국어·영어·한국사 + 직렬별 2과목','ok','https://www.mpm.go.kr/mpm/info/infoJobs/HrProcedures/recruit/recruit02/'],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행','ok','https://www.historyexam.go.kr/main/examSchedChk.do'],
+  ['교원·한국어교원 등','교직·한국어교원 요건은 교육부·국립국어원 기준 확인','chk','']],
+ star:[['글쓰기·편집·창작 활동','독자·목적·반응 수치로 정리'],['학술·비평 발표','주장 → 근거 → 반응'],['교육·튜터링 경험','대상 파악 → 교안 → 변화']],
+ pf:['글 샘플 3편(장르별)','콘텐츠 기획안 1편','맞춤법·교열 기준을 지킨 자소서']},
+
+fr:{n:'불어불문학과',cnt:1,
+ sum:'프랑스어 자체보다 “언어 + 직무”의 조합이 승부처입니다. 앱의 해외영업·무역·뷰티·패션·관광 직무에 연결하세요.',
+ core:['해외영업·무역','영업·영업관리·기술영업','구매·조달·소싱','물류운영·창고·풀필먼트'],
+ ext:['마케팅·브랜드'],
+ inds:['무역·상사·글로벌비즈니스','화장품·뷰티','패션·섬유','관광·호텔·레저','항공·공항서비스','물류·SCM·택배'],
+ gap:[
+  ['해외영업·무역 사무','바이어 소통·수출입 서류','chk'],
+  ['뷰티·패션 글로벌 마케팅','프랑스어권 시장 기획·소통','chk'],
+  ['관광·항공 서비스','외국어 응대·운영','chk'],
+  ['통번역·언어 서비스','대학원 진학 또는 프리랜서 경로','chk']],
+ lic:[
+  ['프랑스어 공인성적(DELF·DALF)','공식 일정은 시행기관 사이트에서 직접 확인. 이번 조사에서 확인 실패','chk',''],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행. 공공기관 지원 시 확인','ok','https://www.historyexam.go.kr/main/examSchedChk.do']],
+ star:[['교환학생·어학연수·통역 활동','상황 → 소통 방법 → 결과'],['번역·자막·콘텐츠 작업','분량·정확도·피드백'],['외국인 대상 응대 경험','요구 파악과 문제 해결']],
+ pf:['프랑스어 활용 사례 3개(문서·구두)','영어 병행 능력 증빙','지원 산업(뷰티·패션·무역)별 시장 이해 한 장']},
+
+cn:{n:'중어중문학과',cnt:1,
+ sum:'중국어 능력 + 산업 이해 조합으로 무역·유통·뷰티·관광·제조 영업에 폭넓게 지원할 수 있습니다.',
+ core:['해외영업·무역','영업·영업관리·기술영업','구매·조달·소싱','물류운영·창고·풀필먼트'],
+ ext:['마케팅·브랜드'],
+ inds:['무역·상사·글로벌비즈니스','화장품·뷰티','패션·섬유','관광·호텔·레저','유통·리테일','물류·SCM·택배'],
+ gap:[
+  ['중화권 영업·무역','바이어·거래처 소통, 수출 서류','chk'],
+  ['구매·소싱(중국 협력사)','협력사 발굴·품질·납기 관리','chk'],
+  ['뷰티·유통 크로스보더','중국 소비자 대상 상품·채널 운영','chk'],
+  ['통번역·관광','외국어 응대·운영','chk']],
+ lic:[
+  ['HSK(한국사무국 안내)','PBT 12월 시험: 2026-12-13(일), 접수 2026-10-30~11-16, 성적 발표 2027-01-15. “2026년 12월 HSK 3.0 전면 개편” 공지가 있으니 개편 내용 확인','ok','https://www.hsk.or.kr/?c1=600&c2=001&c3=000'],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행','ok','https://www.historyexam.go.kr/main/examSchedChk.do']],
+ star:[['교환학생·통역·중국 현지 활동','상황 → 소통 → 결과'],['번역·콘텐츠 작업','분량·정확도·피드백'],['중국 시장 조사·무역 시뮬레이션','조사 기준 → 제안 → 반응']],
+ pf:['중국어 활용 사례 3개(구두·서면)','HSK 급수와 회화 증빙','타깃 산업(뷰티·유통·제조) 시장 이해 한 장']},
+
+hist:{n:'사학과',cnt:1,
+ sum:'앱에는 학예·기록 직무가 없어 보완했습니다. 학예·기록 트랙과 공공·교육·콘텐츠 트랙으로 나뉩니다.',
+ core:['공공행정·정책·공공사업','인사(HRM)·채용·노무','총무·사무행정·비서','컴플라이언스·감사·내부통제'],
+ ext:['교육기획·교수설계·교육콘텐츠','디지털콘텐츠 기획·제작'],
+ inds:['문화유산·도서관·박물관(문화기반시설)','공공행정·치안·국방·안전','교육·에듀테크','콘텐츠·엔터테인먼트','사회복지·비영리·사회서비스'],
+ gap:[
+  ['학예사(박물관·미술관)','전시·연구·교육. 준학예사 시험 합격 + 실무경력','ok'],
+  ['기록물관리전문요원','공공 기록 관리. 역사학 학사 이상 + 기록관리학 교육과정','ok'],
+  ['공공 사무직·공무원','공무원 응시자격은 학력 제한 없음','ok'],
+  ['콘텐츠·역사 교육 기획','역사 콘텐츠·교육 프로그램','chk']],
+ lic:[
+  ['학예사(국립중앙박물관 안내)','준학예사: 학사 이상이면 시험 합격 + 실무경력 1년 이상. 3급 정학예사: 박사+1년, 석사+2년, 또는 준학예사 후 4년. 시험은 한국산업인력공단 시행(과목·일정 Q-Net 확인)','ok','https://www.museum.go.kr/MUSEUM/contents/M0705010000.do'],
+  ['기록물관리전문요원','역사학 학사 이상 + 기록관리학 교육과정 이수. 2026 시험 4/25, 접수 3/4~3/6','ok','https://www.archives.go.kr/next/newrecordsMngPro/recordsMngProInfo.do'],
+  ['한국사능력검정시험 제81회','2026-11-28(토), 심화만 시행. 공무원·공공기관 준비 시 활용','ok','https://www.historyexam.go.kr/main/examSchedChk.do']],
+ star:[['사료·자료 조사와 논문·발표','질문 → 자료 → 해석 → 결론'],['박물관·기록관 실습·봉사','업무·산출물·개선 제안'],['전시·교육 프로그램 기획','대상 → 기획 → 참여 결과']],
+ pf:['연구·조사 보고서 요약','실습 산출물(자료 정리표 등)','경력 요건(실무경력 인정 기관)을 사전에 확인']}
+}};
+
+(function(){
+  var box=document.getElementById('majbox');if(!box||typeof MAJ==='undefined')return;
+  var sel=document.getElementById('majsel'),det=document.getElementById('majdetail'),ov=document.getElementById('majovbody');
+  var KEY='ip-maj-v1';
+  function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]});}
+  function badge(st){return st==='ok'?'<span class="majbadge ok">공식 확인</span>':'<span class="majbadge chk">확인 필요</span>';}
+  function ls(a,k,v){try{if(a==='g')return localStorage.getItem(k);localStorage.setItem(k,v);}catch(e){return null}}
+  var h='<option value="">학과를 선택하세요</option>';
+  MAJ.groups.forEach(function(g){h+='<optgroup label="'+esc(g[0])+'">';g[1].forEach(function(id){var d=MAJ.d[id];h+='<option value="'+id+'">'+esc(d.n)+' ('+d.cnt+'명)</option>';});h+='</optgroup>';});
+  sel.innerHTML=h;
+  var t='<table class="majov"><thead><tr><th>학과</th><th>인원</th><th>앱 연결 직무</th><th>보강 항목</th></tr></thead><tbody>';
+  Object.keys(MAJ.d).forEach(function(id){var d=MAJ.d[id];t+='<tr data-id="'+id+'"><td>'+esc(d.n)+'</td><td>'+d.cnt+'</td><td>'+d.core.length+'개</td><td>특화 직무 '+d.gap.length+' · 자격 '+d.lic.length+'</td></tr>';});
+  ov.innerHTML=t+'</tbody></table><div class="majnote">행을 누르면 해당 학과 안내로 이동합니다. 기준일 '+esc(MAJ.verified)+'.</div>';
+  function jump(q){var i=document.getElementById('t8q');if(!i)return;i.value=q;i.dispatchEvent(new Event('input',{bubbles:true}));var hits=document.getElementById('t8hits');if(hits&&hits.scrollIntoView)hits.scrollIntoView({behavior:'smooth',block:'center'});}
+  function render(id){
+    var d=MAJ.d[id];if(!d){det.innerHTML='';return;}
+    var o='<div class="majsum"><b>'+esc(d.n)+'</b> · '+esc(d.sum)+'</div>';
+    o+='<h4>① 앱에서 바로 연결되는 직무 <small class="majnew">누르면 아래 직무 검색에 입력됩니다</small></h4><div class="majchips">';
+    d.core.forEach(function(j){o+='<button type="button" class="majchip" data-q="'+esc(j.split('·')[0].replace(/\(.*$/,''))+'">'+esc(j)+'</button>';});
+    d.ext.forEach(function(j){o+='<button type="button" class="majchip ext" data-q="'+esc(j.split('·')[0].replace(/\(.*$/,''))+'" title="추가 연계 제안">'+esc(j)+' (추가 연계)</button>';});
+    o+='</div><h4>② 관련 산업(앱 산업 분류)</h4><div class="majchips">';
+    d.inds.forEach(function(x){o+='<span class="majchip ind">'+esc(x)+'</span>';});
+    o+='</div><h4>③ 학과 특화 직무·진로 <small class="majnew">앱 직무에 없거나 약한 부분 보강</small></h4>';
+    d.gap.forEach(function(g){o+='<div class="majrow"><b>'+esc(g[0])+'</b>'+badge(g[2])+'<span class="mt">'+esc(g[1])+'</span></div>';});
+    o+='<h4>④ 자격·면허·시험 정보</h4>';
+    d.lic.forEach(function(l){o+='<div class="majrow"><b>'+esc(l[0])+'</b>'+badge(l[2])+'<span class="mt">'+esc(l[1])+'</span>'+(l[3]?'<a href="'+esc(l[3])+'" target="_blank" rel="noopener noreferrer">공식 링크</a>':'')+'</div>';});
+    o+='<h4>⑤ 경험 소재 → STAR 포인트</h4>';
+    d.star.forEach(function(s){o+='<div class="majrow"><b>'+esc(s[0])+'</b><span class="mt">'+esc(s[1])+'</span></div>';});
+    o+='<h4>⑥ 포트폴리오·자소서 포인트</h4><ul>';
+    d.pf.forEach(function(p){o+='<li>'+esc(p)+'</li>';});
+    o+='</ul><div class="majact"><button type="button" class="btn ghost sm2" id="majto7">경험발굴 탭 열기</button></div>';
+    o+='<div class="majnote">기준일 '+esc(MAJ.verified)+'. “공식 확인”은 법령·정부·공공기관 페이지에서 확인한 내용, “확인 필요”는 비공식 자료이거나 확인하지 못한 내용입니다. 시험 일정과 법령은 바뀔 수 있으니 반드시 공식 링크와 채용공고로 다시 확인하세요.</div>';
+    det.innerHTML=o;
+    var b=document.getElementById('majto7');if(b)b.onclick=function(){var t7=document.getElementById('tab7');if(t7)t7.click();};
+  }
+  sel.addEventListener('change',function(){ls('s',KEY,sel.value);render(sel.value);});
+  det.addEventListener('click',function(e){var c=e.target.closest&&e.target.closest('.majchip[data-q]');if(c)jump(c.getAttribute('data-q'));});
+  ov.addEventListener('click',function(e){var r=e.target.closest&&e.target.closest('tr[data-id]');if(!r)return;sel.value=r.getAttribute('data-id');ls('s',KEY,sel.value);render(sel.value);det.scrollIntoView({behavior:'smooth',block:'start'});});
+  var saved=ls('g',KEY);if(saved&&MAJ.d[saved]){sel.value=saved;render(saved);}
+})();
+  </script>
 
   <!-- ===== TAB 4: 이력서 작성 ===== -->
   <div id="view4" hidden>
