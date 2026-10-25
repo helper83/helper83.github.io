@@ -2526,9 +2526,9 @@ hist:{n:'사학과',cnt:1,
     h+='</tbody></table></div>'+(f.length>show.length?'<div class="runbtns" style="margin-top:6px"><button type="button" class="btn ghost sm2" data-pub="more">더 보기 (+30)</button></div>':'');
     return h;
   }
-  function mountList(box){
+  function mountList(box,closed){
     var id='pl'+boxes.length+Math.random().toString(36).slice(2,5);
-    box.innerHTML='<details class="hbd" open><summary>공공기관 목록표 (헬퍼탐 · 중앙공공기관·지방공기업·지방출자출연기관)</summary><div class="subt" style="margin:6px 0">공공기관에 지원한다면 여기서 기관을 고르세요. 민간기업 산업과는 둘 중 하나만 적용됩니다.</div><div id="'+id+'sel"></div><div class="fg pubflt" style="margin-top:8px"><div class="fld"><label for="'+id+'g">구분</label><select id="'+id+'g"></select></div><div class="fld"><label for="'+id+'c">분류</label><select id="'+id+'c"></select></div><div class="fld"><label for="'+id+'r">지역</label><select id="'+id+'r"></select></div><div class="fld"><label for="'+id+'q">기관 검색</label><input type="text" id="'+id+'q" placeholder="기관명·소관부처·분류"></div></div><div id="'+id+'t"></div><div class="subt" style="margin-top:6px" id="'+id+'n"></div></details>';
+    box.innerHTML='<details class="hbd"'+(closed?'':' open')+'><summary>공공기관 목록표 (헬퍼탐 · 중앙공공기관·지방공기업·지방출자출연기관)</summary><div class="subt" style="margin:6px 0">공공기관에 지원한다면 여기서 기관을 고르세요. 민간기업 산업과는 둘 중 하나만 적용됩니다.</div><div id="'+id+'sel"></div><div class="fg pubflt" style="margin-top:8px"><div class="fld"><label for="'+id+'g">구분</label><select id="'+id+'g"></select></div><div class="fld"><label for="'+id+'c">분류</label><select id="'+id+'c"></select></div><div class="fld"><label for="'+id+'r">지역</label><select id="'+id+'r"></select></div><div class="fld"><label for="'+id+'q">기관 검색</label><input type="text" id="'+id+'q" placeholder="기관명·소관부처·분류"></div></div><div id="'+id+'t"></div><div class="subt" style="margin-top:6px" id="'+id+'n"></div></details>';
     var $=function(s){return box.querySelector('#'+id+s)};
     function head(){
       $('g').innerHTML=opts(D.grps,ST.grp,'전체');$('c').innerHTML=opts(cats(),ST.cat,'전체');$('r').innerHTML=opts(D.regs,ST.reg,'전체');$('q').value=ST.q;
@@ -2766,7 +2766,7 @@ hist:{n:'사학과',cnt:1,
     });
     $('t4body').innerHTML=h;
     $('t4company').value=S.company||'';$('t4job').value=S.job||'';if(window.__ipHB&&window.__ipHB.bindInd)window.__ipHB.bindInd($('t4ind'));
-    var pb4=$('t4pub');if(pb4&&window.__ipPub&&!pb4.dataset.m){pb4.dataset.m='1';window.__ipPub.mountList(pb4)}
+    var pb4=$('t4pub');if(pb4&&window.__ipPub&&!pb4.dataset.m){pb4.dataset.m='1';window.__ipPub.mountList(pb4,true)}
     var hb4=$('t4hb');if(hb4&&window.__ipHB&&!hb4.dataset.m){hb4.dataset.m='1';window.__ipHB.mount(hb4,{id:'t4h',blocks:['ind','co'],open:['ind'],noSel:true})}
     var pg4=$('t4pubg');if(pg4&&window.__ipPub&&!pg4.dataset.m){pg4.dataset.m='1';window.__ipPub.mountGuide(pg4,{blocks:['struct','blind','src'],open:[]})}
     ZONES.forEach(function(Z){renderFiles(Z.k)});
