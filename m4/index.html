@@ -1,10 +1,7 @@
-<!doctype html>
-<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>헬퍼손 면접</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>헬퍼손 면접</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="theme-color" content="#ffffff">
-</head><body>
-<style>
+</head><body><style>
 /* Layout(헬퍼탐 방식): 상단 로고+탭 내비(PC) / 하단 컬러 칩 탭바(모바일) / 탭마다 색 제목 띠 / 홈은 히어로+리스트 / 단계형은 순차 아코디언 */
 /* 확정값: 주색 #1E7BC4, 배경 #EDF0F5, 테두리 #E1E5EC, 그림자, 탭별 컬러 칩, 리스트형 홈, 순차 아코디언. 확인 필요(기본값): 탭 7색, 잉크색, 라운드 값. 탭색은 흰 글자 명암비 확보를 위해 일부 어둡게 조정 */
 :root{
@@ -425,14 +422,14 @@ function viewQ36(){
  const items=qItems;
  const cur=()=>{const o=[],mine=qJob==='내 직무',jb=mine?qJobOf():qJob,R=curRole();
   TYPES.filter(t=>qType==='전체'||t.k===qType).forEach(t=>{
-   if(mine){genQs(R,t.k).forEach((g,i)=>o.push([t,g.x,'맞춤 Q'+(i+1),g.i]));rankQs(R,jb,t.k).forEach(s=>o.push([t,s.x,'Q'+(s.i+1),null]))}
+   if(mine){genQs(R,t.k).forEach((g,i)=>o.push([t,g.x,'맞춤 Q'+(i+1),g.i]))}
    else items(jb,t.k).forEach((it,i)=>o.push([t,it,'Q'+(i+1),null]))});return o};
  const card=([t,it,n,gid])=>{const mine=qJob==='내 직무',tg=gid?'내 직무 맞춤':(mine?qJobOf():qJob);const lab=t.k==='PT'?['PT 주제','발표 핵심 내용']:t.k==='토론'?['토론 주제','모범 발언']:['예시 질문','모범답변'];
   return `<article class="card"><span class="tag">${esc(tg)} · ${esc(t.k)} · ${esc(n)}</span>
   <p class="q">${esc(it.q)}</p><div class="sample">면접관이 기대하는 답변 방향</div><div class="steps">${it.a.split('→').map((s,i)=>(i?'<u>→</u>':'')+`<i>${esc(s)}</i>`).join('')}</div>
-  ${gid?`<div class="row"><button type="button" class="btn text" data-g="${gid}" data-k="${t.k}">작성 탭에서 이 질문으로 답하기</button></div><p class="sample">직무 이름·KSA·성과지표로 만든 맞춤 질문입니다.</p>`:`<details class="ma"><summary>모범답변 예시 보기</summary>${it.ex?`<div class="ex good"><b>${lab[0]}</b>${esc(it.ex)}</div>`:''}<div class="ex good"><b>${lab[1]}</b>${esc(it.m)}</div>${it.fu?`<div class="fu"><b>꼬리질문</b><ul>${it.fu.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<p class="sample">강의용 가상 사례입니다. 본인 경험으로 바꿔 쓰세요.</p></details>`}</article>`};
+  ${gid?`<details class="ma"><summary>답변 예시 보기 (○○는 본인 경험으로)</summary>${(it.ans||[]).map((x,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[t.k].steps[i]||[''])[0])}</span>${esc(x)}</p>`).join('')}<p class="sample">직무 데이터로 만든 교육용 예시입니다.</p></details><div class="row"><button type="button" class="btn text" data-g="${gid}" data-k="${t.k}">작성 탭에서 이 질문으로 답하기</button></div>`:`<details class="ma"><summary>모범답변 예시 보기</summary>${it.ex?`<div class="ex good"><b>${lab[0]}</b>${esc(it.ex)}</div>`:''}<div class="ex good"><b>${lab[1]}</b>${esc(it.m)}</div>${it.fu?`<div class="fu"><b>꼬리질문</b><ul>${it.fu.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}<p class="sample">강의용 가상 사례입니다. 본인 경험으로 바꿔 쓰세요.</p></details>`}</article>`};
  function draw(){
-  mk($('#jc'),['내 직무',...JOBS],qJob,x=>qJob=x);const R0=curRole();$('#mjn').textContent=R0.name||'직무 미입력';$('#mjs').textContent=`연결 직군 · ${qJobOf()} (작성 탭에서 고른 세부 직무 기준). '내 직무'를 고르면 맞춤 질문과 직무 관련도가 높은 질문이 먼저 나옵니다.`;mk($('#tc'),['전체',...TYPES.map(t=>t.k)],qType,x=>qType=x);
+  mk($('#jc'),['내 직무',...JOBS],qJob,x=>qJob=x);const R0=curRole();$('#mjn').textContent=R0.name||'직무 미입력';$('#mjs').textContent=`연결 직군 · ${qJobOf()} (작성 탭에서 고른 세부 직무 기준). '내 직무'에서는 선택한 세부 직무의 업무·성과지표로 만든 질문과 답변 예시만 보여 줍니다.`;mk($('#tc'),['전체',...TYPES.map(t=>t.k)],qType,x=>qType=x);
   const all=cur();$('#qn').textContent=pick?'랜덤 1문항':`${qJob==='내 직무'?'내 직무 · '+qJobOf()+' 직군':qJob} · ${qType} ${all.length}문항`;
   $('#all').style.display=pick?'':'none';
   $('#ql').innerHTML=(pick?[pick]:all).map(card).join('')}
@@ -520,7 +517,7 @@ let role=store.get('role','J01');
 if(role!=='custom'&&!JOB_BY[role])role='J01';
 function curRole(){
   if(role==='custom'){const c=getCustom();return {name:String(c.name||'').trim(),kpi:'',K:linesToItems(c.K),S:linesToItems(c.S),A:linesToItems(c.A)}}
-  const j=JOB_BY[role];return {name:j.n,kpi:j.k,K:toItems(j.K),S:toItems(j.S),A:toItems(j.A)}}
+  const j=JOB_BY[role];return {name:j.n,kpi:j.k,o:j.o,et:j.et,t:j.t,K:toItems(j.K),S:toItems(j.S),A:toItems(j.A)}}
 const stripPh=s=>s.split(/[\n.!?。]+/).filter(x=>!x.includes('○')).join(' ');
 
 const TPL=(j,a,b,c,d)=>`저는 ${a||'<mark>[핵심 경험]</mark>'}을 통해 ${j} 직무에 필요한 역량을 길렀습니다. 당시 저는 ${b||'<mark>[본인이 수행한 구체적 행동]</mark>'}을 실행했습니다. 그 결과 ${c||'<mark>[성과와 학습]</mark>'}을 얻었습니다. 이 경험을 바탕으로 입사 후 ${d||'<mark>[직무 기여방안]</mark>'}에 기여하겠습니다.`;
@@ -552,7 +549,7 @@ function markHas(){const t=$$('.stop')[2];if(t)t.classList.toggle('has',doneType
 function viewWrite(){
  const isC=role==='custom',cu=getCustom();
  const k=wType,W=WSPEC[k],F=FORM.find(x=>x.k===k),N=W.steps.length;
- const saved=getDraft(role,k),JEX=jobEx(k,curRole());
+ const saved=getDraft(role,k),JEX=jobExFor(k);
  const curJ=isC?null:JOB_BY[role],curG=isC?'custom':curJ.g;
  const secTxt=W.sec>=120?`${W.sec/60}분`:`${W.sec}초`;
  viewEl.innerHTML=pageHead(2)+`<div class="stack">
@@ -713,6 +710,92 @@ function renderCM3(){
  fs.forEach((f,i)=>{f.value=v[i]||'';f.oninput=upd});upd();
  $('#cmc').onclick=e=>{const b=e.target.closest('button');if(!b)return;store.set('cm3t',b.dataset.id);renderCM3()};
  $('#cmp').onclick=async()=>{const t=upd();try{await navigator.clipboard.writeText(t);$('#cmm').textContent='복사했습니다'}catch(e){const r=document.createRange();r.selectNodeContents($('#cmd'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('#cmm').textContent='텍스트를 선택했습니다. 복사하세요'}}}
+/* 직무 DB 기반 맞춤 질문·답변 생성기 (순수 함수) — 세부 직무의 신입 업무·핵심 업무·성과지표·산출물·KSA로 6개 유형 × 3문항과 단계별 답변 예시를 만든다 */
+const jongOf=w=>{w=String(w||'');for(let i=w.length-1;i>=0;i--){const ch=w[i],c=ch.charCodeAt(0);
+  if(c>=0xAC00&&c<=0xD7A3)return (c-0xAC00)%28;
+  if(/[LlRr178]/.test(ch))return 8;
+  if(/[MmNn360]/.test(ch))return 4;
+  if(/[A-Za-z0-9]/.test(ch))return 0;
+  if(/[\s)）\]’”'"」』>]/.test(ch))continue;return -1}return -1};
+const jp=(w,a,b)=>{const j=jongOf(w);if(j<0)return a+'('+b+')';
+  if(a==='으로')return j===0||j===8?b:a;return j?a:b};
+const josa=(w,a,b)=>w+jp(w,a,b);
+const jclean=s=>String(s||'').replace(/\s*[(（][^)）]*[)）]/g,'').replace(/\s+/g,' ').trim();
+const jsplit=s=>String(s||'').split(/[,，](?![^(（]*[)）])/).map(jclean).filter(Boolean);
+const ADN=[['한다','하는'],['든다','드는'],['는다','는'],['인다','이는'],['운다','우는'],['낸다','내는'],['린다','리는'],['춘다','추는'],['긴다','기는'],['쓴다','쓰는'],['킨다','키는'],['끈다','끄는'],['진다','지는'],['른다','르는']];
+const jwork=x=>{x=String(x||'').replace(/[.。\s]+$/,'');let r=null;
+  for(const [e,a] of ADN){if(x.endsWith(e)){r=x.slice(0,-e.length)+a;break}}
+  let w=r||x;if(/업무$/.test(w))return w;return w+' 업무'};
+const jnp=(x,suf)=>{x=String(x||'');return new RegExp('(능력|역량|기술|스킬)$').test(x)?x:x+(suf||'')};
+const JQ_ORDER=['인성','직무','상황','PT','토론','AI'];
+function jobData(R){
+  const pick=a=>(a||[]).map(x=>jclean(Array.isArray(x)?x[0]:x)).filter(x=>x.length>=2&&x.length<=28);
+  const E=(R.et||[]).map(jwork),T=(R.t||[]).map(jwork);
+  const sh=a=>{const s=a.filter(x=>x.length<=42);return s.length>=3?s:a};
+  return {J:R.name||'',E:sh(E),T:sh(T),KP:jsplit(R.kpi),OU:jsplit(R.o),K:pick(R.K),S:pick(R.S),A:pick(R.A)}}
+const STOPB=new Set('업무 관리 작성 분석 활용 능력 역량 자료 보고 운영 기반 수립 이해 기초 지식 기법 방법 사용 수행 대한 통한 정리 시스템 제도 관련'.split(' ').flatMap(w=>[w]));
+const bgm=t=>{const c=String(t||'').replace(/[^가-힣A-Za-z0-9]/g,''),o=new Set();for(let i=0;i<c.length-1;i++){const g=c.slice(i,i+2).toLowerCase();if(!STOPB.has(g))o.add(g)}return o};
+const jb2=(arr,text,start)=>{if(!arr.length)return {v:'',s:-1};const tb=bgm(text);let bi=-1,bs=-1;
+  for(let n=0;n<arr.length;n++){const i=(start+n)%arr.length,b=bgm(arr[i]);let c=0;b.forEach(x=>{if(tb.has(x))c++});if(c>bs){bs=c;bi=i}}return {v:arr[bi],s:bs}};
+const jbest=(arr,text,start)=>jb2(arr,text,start).v||null;
+function jobQs(R,k){
+  if(!R||!R.et||!R.et.length||!R.t||!R.t.length||!R.kpi||!R.o)return null;
+  const D=jobData(R),J=D.J,ti=Math.max(0,JQ_ORDER.indexOf(k));
+  const P=(a,i,d)=>a.length?a[((i%a.length)+a.length)%a.length]:d;
+  const Q=x=>'‘'+x+'’',Qj=(x,a,b)=>Q(x)+jp(x,a,b);
+  const E1=P(D.E,ti),T1=P(D.T,ti),E2=P(D.E,ti+1);
+  const KP1=P(D.KP,ti),KP2=D.KP.length>1?P(D.KP,ti+1):KP1,OU1=P(D.OU,ti),OU2=P(D.OU,ti+1);
+  const kM=jb2(D.K,E1,ti),sM=jb2(D.S,E1,ti),K1=kM.v||'',S1=jnp(sM.v||'',' 역량'),A1=P(D.A,ti,'책임감');
+  const core=sM.s>kM.s?S1:K1,coreOk=Math.max(sM.s,kM.s)>=1,oT=jb2(D.OU,T1,ti),kT=jb2(D.KP,T1,ti),OUt=oT.s>=1?oT.v:'',KPt=kT.s>=1?kT.v:'';
+  const oE=jb2(D.OU,E1,ti),kE=jb2(D.KP,E1,ti),OUe=oE.s>=1?oE.v:'',KPe=kE.s>=1?kE.v:KP1;
+  if(!K1||!S1.trim()||!KP1||!OU1)return null;
+  const jk=[];
+  const L={
+  인성:[
+   {q:`${J}에서는 ${Qj(E1,'을','를')} 신입 단계부터 맡습니다. 이 일에 필요한 ${josa(A1,'을','를')} 보여 준 경험을 말씀해 주세요.`,d:'상황 설명→본인 행동→결과→직무 연결',
+    s:[`○○ 활동에서 ${E1}와 비슷한 일을 맡았는데, ○○ 때문에 진행이 어려워졌습니다.`,`저는 ${josa(A1,'이','가')} 특히 필요한 ○○ 부분을 책임지고 ○○까지 마무리해야 했습니다.`,`저는 ○○를 기준으로 우선순위를 정하고, ○○를 직접 점검·보완하며 진행 상황을 팀에 공유했습니다.`,`그 결과 ○○를 ○건(%·시간) 개선해 기한 안에 마무리했습니다.`,`이 경험으로 ${josa(A1,'이','가')} ${J} 업무의 기본이라는 점을 배웠고, 입사 후 ${Qj(OU1,'을','를')} 만들 때도 같은 방식으로 적용하겠습니다.`]},
+   {q:`${J}에서는 ${Qj(OU1,'을','를')} 여러 사람과 함께 완성합니다. 팀원과 의견이 달랐지만 합의해 결과물을 완성한 경험을 말씀해 주세요.`,d:'갈등 상황→내 역할→조율 행동→합의 결과',
+    s:[`○○ 프로젝트에서 ${Qj(OU1,'과','와')} 비슷한 결과물을 팀으로 만들다가, ○○ 문제로 팀원과 의견이 갈렸습니다.`,`저는 ○○ 파트를 맡았고, 기한 안에 ○○ 수준의 결과물을 내는 것이 목표였습니다.`,`저는 서로의 근거를 표로 정리해 비교하고, 기준(○○)에 따라 결정하자고 제안했습니다. 합의 내용은 문서로 남겨 공유했습니다.`,`그 결과 ○○ 방식으로 합의해 기한 안에 제출했고 ○○ 평가를 받았습니다.`,`${J}에서도 ${Qj(OU1,'을','를')} 만들 때 근거 중심으로 의견을 조율하겠습니다.`]},
+   {q:`${J}에서는 ${Q(KP1)} 같은 성과지표로 평가받습니다. 목표 수치를 정하고 끝까지 책임지고 달성해 본 경험을 말씀해 주세요.`,d:'목표 설정→실행 행동→수치 결과→직무 연결',
+    s:[`○○ 활동에서 ○○를 ○% 달성하는 것이 목표였습니다.`,`저는 목표 달성 여부를 확인하는 ○○ 수치를 점검하는 역할을 맡았습니다.`,`주 단위로 ○○ 수치를 기록해 목표와의 차이를 확인하고, 차이가 큰 ○○부터 개선했습니다.`,`그 결과 목표 대비 ○%를 달성했습니다.`,`${J}에서도 ${Qj(KP1,'을','를')} 정기적으로 점검하고 ○○ 방식으로 개선하겠습니다.`]}],
+  직무:[
+   {q:`${J}에서 신입이 맡는 ${Q(E1)}에 가장 도움이 되는 지식이나 역량은 무엇이라고 생각하며, 어떻게 준비했습니까?`,d:'핵심 역량 제시→준비·활용 경험→입사 후 기여',
+    s:[coreOk?`${E1}에서는 ${Qj(core,'이','가')} 중요한 기반이 된다고 생각합니다. 이 부분이 부족하면 ${OUe?Q(OUe)+' 같은 ':''}업무 결과물의 품질이 달라지기 때문입니다.`:`${J} 직무에서는 ${Qj(K1,'이','가')} 판단의 기본이 된다고 생각합니다. ${E1}에서도 이를 바탕으로 기준을 먼저 확인하겠습니다.`,`저는 ○○ 과제에서 ${Qj(S1,'을','를')} 직접 활용해 ○○ 문제를 해결해 본 경험이 있습니다.`,`입사 후에는 ${Qj(KPe||KP1,'을','를')} 관리·개선하는 데 이 역량을 활용해 ○○ 수준까지 기여하겠습니다.`]},
+   {q:`${J} 업무에서는 ${Qj(K1,'과','와')} ${Q(S1)} 중 어느 쪽이 더 먼저 필요하다고 생각합니까? 그 이유와 본인의 준비 정도를 말씀해 주세요.`,d:'선택 근거→준비 경험→입사 후 보완 계획',
+    s:[`저는 입사 초기에는 ${Qj(K1,'이','가')} 먼저 필요하다고 생각합니다. ${J} 업무의 판단과 결과물의 근거가 되기 때문입니다.`,`이를 위해 ○○ 수업(자격·교육)에서 관련 내용을 학습했고, ${Q(S1)} 쪽은 ○○ 과제로 직접 연습했습니다.`,`부족한 부분은 입사 후 ○○ 교육과 선임의 피드백으로 ○개월 안에 보완하겠습니다.`]},
+   {q:`${J}의 성과는 ${Q(KP1)}${KP2&&KP2!==KP1?', '+Q(KP2):''} 등으로 평가됩니다. 입사 후 이 중 하나를 개선하기 위해 가장 먼저 무엇을 하겠습니까?`,d:'지표 선택→원인 확인→실행 계획→점검 방법',
+    s:[`저는 ${Qj(KP1,'을','를')} 먼저 개선하겠습니다. ${J}에서 성과를 판단하는 기본 지표이기 때문입니다.`,`먼저 ${Q(KP1)}의 현재 수준과 최근 추이를 ○○ 자료로 확인하고, 원인이 ○○인지 ○○인지 구분하겠습니다.`,`목표는 ○개월 안에 ○○ 수준 달성으로 두고, ○주마다 선임에게 점검받겠습니다.`]}],
+  상황:[
+   {q:`${Qj(E1,'을','를')} 하던 중, 선임이 급한 일을 추가로 맡겼습니다. 둘 다 오늘 마감이라면 어떻게 하겠습니까?`,d:'상황 파악→우선순위 기준→보고·조율→결과 확인',
+    s:[`먼저 두 업무의 마감 시각과 결과물, 영향 범위를 확인하겠습니다.`,`영향이 크고 기한이 짧은 일을 우선하되, 기준은 선임과 함께 정하겠습니다.`,`선임께 두 업무의 진행 상황을 짧게 보고하고 우선순위를 확인한 뒤, 먼저 할 일부터 처리하겠습니다. 나머지는 가능한 마감 시각을 공유하고 도움이 필요하면 요청하겠습니다.`,`처리 후 각 결과물이 기한 안에 전달되었는지 확인하고, 같은 상황에 대비해 일정표를 팀과 공유하겠습니다.`]},
+   {q:`${Qj(OU1,'을','를')} 제출한 뒤에 잘못된 내용을 발견했습니다. 아직 아무도 눈치채지 못했다면 어떻게 하겠습니까?`,d:'오류 범위 확인→정확성 우선→보고·정정→재발방지',
+    s:[`먼저 오류의 범위와 원인, 이미 전달된 곳을 확인하겠습니다.`,`정확성과 신뢰가 우선이므로 숨기지 않고 바로 보고하는 것을 기준으로 삼겠습니다.`,`선임께 오류 내용과 수정안을 함께 보고하고 ${OU1} 수정본을 다시 전달하겠습니다. 영향받은 담당자에게는 정정 사실을 안내하겠습니다.`,`이후에는 제출 전 점검표로 한 번 더 검증하고, 같은 오류가 생기지 않도록 확인 절차를 팀에 공유하겠습니다.`]},
+   {q:`${J}의 성과지표(예: ${KP1})를 맞추라는 압박이 큰 상황에서, 정해진 절차를 건너뛰면 단기 수치를 맞출 수 있다면 어떻게 하겠습니까?`,d:'위험 확인→규정·절차 우선→대안 제안→점검',
+    s:[`먼저 어떤 절차를 건너뛰는 것인지, 그 절차가 막아 주는 위험(품질·안전·고객 신뢰)이 무엇인지 확인하겠습니다.`,`절차와 규정 준수를 우선 기준으로 삼고, 단기 수치만을 위한 선택은 하지 않겠습니다.`,`선임께 현재 수치와 지연 원인을 보고하고, 절차를 지키면서 수치를 개선할 대안(○○)을 함께 제안하겠습니다.`,`이후 ${KP1} 추이를 정기적으로 공유하고, 목표가 비현실적이면 근거 자료와 함께 조정을 요청하겠습니다.`]}],
+  PT:[
+   {q:`${J} 관점에서 ${Qj(KP1,'을','를')} 개선하기 위한 전략을 발표하시오. (5분)`,d:'문제정의→현황·원인→대안→실행계획·KPI',
+    s:[`저는 ${J}의 ${Qj(KP1,'을','를')} 개선하기 위해 관련 업무의 처리 기준과 확인 방식을 먼저 점검할 것을 제안합니다.`,`현재 ${KP1} 수준은 ○○이며, 목표 ○○와 ○% 차이가 있습니다(가정). 관련 자료는 ○○에서 확인할 수 있습니다.`,`원인으로 ○○와 ○○를 가설로 세우고, ${OU1} 등 기존 기록을 분석해 확인하겠습니다.`,`대안은 ○○를 ○주 동안 일부 범위에서 시범 적용하는 것입니다.`,`성과는 ${Qj(KP1,'을','를')} KPI로 두고 4주 단위로 점검하며, 목표는 ○○에서 ○○로 개선하는 것입니다.`]},
+   {q:`${J}의 ${Q(T1)}의 효율을 높이는 개선안을 발표하시오. (5분)`,d:'문제정의→현황·원인→대안→실행계획·KPI',
+    s:[`저는 이 업무의 처리 순서와 확인 방식을 표준화할 것을 제안합니다.`,`현재 ○○ 단계에서 시간이 오래 걸리고 ○○ 때문에 재작업이 생기는 것으로 가정합니다.`,`원인이 담당자별 방식 차이인지 ○○ 때문인지는 최근 ○건의 처리 기록으로 확인하겠습니다.`,`표준 체크리스트와 ${OUt?Q(OUt)+' ':''}문서 양식을 만들어 ○주 동안 시범 적용합니다.`,`처리 시간과 재작업 건수를 지표로 시범 전후를 비교하고${KPt?', '+Qj(KPt,'이','가')+' 개선되는지 함께 확인합니다':' 효과를 확인합니다'}.`]},
+   {q:`${J}의 ${Q(OU1)}의 품질을 높이기 위한 작성·검토 체계 개선안을 발표하시오. (5분)`,d:'문제정의→현황·원인→대안→실행계획·KPI',
+    s:[`저는 ${Q(OU1)} 작성 전 기준 확인과 제출 전 교차 검토 단계를 추가할 것을 제안합니다.`,`현재는 담당자 개인 경험에 따라 품질 편차가 생길 수 있다고 가정합니다. 최근 ○건의 사례로 편차를 확인하겠습니다.`,`편차가 입력 자료 문제인지 검토 기준 문제인지 구분해 ○○ 데이터로 검증하겠습니다.`,`점검표(○개 항목)와 선임 교차 검토를 ○주 동안 시범 운영합니다.`,`수정 요청 건수와 재작업 시간을 지표로 삼아, 4주 뒤 ○% 감소를 목표로 점검합니다.`]}],
+  토론:[
+   {q:`${J}에서 자원이 한정될 때, ${Qj(KP1,'과','와')} ${Q(KP2)} 중 무엇을 먼저 개선해야 하는가?`,d:'입장→근거→상대 의견 반응→절충안 (입장은 본인 판단으로 바꾸세요)',
+    s:[`저는 ${Qj(KP1,'을','를')} 먼저 개선해야 한다고 생각합니다.`,`이 지표는 ${J}에서 성과를 판단하는 기본 기준이고, 흔들리면 ${Q(KP2)}에도 영향을 줄 수 있기 때문입니다. 근거는 ○○ 사례로 보완하겠습니다.`,`앞서 ${Q(KP2)} 우선 의견의 우려에 공감합니다. 다만 ○○ 측면에서 순서의 차이가 있다고 생각합니다.`,`두 지표를 모두 보되, 처음 ○개월은 ${Q(KP1)} 중심으로 운영하고 이후 ${Qj(KP2,'으로','로')} 확대하는 단계적 방안을 제안합니다.`]},
+   {q:`${J}에서 ${Q(T1)}에 AI·자동화 도구를 확대 도입해야 하는가?`,d:'입장→근거→상대 의견 반응→절충안',
+    s:[`저는 반복적인 자료 정리와 초안 작성에는 도입하되 최종 판단은 사람이 맡는 조건부 도입에 찬성합니다.`,`반복 작업은 시간을 줄일 수 있지만, 판단이 필요한 부분은 해당 분야의 전문지식이 있어야 오류를 검증할 수 있기 때문입니다.`,`앞서 오류와 책임 소재를 우려하신 의견에 공감합니다.`,`○○ 단계에서만 시범 도입하고, 오류율과 처리 시간을 비교한 뒤 확대 여부를 정하는 방안을 제안합니다.`]},
+   {q:`${Qj(E1,'을','를')} 신입이 단독으로 처리해도 되는가, 선임의 검토를 반드시 거쳐야 하는가?`,d:'입장→근거→상대 의견 반응→절충안',
+    s:[`저는 초기에는 선임 검토를 거치고, 숙련도에 따라 단독 처리 범위를 넓히는 방식을 지지합니다.`,`${J}에서는 오류가 업무 결과물의 신뢰에 영향을 줄 수 있어, 초기에는 기준 확인이 필요하기 때문입니다.`,`앞서 검토가 업무 속도를 늦춘다는 지적에 공감합니다.`,`위험이 낮은 ○○ 부분은 단독 처리하고, 위험이 큰 ○○ 부분은 검토를 거치는 단계별 기준을 제안합니다.`]}],
+  AI:[
+   {q:`${J}에 지원한 이유와 이를 위해 준비한 경험을 80초 안에 말씀하세요.`,d:'지원 이유→준비 경험→입사 후 기여',
+    s:[`저는 ${J}의 ${Q(T1)}에 관심이 있어 지원했습니다.`,`이를 위해 ○○ 과목(활동)에서 ${Qj(S1,'을','를')} 쌓았고, ○○ 과제에서 직접 ○○를 해 보았습니다.`,`이 준비로 ○○를 ○건(%) 해냈고, 입사 후 ${Qj(KP1,'을','를')} 관리·개선하는 데 기여하겠습니다.`]},
+   {q:`${Qj(E1,'을','를')} 처음 맡았을 때 가장 먼저 확인할 것은 무엇입니까?`,d:'결론 먼저→근거 경험→결과·확인',
+    s:[`저는 먼저 업무의 목적과 결과물, 기한, 전달받을 사람을 확인하겠습니다.`,`${J}의 ${Q(OUe||OU1)} 같은 결과물은 형식과 기준이 정해져 있는 경우가 많아 기존 사례를 보고 기준을 맞추는 것이 중요합니다. 저도 ○○ 과제에서 사전 확인으로 수정 횟수를 줄인 적이 있습니다.`,`확인한 내용은 선임께 짧게 공유해 방향을 맞춘 뒤 진행하겠습니다.`]},
+   {q:`${Qj(KP1,'과','와')} 관련해 본인이 기여할 수 있는 점을 말씀하세요.`,d:'기여 한 문장→근거 경험→결과·학습',
+    s:[`저는 ${Qj(KP1,'을','를')} 관리·개선하는 데 ${Qj(S1,'으로','로')} 기여할 수 있습니다.`,`○○ 과제에서 ${Qj(S1,'을','를')} 활용해 ○○를 정리하고 ○○ 결과를 확인한 경험이 있습니다.`,`그 결과 ○○를 ○%(건) 개선했고, 입사 후에도 ○개월 안에 기본 업무를 익혀 기여하겠습니다.`]}]
+  };
+  return (L[k]||[]).map((o,n)=>({k,i:'g'+n,x:{q:o.q,a:o.d,m:'',f:'',ans:o.s},c:0,gen:true,db:true}))}
+
 /* 유형별 연습 질문 — 작성 탭에서 고른 직무를 가장 가까운 6개 직군에 연결하고, 직무 KSA·KPI 용어와 겹치는 질문을 유형마다 3개 추천 */
 const G2J={'전략·기획·사업관리':'경영지원','인사·조직·경영지원':'경영지원','재무·회계':'경영지원','금융·보험':'경영지원','법무·공공행정·치안':'경영지원','마케팅·홍보':'영업·마케팅','영업·커머스·고객서비스':'영업·마케팅','구매·공급망·물류':'생산·품질','연구개발·공학설계':'연구개발','생산·공정·품질·설비':'생산·품질','IT·소프트웨어·보안':'IT','데이터·AI':'IT','디자인':'영업·마케팅','콘텐츠·미디어·문화예술':'영업·마케팅','교육·상담·복지·연구':'서비스','보건·의료':'서비스','건설·건축·부동산':'생산·품질','환경·에너지·산업안전':'생산·품질','관광·외식·스포츠·뷰티':'서비스','항공·철도·선박 운항':'생산·품질','농림·축산·수산':'생산·품질'};
 const KWJ=[['서비스',/고객|서비스|상담|CS|응대|간호|돌봄|복지|교육|강사/],['IT',/데이터|개발|소프트웨어|보안|시스템|IT|AI|인공지능|네트워크|클라우드|프로그래|웹|앱/],['연구개발',/연구|R&D|설계|공학|실험|분석기|신소재/],['생산·품질',/품질|생산|설비|공정|제조|물류|구매|공급|안전|시공|건설|정비|운항/],['영업·마케팅',/마케팅|영업|브랜드|홍보|광고|콘텐츠|디자인|MD|판매|커머스/],['경영지원',/인사|재무|회계|총무|기획|경영|법무|행정|금융|보험|세무|감사/]];
@@ -722,12 +805,11 @@ function qJobOf(){
   if(role==='custom')return '경영지원';
   return G2J[JOB_BY[role].g]||'경영지원'}
 /* 선택한 세부 직무의 이름·KSA·성과지표로 만든 맞춤 질문 (유형별 2개, 직무마다 다른 조합) */
-const josa=(w,a,b)=>{const c=w.charCodeAt(w.length-1);return (c>=0xAC00&&c<=0xD7A3)?w+(((c-0xAC00)%28)?a:b):w+a+'('+b+')'};
 const shortL=x=>{const t=String(x||'').split(/[(（,，/]/)[0].trim();if(t.length<=18)return t;
   const f=t.split('·')[0].trim();if(f.length>=4&&f.length<=18)return f;
   let c=t.slice(0,18),i=c.lastIndexOf(' ');if(i>=4)c=c.slice(0,i);
   return c.replace(/\s+(의|과|와|및|을|를|은|는|이|가)$/,'').replace(/(의|과|와)$/,'').trim()};
-function genQs(R,k){
+function genQsOld(R,k){
   const J=R.name||'지원 직무',g=c=>(R[c]||[]).map(x=>shortL(x[0])).filter(Boolean);
   const Ks=g('K'),Ss=g('S'),As=g('A'),kp=(R.kpi||'').split(/[,，]/).map(shortL).filter(Boolean);
   const h=[...String(role)+J].reduce((a,c)=>a+c.charCodeAt(0),0);
@@ -751,7 +833,10 @@ function rankQs(R,jb,k){
   const its=qItems(jb,k),n=its.length;
   const sc=its.map((x,i)=>{const t=synNorm(x.q+' '+x.a+' '+x.m);let c=0;words.forEach(w=>{if(t.includes(synNorm(w)))c++});return {k,i,x,c,r:((i-h)%n+n)%n}});
   sc.sort((a,b)=>b.c-a.c||a.r-b.r);return sc}
-function recQs(R,jb,k){return genQs(R,k).concat(rankQs(R,jb,k).slice(0,3))}
+function genQs(R,k){return jobQs(R,k)||genQsOld(R,k)}
+function recQs(R,jb,k){const g=jobQs(R,k);return g||genQsOld(R,k)}
+function selRec(k){const R=curRole(),recs=recQs(R,qJobOf(),k),si=store.get('wq_'+role+'_'+k,null);return recs.find(x=>x.i===si)||recs[0]}
+function jobExFor(k){const R=curRole(),r=selRec(k);return (r&&r.x.ans)?r.x.ans:jobEx(k,R)}
 function selQ(k){
   const jb=qJobOf(),recs=recQs(curRole(),jb,k),si=store.get('wq_'+role+'_'+k,null);
   const r=recs.find(x=>x.i===si)||recs[0];return r.x.q}
@@ -760,17 +845,18 @@ function renderRQ(){
   const k=wType,jb=qJobOf(),R=curRole(),recs=recQs(R,jb,k);
   let si=store.get('wq_'+role+'_'+k,null);if(si==null||!recs.some(r=>r.i===si))si=recs[0].i;
   const sel=recs.find(r=>r.i===si);
-  box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">위에서 고른 세부 직무(${esc(R.name||'직무 미입력')})의 이름·KSA·성과지표로 맞춤 질문 2개를 만들고, ${esc(jb)} 예시 질문 3개를 함께 추천합니다. 직무를 바꾸면 질문도 바뀝니다. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
-   ${recs.map(r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${esc(r.x.q)}</b><span class="steps">${r.x.a.split('→').map((s,i)=>(i?'<u>→</u>':'')+`<i>${esc(s)}</i>`).join('')}</span><small>${r.gen?'선택한 직무에 맞춘 질문 · 직무명·KSA·성과지표로 생성':(r.c>0?'직무 용어 '+r.c+'개와 연결된 질문':'기본 추천 질문')+' · 예시 탭 Q'+(r.i+1)}</small></button>`).join('')}
-   <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 ${esc(jb)} ${esc(k)} 질문 더 보기</button></div>
-   <p class="note">세부 직무 이름과 직무 분류로 6개 예시 직군에 자동 연결한 것(추정)이라 직무와 완전히 같지 않을 수 있습니다.</p>`;
+  box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">위에서 고른 세부 직무(${esc(R.name||'직무 미입력')})의 신입 업무·핵심 업무·성과지표·산출물·KSA로 만든 질문입니다. 직무를 바꾸면 질문과 답변 예시가 함께 바뀝니다. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
+   ${recs.map(r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${esc(r.x.q)}</b><span class="steps">${r.x.a.split('→').map((s,i)=>(i?'<u>→</u>':'')+`<i>${esc(s)}</i>`).join('')}</span><small>${r.db?'직무 데이터 기반 맞춤 질문':r.gen?'직무명·KSA로 만든 질문(직무 데이터 없음)':(r.c>0?'직무 용어 '+r.c+'개와 연결된 질문':'기본 추천 질문')+' · 예시 탭 Q'+(r.i+1)}</small></button>`).join('')}
+   ${sel&&sel.x.ans?`<details class="ma" open><summary>고른 질문의 답변 예시 (○○는 본인 경험으로 교체)</summary>${sel.x.ans.map((t,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[k].steps[i]||[''])[0])}</span>${esc(t)}</p>`).join('')}</details>`:''}
+   <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 내 직무의 ${esc(k)}면접 질문·답변 보기</button></div>
+   <p class="note">${R.et?'앱 직무 DB(신입 업무·성과지표·산출물)로 만든 교육용 예시입니다. 질문의 업무·지표는 직무별 실제 데이터이고, 답변 속 ○○ 경험은 본인 사례로 채워야 합니다. 특정 기업의 실제 기출이 아닙니다.':'직접 입력한 직무는 직무 데이터가 없어 일반 질문 2개만 제공합니다. 세부 직무를 목록에서 고르면 직무 맞춤 질문이 나옵니다.'}</p>`;
   const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
   box.onclick=e=>{const b=e.target.closest('.qpick');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^g/.test(d)?d:+d);renderRQ()}};
   $('#rqm').onclick=()=>{qJobInit=true;qJob='내 직무';qType=k;go(5)};if(typeof cm3G==='function'&&cm3G)cm3G()}
 
 /* 직무에 맞춰 바뀌는 답변 예시 — 선택한 세부 직무의 이름·KSA·성과지표를 문장에 넣어 단계별 예시를 만든다 */
 function jobWords(R){
-  const J=R.name||'지원 직무',g=c=>(R[c]||[]).map(x=>shortL(x[0])).filter(Boolean),pk=(arr,d,o)=>arr.length?arr[(h+o)%arr.length]:d;
+  const J=R.name||'지원 직무',g=c=>(R[c]||[]).map(x=>{const t=jclean(x[0]);return t.length<=24?t:shortL(x[0])}).filter(Boolean),pk=(arr,d,o)=>arr.length?arr[(h+o)%arr.length]:d;
   const h=[...String(role)+J].reduce((a,c)=>a+c.charCodeAt(0),0),kp=(R.kpi||'').split(/[,，]/).map(shortL).filter(Boolean);
   return {J,K1:pk(g('K'),'핵심 직무지식',0),S1:pk(g('S'),'핵심 직무기술',1),A1:pk(g('A'),'책임감',2),P1:pk(kp,'핵심 성과지표',0)}}
 function jobEx(k,R){
@@ -788,8 +874,8 @@ function cm3Ex(id,R){
    comp:[`○○ 사업의 ○○ 방향이 제가 관심 둔 ○○ 문제와 맞닿아 있었습니다.`,`${J}에 필요한 ${K1} 관련 경험을 ○○에서 쌓았고, 회사의 ○○ 가치와 맞는다고 생각했습니다.`,`입사 후 ${J} 업무에서 ${o(P1,'을','를')} 개선하는 데 기여하겠습니다.`],
    job:[`${J}의 ${K1} 업무에 끌린 순간은 ○○ 경험이었습니다.`,`${K1}와(과) ${S1}을(를) 준비하기 위해 ○○를 해 봤습니다.`,`입사 후 ${o(P1,'을','를')} ○○ 수준으로 개선하겠습니다.`]}[id]||null}
 function jobExHtml(k){
-  const R=curRole(),ex=jobEx(k,R),st=WSPEC[k].steps;
-  return `<section class="card" id="jx"><span class="tag">내 직무 예시</span><h2>${esc(josa(R.name||'지원 직무','으로','로'))} 바꾼 ${esc(k)}면접 답변 예시</h2><p class="sub">작성 탭에서 고른 세부 직무의 이름·KSA·성과지표를 넣어 만든 문장 틀입니다. ○○는 본인 경험으로 바꿔 쓰세요. 직무를 바꾸면 예시도 바뀝니다.</p>
+  const R=curRole(),rc=selRec(k),ex=jobExFor(k),st=WSPEC[k].steps;
+  return `<section class="card" id="jx"><span class="tag">내 직무 예시</span><h2>${esc(josa(R.name||'지원 직무','으로','로'))} 바꾼 ${esc(k)}면접 답변 예시</h2><p class="sub">질문: ${esc(rc?rc.x.q:'')}<br>작성 탭에서 고른 세부 직무와 질문에 맞춘 문장 틀입니다. ○○는 본인 경험으로 바꿔 쓰세요.</p>
   ${st.map((s,i)=>`<p class="dl"><span class="dt">${esc(s[0])}</span>${esc(ex[i]||'')}</p>`).join('')}
   <div class="row"><button type="button" class="btn ghost" id="fjb">작성 탭에서 직무 바꾸고 써 보기</button></div></section>`}
 /* 면접 준비 카드 내보내기 — Word(.docx)·PDF 파일을 브라우저에서 직접 생성 (외부 라이브러리 없음) */
@@ -1035,5 +1121,4 @@ tabsEl.addEventListener('keydown',e=>{const k=e.key,bs=$$('.stop');let i=bs.inde
 markHas();
 const h=location.hash.slice(1);go(Math.max(0,TABS.findIndex(t=>t[0]===h)));
 </script>
-
 </body></html>
