@@ -3268,6 +3268,96 @@ function majorRows(type, list) {
       '<span class="mj-bar" title="연결 정도(1위 대비)"><i style="width:' + x.pct + '%"></i></span>' + starButton(type, x.code, x.name, true) + '</li>';
   }).join('') + '</ul>';
 }
+/* ===== v1.17 수업 학과 맞춤 진출 가이드 (큐레이션) =====
+ * 학과명(정규화) → 우선 표시 산업·직무 코드, 법정/국가/민간 자격, 준비 포인트.
+ * 근거: 커리어넷·고용24 학과정보의 진출 분야, 관련 법령(도서관법·박물관 및 미술관 진흥법·국민영양관리법·영유아보육법·사회복지사업법 등)과
+ *       한국산업인력공단(Q-Net)·국시원 등 공식 기관 사이트. 세부 응시요건·일정은 해당 기관 공고로 확인 필요. */
+const CERT_T = { L: '법정 면허·자격', N: '국가기술자격', P: '민간·국제(확인 필요)' };
+const U = { kuksiwon: 'https://www.kuksiwon.or.kr', qnet: 'https://www.q-net.or.kr', law: 'https://www.law.go.kr', dataq: 'https://www.dataq.or.kr', kisa: 'https://www.kisa.or.kr', mcst: 'https://www.mcst.go.kr', archives: 'https://www.archives.go.kr', kcpi: 'https://www.kcpi.or.kr', moe: 'https://www.moe.go.kr', welfare: 'https://www.welfare.net', korean: 'https://www.korean.go.kr', history: 'https://www.historyexam.go.kr', kofia: 'https://www.kofia.or.kr', hsk: 'https://www.hsk.or.kr', fei: 'https://www.france-education-international.fr', gtq: 'https://www.ihd.or.kr' };
+const MAJOR_GUIDE = [
+  { id: 'nutri', re: /^(식품영양|영양|식품영양학|영양학)학?$/, ind: ['F35', 'F27', 'F28', 'F59', 'F44'], job: ['J69', 'J81', 'J39', 'J35', 'J59'],
+    certs: [['영양사(면허)', 'L', '국민영양관리법 · 보건복지부 면허, 시험은 국시원', U.kuksiwon], ['위생사(면허)', 'L', '공중위생관리법 · 국시원', U.kuksiwon], ['식품기사·식품산업기사', 'N', 'Q-Net', U.qnet], ['조리기능사', 'N', 'Q-Net', U.qnet], ['영양교사(교직 이수)', 'L', '교육부 · 학교급식법', U.moe]],
+    tip: ['영양사 면허 취득 후 진출처는 병원·급식(집단급식소)·학교·보건소·식품기업 순으로 갈립니다. 병원은 산업 탐색의 “병원·헬스케어서비스”를 먼저 보세요.', '앱에 “영양사” 전용 직무가 없어 보건·건강증진, 외식·조리·식음, 품질관리를 가까운 직무로 연결했습니다(추정). 채용공고의 직무명은 “영양사·임상영양사·급식관리”로 검색하세요.'] },
+  { id: 'biz', re: /^경영학?$/, ind: ['F45', 'F37', 'F21', 'F25', 'F38'], job: ['J01', 'J20', 'J08', 'J09', 'J05'],
+    certs: [['전산회계·전산세무', 'P', '한국세무사회 등 · 확인 필요', U.qnet], ['컴퓨터활용능력', 'N', 'Q-Net·대한상공회의소', U.qnet], ['공인회계사·세무사·경영지도사', 'L', '국가전문자격 · 법령 확인', U.law], ['투자자산운용사·증권투자권유자문인력', 'P', '금융투자협회', U.kofia], ['ERP정보관리사', 'P', '한국생산성본부 · 확인 필요', '']],
+    tip: ['경영은 진출 범위가 넓어 “직무 먼저” 정하는 편이 효율적입니다(재무·회계, 마케팅, 인사, 영업/기획).', '직무별 필수 자격이 다르니 관심 직무 1~2개를 정한 뒤 자격을 고르세요.'] },
+  { id: 'econ', re: /^경제학?$/, ind: ['F37', 'F38', 'F40', 'F39', 'F45'], job: ['J08', 'J12', 'J22', 'J16', 'J48'],
+    certs: [['투자자산운용사·증권투자권유자문인력', 'P', '금융투자협회', U.kofia], ['신용분석사 등 금융 자격', 'P', '금융연수원 등 · 확인 필요', ''], ['공인회계사·세무사', 'L', '국가전문자격 · 법령 확인', U.law], ['ADsP·SQLD(데이터 기초)', 'P', '한국데이터산업진흥원', U.dataq]],
+    tip: ['금융·공공(정책·연구)·컨설팅으로 나뉩니다. 통계·데이터 활용 역량(ADsP·SQLD, 엑셀·Python)이 공통 경쟁력입니다.'] },
+  { id: 'data', re: /^(데이터사이언스|데이터과학|빅데이터)학?$/, ind: ['F46', 'F40', 'F47', 'F49', 'F37'], job: ['J48', 'J50', 'J49', 'J43', 'J22'],
+    certs: [['ADsP(데이터분석 준전문가)', 'P', '한국데이터산업진흥원 데이터자격검정', U.dataq], ['SQLD·SQLP', 'P', '한국데이터산업진흥원', U.dataq], ['빅데이터분석기사', 'N', 'Q-Net', U.qnet], ['정보처리기사', 'N', 'Q-Net', U.qnet]],
+    tip: ['자격보다 포트폴리오(공모전·프로젝트·GitHub)가 채용에서 더 크게 작용하는 직무군입니다(추정). SQL·Python·통계를 먼저 갖추세요.'] },
+  { id: 'indd', re: /^(산업디자인)학?$/, ind: ['F31', 'F14', 'F13', 'F34', 'F53'], job: ['J52', 'J53', 'J51', 'J99', 'J04'],
+    certs: [['산업디자인기사·시각디자인기사', 'N', 'Q-Net', U.qnet], ['컬러리스트기사', 'N', 'Q-Net', U.qnet], ['GTQ(그래픽기술자격)', 'P', '한국생산성본부 · 확인 필요', U.gtq], ['컴퓨터그래픽스운용기능사', 'N', 'Q-Net', U.qnet]],
+    tip: ['디자인직은 자격보다 포트폴리오가 핵심입니다. 제품(가전·모빌리티·의료기기)과 시각·UX로 방향을 나눠 작품을 구성하세요.'] },
+  { id: 'sec', re: /^(정보보호|정보보안|사이버보안|사이버보안학|컴퓨터보안|정보보호학)학?$/, ind: ['F12', 'F48', 'F11', 'F40', 'F55'], job: ['J47', 'J45', 'J46', 'J43', 'J15'],
+    certs: [['정보보안기사·정보보안산업기사', 'N', 'Q-Net · 한국인터넷진흥원(KISA)', U.qnet], ['정보처리기사', 'N', 'Q-Net', U.qnet], ['네트워크관리사', 'P', '민간 · 확인 필요', ''], ['CISA·CISSP', 'P', '국제 자격 · 확인 필요', ''], ['개인정보 관련 자격(CPPG 등)', 'P', '민간 · 확인 필요', '']],
+    tip: ['정보보안 전용 산업(F12) 외에 금융·통신·클라우드 기업의 보안팀, 공공(KISA·국정원 등)이 주요 진출처입니다.', '“경비·경호” 같은 물리 보안과는 다른 분야입니다. 사이버보안은 정보보안·개인정보보호 직무를 보세요.'] },
+  { id: 'fashion', re: /^(패션산업|패션|패션디자인|패션마케팅)학?$/, ind: ['F30', 'F25', 'F26', 'F41', 'F29'], job: ['J26', 'J99', 'J20', 'J97', 'J21'],
+    certs: [['컬러리스트기사', 'N', 'Q-Net', U.qnet], ['패션디자인산업기사', 'N', 'Q-Net', U.qnet], ['패션 MD·유통 관련 민간 자격', 'P', '기관별 상이 · 확인 필요', '']],
+    tip: ['산업 전공은 디자이너보다 MD·상품기획, 마케팅, 온라인 커머스 진출이 많습니다(추정). “MD·상품운영”을 우선 확인하세요.'] },
+  { id: 'lis', re: /^(문헌정보|도서관|문헌정보학)학?$/, ind: ['F60', 'F59', 'F53', 'F43', 'F48'], job: ['J102', 'J56', 'J60', 'J16', 'J48'],
+    certs: [['사서(정사서 1·2급, 준사서)', 'L', '도서관법 · 문화체육관광부', U.mcst], ['기록물관리 전문요원', 'L', '공공기록물법 · 국가기록원 · 요건 확인 필요', U.archives], ['사서교사(교직 이수)', 'L', '교육부 · 학교도서관진흥법', U.moe]],
+    tip: ['공공·대학·학교·전문도서관 사서직은 공개채용(공무원·공공기관)이 많습니다. 기록관리·정보관리 직무로 확장할 수 있습니다.', '앱에서 “학예·사서·기록관리”(J102)와 “문화유산·도서관·박물관”(F60)을 먼저 확인하세요.'] },
+  { id: 'sw', re: /^사회복지학?$/, ind: ['F44', 'F35', 'F54', 'F59', 'F55'], job: ['J63', 'J62', 'J16', 'J93', 'J61'],
+    certs: [['사회복지사 1급', 'L', '사회복지사업법 · 국시원 시험', U.kuksiwon], ['사회복지사 2급', 'L', '교과목 이수 · 보건복지부', U.welfare], ['직업상담사 2급', 'N', 'Q-Net', U.qnet], ['청소년상담사', 'L', '여성가족부 · 확인 필요', '']],
+    tip: ['사회복지사 1급은 졸업(예정) 시기에 국가시험이 있어 일정 확인이 최우선입니다.', '복지관·시설, 공공(사회복지직 공무원), 병원 사회사업, 비영리 후원개발로 길이 나뉩니다.'] },
+  { id: 'child', re: /^(아동|아동학|아동가족|아동ㆍ가족학|아동복지|영유아)학?$/, ind: ['F59', 'F44', 'F43', 'F54', 'F55'], job: ['J101', 'J63', 'J59', 'J60', 'J62'],
+    certs: [['보육교사 2급', 'L', '영유아보육법 · 보건복지부(한국보육진흥원)', U.kcpi], ['유치원 정교사(교직 이수)', 'L', '교육부 · 학과별 요건 확인 필요', U.moe], ['사회복지사 2급', 'L', '교과목 이수 · 보건복지부', U.welfare], ['청소년지도사', 'L', '여성가족부 · 확인 필요', '']],
+    tip: ['아동학 전공은 보육교사 2급 취득 경로가 일반적이며, 유치원 교사는 별도 교직 요건이 있어 학교별 교육과정 확인이 필요합니다.', '어린이집·유치원 외에 아동복지시설, 지역아동센터, 육아·교육 콘텐츠 기업이 있습니다.'] },
+  { id: 'dvideo', re: /^(디지털영상|영상|영상학|미디어영상|영상콘텐츠)학?$/, ind: ['F42', 'F41', 'F50', 'F49', 'F26'], job: ['J55', 'J54', 'J51', 'J57', 'J96'],
+    certs: [['컴퓨터그래픽스운용기능사', 'N', 'Q-Net', U.qnet], ['GTQ(그래픽기술자격)', 'P', '한국생산성본부 · 확인 필요', U.gtq], ['영상편집·모션 관련 민간 자격', 'P', '기관별 상이 · 확인 필요', '']],
+    tip: ['영상직은 자격보다 포트폴리오(쇼릴·작품)가 핵심입니다. 방송사·OTT·제작사, 광고·브랜드 콘텐츠, 게임·플랫폼 영상으로 나눠 보세요.'] },
+  { id: 'journal', re: /^(저널리즘|언론|언론정보|신문방송|미디어커뮤니케이션|미디어)학?$/, ind: ['F41', 'F53', 'F42', 'F49', 'F43'], job: ['J56', 'J55', 'J23', 'J54', 'J20'],
+    certs: [['언론사 공채 필기(논술·상식·작문)', 'P', '언론사별 공고 · 확인 필요', ''], ['한국어능력시험(KBS 등)', 'P', '민간 · 확인 필요', ''], ['방송·영상 관련 포트폴리오', 'P', '자격 아님', '']],
+    tip: ['기자·PD는 신문·방송사 공채(필기+면접) 외에 인터넷 매체, 기업 홍보·콘텐츠, 광고 대행으로도 진출합니다.', '“언론·출판·편집”(J56)과 “홍보·PR”(J23)을 함께 확인하세요.'] },
+  { id: 'korean', re: /^(국어국문|국문|국어)학?$/, ind: ['F53', 'F41', 'F42', 'F43', 'F59'], job: ['J56', 'J60', 'J54', 'J23', 'J59'],
+    certs: [['한국어교원 2급', 'L', '국립국어원 · 요건 확인 필요', U.korean], ['중등 정교사(국어) 교직 이수', 'L', '교육부', U.moe], ['KBS한국어능력시험', 'P', '민간 · 확인 필요', '']],
+    tip: ['출판·편집, 콘텐츠 기획, 홍보·카피, 교육으로 진출합니다. 글쓰기 포트폴리오와 기획 경험을 함께 만드세요.'] },
+  { id: 'french', re: /^(불어불문|프랑스어문|프랑스어|프랑스어ㆍ문)학?$/, ind: ['F21', 'F36', 'F24', 'F41', 'F43'], job: ['J58', 'J25', 'J80', 'J84', 'J23'],
+    certs: [['DELF·DALF·TCF', 'P', '프랑스 국립교육연구센터(FEI) · 확인 필요', U.fei], ['관광통역안내사', 'N', 'Q-Net · 한국관광공사', U.qnet], ['통번역대학원 진학', 'P', '입학 요건 확인 필요', '']],
+    tip: ['제2외국어 단독보다 “언어+직무”(무역, 관광, 화장품·패션 해외영업, 항공 서비스) 조합이 경쟁력입니다.'] },
+  { id: 'chinese', re: /^(중어중문|중국어문|중국어|중어중문학)학?$/, ind: ['F21', 'F36', 'F26', 'F24', 'F25'], job: ['J25', 'J58', 'J80', 'J24', 'J84'],
+    certs: [['HSK(한어수평고시)', 'P', 'HSK 한국사무국 · 확인 필요', U.hsk], ['TSC·BCT', 'P', '민간 · 확인 필요', ''], ['관광통역안내사', 'N', 'Q-Net · 한국관광공사', U.qnet]],
+    tip: ['무역·해외영업, 관광·MICE, 이커머스(크로스보더), 통번역으로 진출합니다. 산업 지식과 결합해야 경쟁력이 커집니다.'] },
+  { id: 'history', re: /^(사|사학|역사|역사학)학?$/, ind: ['F60', 'F59', 'F53', 'F55', 'F42'], job: ['J102', 'J59', 'J56', 'J16', 'J57'],
+    certs: [['학예사(준학예사·정학예사)', 'L', '박물관 및 미술관 진흥법 · 문화체육관광부', U.mcst], ['한국사능력검정시험', 'P', '국사편찬위원회(공공 지원·공채 가점 확인 필요)', U.history], ['중등 정교사(역사) 교직 이수', 'L', '교육부', U.moe]],
+    tip: ['학예·문화유산 기관, 교육, 출판, 공공(연구·행정)으로 진출합니다. 학예사는 자격 요건과 채용 규모가 제한적이어서 대안 직무도 함께 준비하세요.'] },
+  { id: 'foodeng', re: /^(식품공학|식품과학|식품생명공학|식품학)학?$/, ind: ['F27', 'F33', 'F52', 'F01', 'F28'], job: ['J39', 'J35', 'J37', 'J38', 'J36'],
+    certs: [['식품기사·식품산업기사', 'N', 'Q-Net', U.qnet], ['위생사(면허)', 'L', '공중위생관리법 · 국시원', U.kuksiwon], ['HACCP·식품안전 교육 이수', 'P', '식품의약품안전처 관련 기관 · 확인 필요', ''], ['품질경영기사', 'N', 'Q-Net', U.qnet]],
+    tip: ['식품기업은 연구개발, 품질관리·보증, 생산기술로 진출합니다. 식품기사 취득과 인턴·현장 실습이 효과적입니다.'] },
+  { id: 'bioenv', re: /^(생명환경공학|환경생명공학|생명환경|생명공학)학?$/, ind: ['F33', 'F04', 'F52', 'F01', 'F32'], job: ['J35', 'J75', 'J36', 'J39', 'J91'],
+    certs: [['환경기사(수질·대기·폐기물 등)', 'N', 'Q-Net', U.qnet], ['산업안전기사', 'N', 'Q-Net', U.qnet], ['위험물산업기사', 'N', 'Q-Net', U.qnet], ['생물분류기사 등 생명분야 자격', 'N', 'Q-Net · 종목 확인 필요', U.qnet]],
+    tip: ['바이오·의약 연구개발·품질과, 환경·자원순환·수처리(환경 직무)로 크게 갈립니다. 대학원 진학 비중도 높습니다(추정).'] }
+];
+function guideNorm(s) { return String(s || '').replace(/[\sㆍ·]/g, '').replace(/(경기대|서울여자?대)(학교)?/, '').replace(/(전공|학부)$/, '').replace(/과$/, ''); }
+function majorGuideFor(r, q) {
+  const cand = [q, r && r.typed, r && r.label].filter(Boolean).map(guideNorm);
+  for (let i = 0; i < MAJOR_GUIDE.length; i++) for (let j = 0; j < cand.length; j++) if (MAJOR_GUIDE[i].re.test(cand[j])) return MAJOR_GUIDE[i];
+  return null;
+}
+function majorApplyGuide(out, g, IN, JB) {
+  if (!g) return out;
+  const pick = function (pins, cur, names) {
+    const seen = {}, res = [];
+    pins.forEach(function (c, i) { if (names[c] && !seen[c]) { seen[c] = 1; res.push({ code: c, name: names[c], score: 10 - i, pct: Math.max(30, 100 - i * 12), curated: true }); } });
+    (cur || []).forEach(function (x) { if (res.length < 5 && !seen[x.code]) { seen[x.code] = 1; res.push(x); } });
+    return res.slice(0, 5);
+  };
+  return { industries: pick(g.ind, out.industries, IN), jobs: pick(g.job, out.jobs, JB), evidence: out.evidence, guide: g };
+}
+function majorGuideHtml(g) {
+  const certs = g.certs.map(function (c) {
+    const nm = c[3] ? '<a href="' + esc(c[3]) + '" target="_blank" rel="noopener noreferrer">' + esc(c[0]) + '</a>' : esc(c[0]);
+    return '<li><b>' + nm + '</b> <span class="mj-badge' + (c[1] === 'P' ? ' thin' : '') + '">' + esc(CERT_T[c[1]]) + '</span><br><span class="small muted">' + esc(c[2]) + '</span></li>';
+  }).join('');
+  return '<div class="learn mj-guide" style="margin-top:12px"><strong class="t">수업 학과 맞춤 진출 가이드</strong>' +
+    '<p class="small muted" style="margin:4px 0 6px">위 산업·직무 순서는 학과 교육과정·법정 자격·진출 분야를 검토해 앞쪽에 우선 배치했습니다(큐레이션). 아래 자격·일정은 공식 기관 공고로 최종 확인하세요.</p>' +
+    '<h3 style="margin:8px 0 4px">관련 자격·면허</h3><ul class="small" style="margin:0 0 6px;padding-left:18px;line-height:1.6">' + certs + '</ul>' +
+    '<h3 style="margin:8px 0 4px">준비 포인트</h3><ul class="small" style="margin:0 0 6px;padding-left:18px;line-height:1.6">' + g.tip.map(function (t) { return '<li>' + esc(t) + '</li>'; }).join('') + '</ul>' +
+    '<p class="small muted" style="margin:6px 0 0">확인 출처: <a href="https://www.career.go.kr" target="_blank" rel="noopener noreferrer">커리어넷 학과정보</a> · <a href="https://www.work24.go.kr" target="_blank" rel="noopener noreferrer">고용24 학과정보</a> · <a href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer">국가법령정보센터</a> · <a href="https://www.q-net.or.kr" target="_blank" rel="noopener noreferrer">Q-Net</a>. “민간·국제(확인 필요)” 항목과 직무 연결 일부는 추정입니다.</p></div>';
+}
+
 function majorShow(r, q, scroll) {
   const box = $('majorResult'), sg = $('majorSuggest');
   STATE.major = null;
@@ -3276,7 +3366,12 @@ function majorShow(r, q, scroll) {
     box.innerHTML = '<div class="learn"><b>“' + esc(q) + '” 학과를 찾지 못했습니다.</b><p class="small" style="margin:6px 0 0">학과명을 줄여 입력하거나(예: 경영, 컴퓨터, 간호) 아래 “학과 분류로 둘러보기”에서 가까운 분야를 골라 보세요.</p></div>';
     return;
   }
-  const out = majorRecommend(DB, INDUSTRY_MAJOR_REFERENCE, r, 5);
+  const IN0 = {}, JB0 = {};
+  DB.industries.forEach(function (x) { IN0[x.code] = x.name; });
+  DB.jobs.forEach(function (x) { JB0[x.code] = x.name; });
+  const gd = majorGuideFor(r, q);
+  const out = majorApplyGuide(majorRecommend(DB, INDUSTRY_MAJOR_REFERENCE, r, 8), gd, IN0, JB0);
+  if (!gd) { out.industries = out.industries.slice(0, 5); out.jobs = out.jobs.slice(0, 5); }
   STATE.major = out;
   const thin = out.evidence < 30;
   const short = out.industries.length < 5 || out.jobs.length < 5;
@@ -3294,6 +3389,7 @@ function majorShow(r, q, scroll) {
     (short ? '<p class="small muted" style="margin:6px 0 0">연결 데이터가 있는 항목이 적어 산업 ' + out.industries.length + '개·직무 ' + out.jobs.length + '개만 표시합니다. 무관한 항목으로 채우지 않았으니 산업·직무 탐색에서 직접 둘러보세요.</p>' : '') + '</div>';
   h += '<div class="mj-cols"><div class="mj-col"><h3>추천 산업 TOP ' + out.industries.length + '</h3><p class="small muted" style="margin:0">전공 연결이 높은 산업 순 · 이름을 누르면 상세로 이동</p>' + majorRows('INDUSTRY', out.industries) + '</div>' +
     '<div class="mj-col"><h3>추천 직무 TOP ' + out.jobs.length + '</h3><p class="small muted" style="margin:0">전공 연결이 높은 직무 순 · 이름을 누르면 상세로 이동</p>' + majorRows('JOB', out.jobs) + '</div></div>' +
+    (gd ? majorGuideHtml(gd) : '') +
     '<div class="btn-row no-print"><button class="btn primary" type="button" onclick="majorAddAll()">추천 항목 관심목록에 담기</button>' +
     '<button class="btn" type="button" onclick="openPage(\'industryPage\')">산업 탐색으로 이동</button>' +
     '<button class="btn" type="button" onclick="openPage(\'jobPage\')">직무 탐색으로 이동</button></div>' +
