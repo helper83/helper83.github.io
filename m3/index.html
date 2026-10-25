@@ -471,6 +471,12 @@ body{font-size:15px;line-height:1.65}
 .cs5 input[type=text]{width:100%;box-sizing:border-box;min-height:44px;font-size:16px;padding:6px 10px;border:1px solid var(--pf-line,#8FB4D4);border-radius:8px;background:#fff;color:var(--fg)}
 .cs5 .cs5a{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cs5 .cs5n{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55}
+.cs5 details.cs5d{margin-top:10px;border:1px solid var(--pf-line,#8FB4D4);border-radius:8px;background:#fff}
+.cs5 details.cs5d>summary{min-height:44px;display:flex;align-items:center;padding:0 12px;font-size:15px;font-weight:600;color:var(--accent);cursor:pointer}
+.cs5 .cs5dc{padding:2px 12px 12px}
+.cs5 details.cs5d2{margin-top:8px}
+.cs5 details.cs5d2>summary{min-height:44px;display:flex;align-items:center;font-size:14px;font-weight:600;color:var(--accent);cursor:pointer}
+.cs5 textarea{width:100%;box-sizing:border-box;font-size:16px;padding:8px 10px;border:1px solid var(--pf-line,#8FB4D4);border-radius:8px;background:#fff;color:var(--fg);font-family:inherit;line-height:1.5}
 @media print{.cs5{display:none!important}}
 /* T5-COSEARCH:END */
 @media print{.fb,.action-bar,.no-print,.note-head{display:none!important}.print-head{display:flex!important;align-items:center;gap:10px;margin-bottom:10px;font-size:14px}.print-head img{width:32px;height:32px}.print-head b{font-size:16px}}
@@ -3463,7 +3469,7 @@ hist:{n:'사학과',cnt:1,
       '<div class="runmsg" id="t5g_'+s.k+'" role="status"></div><div class="aic5" id="t5r_'+s.k+'" hidden></div></div>';
     });
     $('t5body').innerHTML=h;
-    var cf0=$('t5m_motive_company');if(cf0&&cf0.parentNode)cf0.parentNode.insertAdjacentHTML('beforeend','<div class="cs5" id="t5cs"><div class="cs5h">기업 이해 검색<small>회사를 직접 조사하고 출처와 함께 메모에 넣습니다</small></div><div class="cs5l" id="t5cs_links"></div><label for="t5cs_f">찾은 사실 (한두 문장)</label><input type="text" id="t5cs_f" autocomplete="off" placeholder="검색 결과에서 확인한 사업·제품·가치·최근 이슈"><label for="t5cs_s">출처 (기사 제목, 사이트 이름 또는 주소)</label><input type="text" id="t5cs_s" autocomplete="off" placeholder="예: 전자공시 사업보고서, 회사 공식 보도자료 제목"><div class="cs5a"><button type="button" class="btn sm2" id="t5cs_add">출처와 함께 메모에 추가</button><span class="runmsg" id="t5cs_m" role="status"></span></div><div class="cs5n" id="t5cs_cnt"></div><div class="cs5n">확인 기준: 전자공시·공식 보도자료·채용 페이지를 먼저 보고, 기사는 날짜와 언론사를 확인하세요. 같은 사실을 두 곳 이상에서 확인하면 더 안전합니다. 검색은 새 창에서 열리며 이 앱은 검색어 외의 내용을 보내지 않습니다.</div></div>');
+    var cf0=$('t5m_motive_company');if(cf0&&cf0.parentNode)cf0.parentNode.insertAdjacentHTML('beforeend','<div class="cs5" id="t5cs"><div class="cs5h">기업 이해 검색<small>회사를 직접 조사하고 출처와 함께 메모에 넣습니다</small></div><div class="cs5l" id="t5cs_links"></div><label for="t5cs_f">찾은 사실 (한두 문장)</label><input type="text" id="t5cs_f" autocomplete="off" placeholder="검색 결과에서 확인한 사업·제품·가치·최근 이슈"><label for="t5cs_s">출처 (기사 제목, 사이트 이름 또는 주소)</label><input type="text" id="t5cs_s" autocomplete="off" placeholder="예: 전자공시 사업보고서, 회사 공식 보도자료 제목"><div class="cs5a"><button type="button" class="btn sm2" id="t5cs_add">출처와 함께 메모에 추가</button><span class="runmsg" id="t5cs_m" role="status"></span></div><details class="cs5d"><summary>AI로 한 번에 조사하기 (검색 지침 복사)</summary><div class="cs5dc"><div class="cs5n" style="margin-top:0">웹검색이 되는 AI(ChatGPT, Claude, Perplexity, Gemini 등)에 아래 지침을 붙여넣으면 기업·직무분석표, 자소서 문장 초안, 예상 면접질문, 리스크 목록까지 받을 수 있습니다. 지원기업명과 직무는 탭③ 입력값이 자동으로 들어갑니다.</div><label for="t5cs_jd">채용공고 원문 또는 주소 (비우면 탭③에 올린 공고를 사용)</label><textarea id="t5cs_jd" rows="3" placeholder="공고 본문이나 채용 페이지 주소를 붙여넣으세요"></textarea><label for="t5cs_ex">본인 경험·활동 3~5개 (선택, 비우면 경험발굴 탭의 STAR 소재를 사용)</label><textarea id="t5cs_ex" rows="3" placeholder="한 줄에 하나씩 적으세요"></textarea><div class="cs5a"><button type="button" class="btn sm2" id="t5cs_copy">검색 지침 복사</button><span class="runmsg" id="t5cs_pm" role="status"></span></div><div class="cs5l"><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT 열기<span aria-hidden="true"> ↗</span></a><a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Claude 열기<span aria-hidden="true"> ↗</span></a><a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">Perplexity 열기<span aria-hidden="true"> ↗</span></a><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini 열기<span aria-hidden="true"> ↗</span></a></div><details class="cs5d2"><summary>지침 전체 보기</summary><textarea id="t5cs_pv" rows="10" readonly aria-label="복사될 검색 지침"></textarea></details><div class="cs5n">받은 결과는 출처 링크를 직접 열어 확인한 뒤, 위 <b>찾은 사실</b> 칸에 출처와 함께 옮기세요. 출처가 3곳 미만이거나 [확인필요]로 표시된 내용은 지원동기에 단정해서 쓰지 마세요. 이름·연락처 같은 개인정보는 AI에 붙여넣지 않습니다. 이 앱은 지침을 복사해 줄 뿐 내용을 외부로 보내지 않습니다.</div></div></details><div class="cs5n" id="t5cs_cnt"></div><div class="cs5n">확인 기준: 전자공시·공식 보도자료·채용 페이지를 먼저 보고, 기사는 날짜와 언론사를 확인하세요. 같은 사실을 두 곳 이상에서 확인하면 더 안전합니다. 검색은 새 창에서 열리며 이 앱은 검색어 외의 내용을 보내지 않습니다.</div></div>');
     $('t5company').value=S.company;$('t5job').value=S.job;infoR();S.imp=S.imp||{};
     SECS.forEach(function(s){var d=S.sec[s.k];s.memos.forEach(function(m){$('t5m_'+s.k+'_'+m.f).value=d.memo[m.f]||''});$('t5b_'+s.k).value=d.body;$('t5l_'+s.k).value=d.limit;count(s.k);showOut(s.k)});
     $('t5banner').hidden=!S.example;impUI();cov();cs();
@@ -3481,6 +3487,26 @@ hist:{n:'사학과',cnt:1,
     addMemo('motive','company',fv.replace(/\n+/g,' ')+' (출처: '+sv.replace(/\n+/g,' ')+', 확인일 '+ds+')');
     f.value='';s.value='';mg.className='runmsg ok';mg.textContent='기업 이해 메모에 추가했습니다';cs();
   })})();
+  var PH0="당신은 대학 취업지원센터의 기업·직무분석 전문 컨설턴트입니다.\n아래 [분석 원칙]과 [입력 정보]를 바탕으로 [출력 형식]에 맞춰\n빠짐없이, 원문 근거를 밝히며 작성하십시오.\n\n■ 분석 원칙 (반드시 준수)\n1. 직무분석은 4요소(역할/업무/역량/성과)로만 구조화한다.\n   - 역할(Role): 이 직무가 조직에서 존재하는 이유(미션)\n   - 업무(Task): 일상적으로 수행하는 구체적 활동\n   - 역량(Competency): 필요한 지식·기술·태도\n   - 성과(Output): 직무 수행이 잘 되었는지 판단하는 결과물\n2. 기업분석은 4요소(조직/시장/고객/이슈)로만 구조화한다.\n   - 조직: 사업구조, 의사결정방식, 조직문화·인재상\n   - 시장: 산업 성장단계, 경쟁사, 시장 포지션\n   - 고객: B2B/B2C 여부, 핵심 고객군, 고객가치\n   - 이슈: 최근 1년 핵심 이슈 2~3개, \"왜 지금 이 직무를 뽑는가\"\n3. 채용공고 원문을 아래 4칸 분류 규칙으로 나눠 근거 문장을 인용한다.\n   - 업무: \"~합니다/~담당\" 표현\n   - 역량: \"~역량/~스킬/~가능자\" 표현\n   - 툴/환경: SQL, SAP, Python 등 구체 명사\n   - 성과지표: 개선/최적화/효율화/매출·전환/품질·안정화 등\n4. 채용공고에 없는 정보(기업 최신 이슈, 시장 동향 등)는\n   반드시 웹검색 후 작성하고, 출처를 표기한다.\n   - 출처 확인이 3개 미만이면 [확인필요]로 표시\n   - 확정 안 된 수치·순위는 \"추정\" 또는 \"확인 필요\"로 명시\n5. 절대 \"성장 가능성이 커서/전공을 살릴 수 있어서\" 같은\n   추상적 표현을 만들지 않는다. 모든 결론은 근거 문장에 연결한다.\n",PH1="\n■ 출력 형식 (아래 표/구조를 그대로 사용, 개조식)\n\n[1] 직무분석 워크시트\n| 요소 | 내용 | 근거(공고 원문 인용) |\n|---|---|---|\n| 역할 | | |\n| 핵심 업무 Top3 | ①②③ | |\n| 필수 역량 Top3 | ①②③ | |\n| 우대 역량 Top3 | ①②③ | |\n| 사용 툴/기술 | | |\n| 성과 판단 기준 | | |\n\n[2] 기업분석 워크시트\n| 요소 | 내용 | 출처 |\n|---|---|---|\n| 조직(사업구조·문화) | | |\n| 시장(포지션·경쟁사) | | |\n| 고객(형태·핵심가치) | | |\n| 이슈(최근 2~3개) | | |\n| 현재 채용 배경 추정 | | [확인필요 여부 표기] |\n\n[3] 경험-직무 매칭 (입력된 경험이 있을 경우)\n| 경험 | 연결되는 직무 요소 | 보여줄 수 있는 역량 |\n|---|---|---|\n\n[4] 자소서 활용 포인트\n- 지원동기 문장 초안 1개 (시장현황→주요이슈→기업성장방향 구조)\n- 직무적합성 문장 초안 1개 (역할→업무/역량→성과 구조)\n\n[5] 예상 면접질문 9개 + 답변 구조\n| 구분 | 예상 질문 | 답변 구조 |\n|---|---|---|\n| 기업 이슈 기반 (3개) | | 이슈요약→중요성→기업영향→나의관점 |\n| 직무 역량 기반 (3개) | | 직무정의→핵심업무→필요역량→나의준비 |\n| 경험 검증 (3개) | | 상황→역할→행동→결과→직무연결 |\n\n[6] 리스크 안내\n- 정보 부족으로 추정한 항목 목록\n- 추가로 확인이 필요한 항목 목록";
+  function pTxt(){
+    var c=(S.company||'').trim()||'(입력 필요)',j=(S.job||'').trim()||'(입력 필요)',jd=($('t5cs_jd')||{value:''}).value.trim(),ex=($('t5cs_ex')||{value:''}).value.trim();
+    if(!jd){try{var sr=getSources();if(sr&&sr.n&&sr.text)jd=String(sr.text).slice(0,6000)}catch(e){}}
+    if(!jd)jd='(입력 필요: 채용공고 원문 또는 URL)';
+    if(!ex){try{var st=window.__ipT7&&window.__ipT7.stars?window.__ipT7.stars():[];ex=st.slice(0,5).map(function(x){return '- '+x.name+': '+String(x.text||'').replace(/\s+/g,' ').slice(0,300)}).join('\n')}catch(e){}}
+    if(!ex)ex='(없음)';
+    return PH0+'\n■ 입력 정보 (학생이 채워서 제출)\n- 지원기업명: '+c+'\n- 지원직무: '+j+'\n- 채용공고 원문(또는 URL): '+jd+'\n- 본인 경험/활동 리스트(선택, 있으면 3~5개 나열): '+ex+'\n'+PH1;
+  }
+  (function(){
+    var bd=$('t5body');
+    bd.addEventListener('click',function(e){
+      var t=e.target;if(!t||t.id!=='t5cs_copy')return;
+      var tx=pTxt(),pv=$('t5cs_pv'),mg=$('t5cs_pm');if(pv)pv.value=tx;
+      function ok(){mg.className='runmsg ok';mg.textContent='복사했습니다. AI 대화창에 붙여넣으세요'}
+      function fail(){if(pv){var d=pv.closest('details');if(d)d.open=true;pv.focus();pv.select()}mg.className='runmsg err';mg.textContent='자동 복사가 막혀 있습니다. 아래 지침을 직접 선택해 복사하세요'}
+      try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(tx).then(ok,fail)}else{fail()}}catch(err){fail()}
+    });
+    bd.addEventListener('toggle',function(e){if(e.target&&e.target.classList&&e.target.classList.contains('cs5d2')){var pv=$('t5cs_pv');if(pv)pv.value=pTxt()}},true);
+  })();
   function count(k){var d=S.sec[k],n=d.body.replace(/\r/g,'').length,nb=d.body.replace(/\s/g,'').length,el=$('t5c_'+k);el.textContent=n.toLocaleString()+'자 (공백 제외 '+nb.toLocaleString()+'자)'+(n>d.limit?' · 제한을 '+(n-d.limit)+'자 넘었습니다':'');el.className=n>d.limit?'over':''}
   var body=$('t5body');
   body.addEventListener('input',function(e){
