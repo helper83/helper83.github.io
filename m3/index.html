@@ -456,7 +456,7 @@ body{font-size:15px;line-height:1.65}
 .note-head h1 .bt>span:first-child{color:var(--fg)!important;font-size:inherit}
 .note-head h1 .fb,.fb{font-size:12px;line-height:1.3;color:var(--muted);white-space:nowrap;font-weight:400;letter-spacing:0}
 .fb a{color:var(--fg);text-decoration:underline;position:relative}
-.fb a::after{content:'';position:absolute;inset:-15px -8px}
+.fb a::after{content:'';position:absolute;left:0;right:0;top:-16px;bottom:-16px}
 .action-bar{display:flex;gap:10px;margin:16px 0 8px;justify-content:flex-end}
 .action-bar .btn{flex:0 0 auto;min-width:160px;min-height:44px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
 .action-bar .btn.primary{background:var(--prim,#4A94CF);color:#fff;border:0}
@@ -1135,9 +1135,9 @@ hist:{n:'사학과',cnt:1,
       var bt=document.createElement('span');bt.className='bt';
       nm.parentNode.insertBefore(bt,nm);bt.appendChild(nm);
       var fb=document.createElement('span');fb.className='fb no-print';
-      fb.appendChild(document.createTextNode('의견 보내기: '));
-      var a=document.createElement('a');a.textContent=EMAIL;a.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('['+APP+'] 의견');a.setAttribute('aria-label','의견 보내기 이메일 '+EMAIL);
-      fb.appendChild(a);bt.appendChild(fb);
+      fb.appendChild(document.createTextNode('비전HR컨설팅('));
+      var a=document.createElement('a');a.textContent=EMAIL;a.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('['+APP+'] 문의');a.setAttribute('aria-label','비전HR컨설팅 이메일 '+EMAIL);
+      fb.appendChild(a);fb.appendChild(document.createTextNode(')'));bt.appendChild(fb);
     }
     var wrap=document.querySelector('.wrap');if(!wrap)return;
     var ph=document.createElement('div');ph.className='print-head';
