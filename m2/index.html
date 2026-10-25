@@ -838,6 +838,10 @@ body{background:var(--bg)!important}
 .mj-badge{display:inline-block;padding:1px 8px;border-radius:999px;background:var(--sunk);border:1px solid var(--line2);font-size:12px;color:var(--ink2)}
 .mj-badge.thin{background:#FFF4DC;border-color:#F0D9A0;color:#7A5200}
 @media(max-width:700px){.mj-cols{grid-template-columns:1fr}}
+/* QA-APPSKILL:BEGIN v1.18.1 (AS-04) 입력창 16px, 터치 영역 44px */
+select,input[type=number],input[type=search],input[type=text],textarea{font-size:16px}
+@media(max-width:1100px){.btn,.btn.sm,#qToggleBtn{min-height:44px}}
+/* QA-APPSKILL:END */
 </style>
 </head>
 <body>
