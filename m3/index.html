@@ -452,6 +452,17 @@ body{font-size:15px;line-height:1.65}
 
 .appico{width:36px;height:36px;display:block;object-fit:contain;flex:0 0 auto}
 @media (max-width:640px){.appico{width:32px;height:32px}}
+/* QA-APPSKILL:BEGIN (AS-02/03/04/12) */
+body{word-break:keep-all;overflow-wrap:break-word}
+small{font-size:13px}
+@media (pointer:coarse){input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=color]):not([type=file]),select,textarea{font-size:16px}.srcopt label{display:flex;align-items:center;gap:8px;min-height:44px}.srcopt input{width:22px;height:22px;flex:0 0 auto}}
+@page{size:A4;margin:14mm}
+@media print{
+body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding-bottom:0}
+.tabs,.aidlg,button,.pager,.no-print{display:none!important}
+.panel,.card,table,tr{break-inside:avoid;box-shadow:none}
+}
+/* QA-APPSKILL:END */
 </style>
 
 <div class="wrap">
