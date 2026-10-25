@@ -462,6 +462,17 @@ body{font-size:15px;line-height:1.65}
 .action-bar .btn.primary{background:var(--prim,#4A94CF);color:#fff;border:0}
 @media (max-width:640px){.action-bar{margin-bottom:76px}.action-bar .btn{flex:1}}
 .print-head{display:none}
+/* T5-COSEARCH:BEGIN (지원동기 기업 이해 검색) */
+.cs5{margin-top:8px;border:1px solid var(--pf-line,#8FB4D4);border-radius:10px;padding:10px 12px;background:var(--accent-soft,#EAF4FC)}
+.cs5 .cs5h{font-size:14px;font-weight:700;color:var(--fg)}.cs5 .cs5h small{font-weight:400;font-size:13px;color:var(--muted);margin-left:6px}
+.cs5 .cs5l{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.cs5 .cs5l a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border:1px solid var(--pf-line,#8FB4D4);border-radius:8px;background:#fff;color:var(--accent);font-size:14px;font-weight:600;text-decoration:none}
+.cs5 label{display:block;font-size:13px;font-weight:600;margin:8px 0 4px}
+.cs5 input[type=text]{width:100%;box-sizing:border-box;min-height:44px;font-size:16px;padding:6px 10px;border:1px solid var(--pf-line,#8FB4D4);border-radius:8px;background:#fff;color:var(--fg)}
+.cs5 .cs5a{margin-top:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cs5 .cs5n{font-size:13px;color:var(--muted);margin-top:8px;line-height:1.55}
+@media print{.cs5{display:none!important}}
+/* T5-COSEARCH:END */
 @media print{.fb,.action-bar,.no-print,.note-head{display:none!important}.print-head{display:flex!important;align-items:center;gap:10px;margin-bottom:10px;font-size:14px}.print-head img{width:32px;height:32px}.print-head b{font-size:16px}}
 /* QA-APPSKILL2:END */
 /* QA-MAJOR:BEGIN 학과별 진로 가이드 */
@@ -1128,21 +1139,21 @@ hist:{n:'사학과',cnt:1,
 
   <script>
   document.addEventListener('DOMContentLoaded',function(){
-    var EMAIL='hp83@naver.com',APP='헬퍼손 지원서';
+    var EMAIL='hp83@naver.com',ORG='비전HR컨설팅',APP='헬퍼손 지원서';
     var h1=document.querySelector('.note-head h1');
     if(h1&&!h1.querySelector('.fb')){
       var nm=h1.querySelector('span');
       var bt=document.createElement('span');bt.className='bt';
       nm.parentNode.insertBefore(bt,nm);bt.appendChild(nm);
       var fb=document.createElement('span');fb.className='fb no-print';
-      fb.appendChild(document.createTextNode('비전HR컨설팅('));
-      var a=document.createElement('a');a.textContent=EMAIL;a.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('['+APP+'] 문의');a.setAttribute('aria-label','비전HR컨설팅 이메일 '+EMAIL);
+      fb.appendChild(document.createTextNode(ORG+'('));
+      var a=document.createElement('a');a.textContent=EMAIL;a.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('['+APP+'] 문의');a.setAttribute('aria-label',ORG+' 이메일 '+EMAIL);
       fb.appendChild(a);fb.appendChild(document.createTextNode(')'));bt.appendChild(fb);
     }
     var wrap=document.querySelector('.wrap');if(!wrap)return;
     var ph=document.createElement('div');ph.className='print-head';
     var logo=document.querySelector('.appico');
-    ph.innerHTML=(logo?'<img alt="" src="'+logo.getAttribute('src')+'">':'')+'<b>'+APP+'</b><span id="phtab"></span>';
+    ph.innerHTML=(logo?'<img alt="" src="'+logo.getAttribute('src')+'">':'')+'<b>'+APP+'</b><span>'+ORG+'</span><span id="phtab"></span>';
     wrap.insertBefore(ph,wrap.firstChild);
     var bar=document.createElement('div');bar.className='action-bar no-print';
     bar.innerHTML='<button type="button" class="btn primary" id="btnPdf">PDF로 저장·인쇄</button>';
@@ -3400,24 +3411,45 @@ hist:{n:'사학과',cnt:1,
       steps:['상황과 과제를 두 문장 안에 쓰기','내가 한 행동을 1~2개로 좁혀 구체적으로 쓰기','결과를 수치나 변화로 쓰기','배운 점을 입사 후 업무 장면에 연결'],
       checks:['팀이 아니라 내가 한 행동이 중심이다','결과가 수치나 변화로 드러난다','배운 점이 조직 업무로 이어진다','한 문항에 경험은 1~2개만 쓴다'],
       ex:'[상황]에서 [과제]가 있었습니다. 저는 [행동 1~2개]를 했고, 그 결과 [수치·변화]를 얻었습니다. 이 경험에서 [배운 점]을 얻었고, 입사 후 [업무 장면]에 적용하겠습니다.',
-      gkeys:[['problem','문제해결 경험 소재'],['comm','의사소통 경험 소재'],['challenge','도전 경험 소재']]}];
+      gkeys:[['problem','문제해결 경험 소재'],['comm','의사소통 경험 소재'],['challenge','도전 경험 소재']]},
+    {k:'proj',no:'4',title:'직무적합성 경험',sub:'프로젝트·공모전·논문·연구·학습·활동 경험을 [기간]·[경험]·[역할]로 시작해, 실전 적용과 수치 검증까지 쓰는 문항',limit:1000,
+      memos:[{f:'period',label:'기간',ph:'예: 2025.03~2025.06 (4개월)'},{f:'exp',label:'경험 (프로젝트·공모전·논문·연구·학습·활동)',ph:'경험 이름과 유형, 지원 직무와 이어지는 이유'},{f:'role',label:'역할',ph:'예: 4인 팀의 팀장, 시장 데이터 분석 담당'},{f:'apply',label:'실전 적용 (배운 것을 어디에 어떻게 썼는지)',ph:'학습에서 그치지 않고 실제 과제나 현장에 적용한 방법과 도구'},{f:'verify',label:'검증 과정과 수치',ph:'비교 기준(전·후, 목표 대비, 평가 결과)과 수치. 예: 처리 시간 40분→12분'}],
+      frame:'[기간]·[경험]·[역할]을 맨 앞에 명시 → 실전 적용 → 검증 과정과 수치 → 직무 연결',
+      rule:'- 본문 첫 문장은 "[기간] 0000.00~0000.00 [경험] 경험명 [역할] 맡은 역할" 형식으로 시작한다. 메모에 없는 항목은 "(입력 필요)"로 둔다.\n- 배운 내용을 나열하는 데서 끝내지 않고, 실제로 적용한 과정과 검증 결과를 수치와 함께 쓴다.\n',
+      steps:['맨 앞에 [기간], [경험], [역할]을 한 줄로 쓰기','적용: 배운 이론·도구를 어떤 과제에 어떻게 썼는지 쓰기','검증: 무엇과 비교했는지(전·후, 목표, 평가)와 수치 쓰기','마지막에 이 경험이 지원 직무의 어떤 업무로 이어지는지 한 줄'],
+      checks:['첫 줄에 [기간]·[경험]·[역할]이 모두 있다','"배웠다"로 끝나지 않고 적용한 장면이 있다','결과에 숫자와 비교 기준이 함께 있다','팀 성과가 아니라 내가 한 역할이 드러난다'],
+      ex:'[기간] [시작~끝, 총 N개월] [경험] [경험명·유형] [역할] [담당 업무·팀 규모]. 수업에서 배운 [이론·도구]를 [실제 과제]에 [방법]으로 적용했습니다. [비교 기준]으로 검증한 결과 [수치 전]에서 [수치 후]로 개선했고, 이 경험을 [직무 업무]에 쓰겠습니다.',
+      gkeys:[['picks','경험 소재 예시'],['apply','실전 적용 예시'],['verify','검증·수치 예시']]},
+    {k:'ai',no:'5',title:'AI 기반 문제 해결 경험',sub:'AI를 활용한 프로젝트·공모전·논문·연구·문제 해결 경험을 문제 정의 → AI 활용 방식 → 본인 역할 → 성과와 검증 구조로 쓰는 문항',limit:1000,
+      memos:[{f:'problem',label:'문제 정의',ph:'해결하려던 문제, 기존 방식의 한계, 대상과 규모(수치)'},{f:'method',label:'AI 활용 방식',ph:'쓴 AI 기법·도구, 입력 데이터, 모델·프롬프트·자동화 설계, 사람이 검수한 부분'},{f:'role',label:'본인 역할',ph:'내가 직접 설계·구현·검증한 부분 (팀이면 담당 범위)'},{f:'result',label:'실제 성과',ph:'도입 전·후 비교 수치 (시간, 비용, 정확도, 처리량)'},{f:'verify',label:'검증 구조',ph:'테스트 데이터, 정확도 측정 방법, 오류·잘못된 답 점검 방법, 남은 한계'}],
+      frame:'문제 정의 → AI 활용 방식 → 본인 역할 → 실제 성과 → 검증 구조',
+      rule:'- 문제 정의, AI 활용 방식, 본인 역할, 실제 성과, 검증 구조 순서로 쓴다.\n- ChatGPT 등에 질문하고 답을 받는 일상적 활용 수준의 경험은 중심 소재로 쓰지 않는다. 메모가 그 수준이면 notes에 "AI를 어떤 데이터·모델·절차로 설계했는지 보완 필요"라고 적는다.\n- 성과는 전·후 수치와 검증 방법(테스트 데이터, 정확도 기준, 사람 검수)을 함께 쓴다.\n',
+      steps:['문제 정의: 무엇이 문제였고 규모가 어느 정도였는지 수치로 쓰기','AI 활용 방식: 어떤 데이터와 AI 기법·도구를 어떤 절차로 썼는지, 왜 AI였는지 쓰기','본인 역할: 내가 직접 한 설계·구현·검증을 쓰기','성과와 검증: 전·후 수치와 그 수치를 확인한 방법 쓰기'],
+      checks:['AI에 질문하고 답을 받은 수준이 아니라 설계한 절차가 있다','문제, AI 활용, 역할, 성과, 검증이 순서대로 나온다','성과 수치와 측정 방법이 함께 있다','AI 결과를 사람이 확인한 방법과 한계가 있다'],
+      ex:'[대상·규모]에서 [기존 방식의 한계]라는 문제가 있었습니다. [데이터]를 [AI 기법·도구]로 [절차]에 따라 처리하는 방식을 설계했고, 저는 [설계·구현·검증 중 맡은 부분]을 맡았습니다. 그 결과 [수치 전]에서 [수치 후]로 개선했고, [테스트 데이터·측정 방법]으로 확인했으며 [한계와 보완]을 정리했습니다.',
+      gkeys:[['problem','문제 정의 예시'],['method','AI 활용 방식 예시'],['verify','성과·검증 예시']]}];
+  var GEN={proj:{picks:['전공 수업 팀 프로젝트에서 실제 데이터나 사례를 다룬 경험','공모전·경진대회에서 기획·분석·제작을 맡은 경험','졸업 논문·연구실 과제에서 실험이나 조사를 설계한 경험','현장실습·인턴·동아리에서 맡은 업무를 개선한 경험'],apply:['수업에서 배운 이론·도구를 실제 자료에 적용한 장면 (도구 이름과 사용 방법)','조사·분석·제작 과정에서 내가 직접 선택한 방법과 이유','기존 방식과 다르게 시도한 점과 그 이유'],verify:['전·후 비교 (예: 처리 시간 40분→12분)','목표 대비 달성률 (예: 목표 100건 중 120건)','평가 결과 (예: 참가 팀 중 순위, 점수, 피드백 반영 횟수)']},
+  ai:{problem:['반복 작업에 드는 시간이나 오류 수 (예: 하루 40건 수작업 분류)','자료 양이 많아 사람이 모두 확인하기 어려운 상황','기존 방식의 정확도나 속도 한계'],method:['데이터를 모으고 정리한 방법과 AI 기법·도구 선택 이유','프롬프트·모델·자동화 절차를 설계한 과정','AI 결과를 사람이 검수하는 단계를 어디에 두었는지'],verify:['별도 테스트 데이터로 측정한 정확도 (예: 100건 중 87건 일치)','틀린 결과의 유형을 정리하고 보완한 내용','도입 전·후 시간·비용 비교와 남은 한계']}};
   var DEFAULT_GUIDE={motive:{company_points:['담당 사업부·제품군과 주력 판매 지역','최근 해외 시장 전략과 실적 자료(전자공시, 보도자료)','현지 법인과 유통 구조'],job_points:['담당 국가 거래처 발굴과 관리','판매 계획 수립과 실적 분석','수출 계약·대금결제 부서와의 협업'],link_examples:['유통채널 조사 경험 → 신규 거래처 발굴 업무','설문 설계 경험 → 현지 소비자 분석 업무'],plan_examples:['1~3년 차 국가별 판매데이터 분석과 거래처 관리 숙달 → 5년 차 담당 국가 채널 전략 기획 → 10년 차 시장 책임자']},fit:{knowledge:['무역실무(인코텀즈, 계약, 대금결제), 국제마케팅','담당 국가의 시장·산업 지식'],skill:['영어·중국어 등 외국어 실무 커뮤니케이션','Excel 데이터 정리와 분석, 시장조사 보고서 작성'],attitude:['낯선 환경에서 먼저 다가가는 소통 자세','정확성이 중요한 서류·계약 업무에서의 꼼꼼함']},org:{problem:['흩어진 데이터를 구조화해 업무 시간을 줄인 경험','거래처 요청이 부딪힐 때 우선순위를 정한 경험'],comm:['의견이 갈린 팀 프로젝트에서 기준을 합의한 경험','외국어 환경에서 오해를 줄이려 확인 절차를 만든 경험'],challenge:['경험 없는 시장·언어에 도전해 결과를 낸 경험','공모전·프로젝트에서 새 방식을 시도한 경험']}};
   function example(){return {company:'삼성전자',job:'해외영업',example:true,notes:'',guide:DEFAULT_GUIDE,guideJob:'해외영업',guideExample:true,org:null,
     sec:{
       motive:{memo:{company:'삼성전자 DX부문 DA사업부: 생활가전 판매 전략을 세워 매출 확대와 브랜드 리더십을 높임 (채용공고 기준)',job:'담당 지역 시장·파트너 데이터 분석, 판매 전략 수립, 법인 실행 계획과 진척 관리 (직무기술서 기준)',link:'국제통상학 전공, A전자 해외영업 인턴, 베트남 유통채널 15개 조사',plan:'동남아시아 시장의 해외영업 전문가'},body:'',limit:800,out:null},
       fit:{memo:{knowledge:'국제마케팅·무역실무·국제경영전략 수강, 유통관리사 2급',skill:'TOEIC 930, OPIc IH, HSK 5급, Excel 거래처 데이터 정리와 필터 적용',attitude:'교환학생 초기 적응을 위해 매일 중국어 표현 10개를 정리하고 팀원 의견을 조정'},body:'',limit:800,out:null},
-      org:{memo:{problem:'인턴 때 여러 Excel 파일에 나뉜 거래처 정보를 하나로 통합하고 필터 적용',comm:'교환학생 팀 프로젝트에서 가격 중심과 브랜드 이미지 중심 의견을 설문 항목 통합으로 조정',challenge:'중국어가 어려운 환경에서 현지 학생과 식사하며 대화를 늘려 팀장을 맡음'},body:'',limit:800,out:null}}}}
-  function empty(){var o={company:'',job:'',example:false,notes:'',guide:null,guideJob:'',guideExample:false,sec:{}};SECS.forEach(function(s){var m={};s.memos.forEach(function(x){m[x.f]=''});o.sec[s.k]={memo:m,body:'',limit:800,out:null}});return o}
+      org:{memo:{problem:'인턴 때 여러 Excel 파일에 나뉜 거래처 정보를 하나로 통합하고 필터 적용',comm:'교환학생 팀 프로젝트에서 가격 중심과 브랜드 이미지 중심 의견을 설문 항목 통합으로 조정',challenge:'중국어가 어려운 환경에서 현지 학생과 식사하며 대화를 늘려 팀장을 맡음'},body:'',limit:800,out:null},
+      proj:{memo:{period:'2025.03~2025.06 (4개월)',exp:'교내 수출마케팅 공모전: 동남아 화장품 유통채널 진입 전략 제안',role:'4인 팀의 팀장, 유통채널 15개 조사와 마진 비교표 작성 담당',apply:'무역실무 수업에서 배운 인코텀즈·원가 계산을 채널별 견적 비교에 적용하고 Excel로 마진율 계산',verify:'채널 15개 중 마진율 15% 이상 5개 선별, 팀 제안서는 참가 18팀 중 3위 (시연용 가상 수치)'},body:'',limit:1000,out:null},
+      ai:{memo:{problem:'인턴 때 거래처 문의 메일 하루 약 40건을 수작업으로 분류해 응답이 평균 6시간 늦어짐',method:'과거 메일 300건에 라벨을 붙여 Python과 LLM으로 분류하는 절차를 만들고, 확신이 낮은 메일은 사람이 검수',role:'분류 기준 설계, 분류 스크립트 작성, 정확도 검증 담당',result:'분류 시간 하루 90분에서 20분으로 감소 (시연용 가상 수치)',verify:'별도 테스트 100건에서 87건 일치, 오분류 유형을 정리해 규칙 보완'},body:'',limit:1000,out:null}}}}
+  function empty(){var o={company:'',job:'',example:false,notes:'',guide:null,guideJob:'',guideExample:false,sec:{}};SECS.forEach(function(s){var m={};s.memos.forEach(function(x){m[x.f]=''});o.sec[s.k]={memo:m,body:'',limit:s.limit||800,out:null}});return o}
   var KEY='ipsurvey-t5-v1',S=null;
   try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.sec)S=o}}catch(e){}
   if(!S)S=empty();
+  SECS.forEach(function(s){if(!S.sec[s.k])S.sec[s.k]={memo:{},body:'',limit:s.limit||800,out:null};var d=S.sec[s.k];d.memo=d.memo||{};s.memos.forEach(function(m){if(d.memo[m.f]==null)d.memo[m.f]=''})});
   function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
   (function(){var g=window.__ipInfo.get();if(g.company||g.job){S.company=g.company;S.job=g.job}})();
   var pill='search';
   function infoR(){var el=document.getElementById('t5info');if(!el)return;var g=window.__ipInfo.get(),hs=window.__ipHB&&window.__ipHB.sel?window.__ipHB.sel():{ind:'',job:''};
     function v(x){return x?esc(x):'<span style="color:var(--mute,#888)">탭③에서 입력하세요</span>'}
     S.company=g.company||S.company;S.job=g.job||S.job;
-    el.innerHTML='<dt>지원회사</dt><dd>'+v(g.company)+'</dd><dt>산업·기관</dt><dd>'+(window.__ipPub&&window.__ipPub.code()?'공공기관 (탭③ 목록표에서 선택)':v(hs.ind))+'</dd><dt>지원직무</dt><dd>'+v(g.job)+'</dd>'}
+    cs();el.innerHTML='<dt>지원회사</dt><dd>'+v(g.company)+'</dd><dt>산업·기관</dt><dd>'+(window.__ipPub&&window.__ipPub.code()?'공공기관 (탭③ 목록표에서 선택)':v(hs.ind))+'</dd><dt>지원직무</dt><dd>'+v(g.job)+'</dd>'}
 
   /* ---------- left: writing ---------- */
   function build(){
@@ -3431,10 +3463,24 @@ hist:{n:'사학과',cnt:1,
       '<div class="runmsg" id="t5g_'+s.k+'" role="status"></div><div class="aic5" id="t5r_'+s.k+'" hidden></div></div>';
     });
     $('t5body').innerHTML=h;
+    var cf0=$('t5m_motive_company');if(cf0&&cf0.parentNode)cf0.parentNode.insertAdjacentHTML('beforeend','<div class="cs5" id="t5cs"><div class="cs5h">기업 이해 검색<small>회사를 직접 조사하고 출처와 함께 메모에 넣습니다</small></div><div class="cs5l" id="t5cs_links"></div><label for="t5cs_f">찾은 사실 (한두 문장)</label><input type="text" id="t5cs_f" autocomplete="off" placeholder="검색 결과에서 확인한 사업·제품·가치·최근 이슈"><label for="t5cs_s">출처 (기사 제목, 사이트 이름 또는 주소)</label><input type="text" id="t5cs_s" autocomplete="off" placeholder="예: 전자공시 사업보고서, 회사 공식 보도자료 제목"><div class="cs5a"><button type="button" class="btn sm2" id="t5cs_add">출처와 함께 메모에 추가</button><span class="runmsg" id="t5cs_m" role="status"></span></div><div class="cs5n" id="t5cs_cnt"></div><div class="cs5n">확인 기준: 전자공시·공식 보도자료·채용 페이지를 먼저 보고, 기사는 날짜와 언론사를 확인하세요. 같은 사실을 두 곳 이상에서 확인하면 더 안전합니다. 검색은 새 창에서 열리며 이 앱은 검색어 외의 내용을 보내지 않습니다.</div></div>');
     $('t5company').value=S.company;$('t5job').value=S.job;infoR();S.imp=S.imp||{};
     SECS.forEach(function(s){var d=S.sec[s.k];s.memos.forEach(function(m){$('t5m_'+s.k+'_'+m.f).value=d.memo[m.f]||''});$('t5b_'+s.k).value=d.body;$('t5l_'+s.k).value=d.limit;count(s.k);showOut(s.k)});
-    $('t5banner').hidden=!S.example;impUI();cov();
+    $('t5banner').hidden=!S.example;impUI();cov();cs();
   }
+  function cs(){
+    var el=$('t5cs_links');if(!el)return;var c=(S.company||'').trim(),G='https://www.google.com/search?q=',qq=encodeURIComponent;
+    var L=c?[['최근 뉴스 (네이버)','https://search.naver.com/search.naver?where=news&sort=1&query='+qq(c)],['최근 이슈 (구글 뉴스)','https://news.google.com/search?q='+qq(c)],['사업보고서·공시 (전자공시)',G+qq(c+' 사업보고서 site:dart.fss.or.kr')],['공식 보도자료',G+qq(c+' 공식 보도자료')],['사업·제품 소개',G+qq(c+' 사업영역 주요 제품')],['채용·인재상',G+qq(c+' 채용 인재상')]]:[];
+    el.innerHTML=c?L.map(function(x){return '<a href="'+x[1]+'" target="_blank" rel="noopener noreferrer">'+esc(x[0])+'<span aria-hidden="true"> ↗</span></a>'}).join(''):'<div class="subt">탭③에 지원회사를 입력하면 이 회사의 뉴스·공시·보도자료 검색 버튼이 만들어집니다.</div>';
+    var n=$('t5cs_cnt');if(n){var m=(S.sec.motive.memo.company||'').split('\n').filter(function(x){return x.trim()}),k=m.filter(function(x){return /출처\s*:/.test(x)}).length;n.textContent=m.length?('기업 이해 메모 '+m.length+'줄 중 출처가 적힌 줄 '+k+'줄'+(k<m.length?' — 출처 없는 줄은 사실인지 확인하세요':'')):''}
+  }
+  (function(){$('t5body').addEventListener('click',function(e){if(!e.target||e.target.id!=='t5cs_add')return;
+    var f=$('t5cs_f'),s=$('t5cs_s'),mg=$('t5cs_m'),fv=f.value.trim(),sv=s.value.trim();
+    if(!fv||!sv){mg.className='runmsg err';mg.textContent=!fv?'찾은 사실을 적으세요.':'출처를 적어야 메모에 추가됩니다.';return}
+    var d=new Date(),ds=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    addMemo('motive','company',fv.replace(/\n+/g,' ')+' (출처: '+sv.replace(/\n+/g,' ')+', 확인일 '+ds+')');
+    f.value='';s.value='';mg.className='runmsg ok';mg.textContent='기업 이해 메모에 추가했습니다';cs();
+  })})();
   function count(k){var d=S.sec[k],n=d.body.replace(/\r/g,'').length,nb=d.body.replace(/\s/g,'').length,el=$('t5c_'+k);el.textContent=n.toLocaleString()+'자 (공백 제외 '+nb.toLocaleString()+'자)'+(n>d.limit?' · 제한을 '+(n-d.limit)+'자 넘었습니다':'');el.className=n>d.limit?'over':''}
   var body=$('t5body');
   body.addEventListener('input',function(e){
@@ -3553,7 +3599,7 @@ hist:{n:'사학과',cnt:1,
       var p,r;
       if(act==='draft'){
         if(!memo){throw {message:'소재 메모를 한 칸 이상 작성하세요.'}}
-        p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생의 [소재 메모]를 바탕으로 자기소개서 문항 답변 초안을 쓰세요.\n문항: '+sec.title+'\n'+info()+'\n글자 수: '+d.limit+'자 이내\n구성: '+sec.frame+'\n'+RULES+'- 학생 1인칭 문체("~했습니다")로 쓴다.\n- 기업과 직무에 관한 설명은 [학생이 모은 자료]와 [채용공고·직무기술서]에 있는 내용만 인용한다.\n\n'+srcBlock(src)+'[소재 메모]\n'+memo+
+        p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생의 [소재 메모]를 바탕으로 자기소개서 문항 답변 초안을 쓰세요.\n문항: '+sec.title+'\n'+info()+'\n글자 수: '+d.limit+'자 이내\n구성: '+sec.frame+'\n'+RULES+(sec.rule?'작성 기준:\n'+sec.rule:'')+'- 학생 1인칭 문체("~했습니다")로 쓴다.\n- 기업과 직무에 관한 설명은 [학생이 모은 자료]와 [채용공고·직무기술서]에 있는 내용만 인용한다.\n\n'+srcBlock(src)+'[소재 메모]\n'+memo+
         '\n\n출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식: {"draft":"초안 본문","notes":["학생이 쓰기 전에 확인할 점 2~3개"]}';
         r=await ask(p,src,mg,k);
         if(!r||typeof r.draft!=='string')throw {message:'AI 응답 형식이 올바르지 않습니다. 다시 시도하세요.'};
@@ -3561,7 +3607,7 @@ hist:{n:'사학과',cnt:1,
         mg.className='runmsg ok';mg.textContent='초안을 만들었습니다 ('+r.draft.length.toLocaleString()+'자).';
       }else{
         if(!d.body.trim())throw {message:'점검할 본문을 먼저 작성하세요.'};
-        p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생이 쓴 자기소개서 답변을 점검하세요.\n문항: '+sec.title+'\n'+info()+'\n글자 수 제한: '+d.limit+'자 (현재 '+d.body.length+'자)\n좋은 답변의 구성: '+sec.frame+'\n'+RULES+'- 제안은 학생이 쓴 사실 안에서만 고쳐 쓴다.\n- 인용은 본문에서 그대로 30자 이내로 가져온다.\n'+(src.n?'- [채용공고·직무기술서]의 필수·우대 요건, 직무 키워드, 인재상을 뽑아 학생 본문과 하나씩 비교한다. 본문에 이미 반영된 요건은 matched, 공고에는 있으나 본문에 없거나 약한 요건은 missing, 공고 표현과 어긋나거나 근거 없이 과장된 부분은 mismatch에 쓴다.\n- missing의 how에는 [이력서]나 [경험발굴]에 이미 있는 경험 중 쓸 수 있는 것을 지목하고, 없으면 "(새 사실 필요)"라고 쓴다. 새 사실을 지어내지 않는다.\n':'')+'\n'+srcBlock(src)+extraBlocks()+'[학생 소재 메모]\n'+(memo||'(없음)')+'\n\n[학생 본문]\n'+d.body+
+        p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생이 쓴 자기소개서 답변을 점검하세요.\n문항: '+sec.title+'\n'+info()+'\n글자 수 제한: '+d.limit+'자 (현재 '+d.body.length+'자)\n좋은 답변의 구성: '+sec.frame+'\n'+RULES+(sec.rule?'작성 기준:\n'+sec.rule:'')+'- 제안은 학생이 쓴 사실 안에서만 고쳐 쓴다.\n- 인용은 본문에서 그대로 30자 이내로 가져온다.\n'+(src.n?'- [채용공고·직무기술서]의 필수·우대 요건, 직무 키워드, 인재상을 뽑아 학생 본문과 하나씩 비교한다. 본문에 이미 반영된 요건은 matched, 공고에는 있으나 본문에 없거나 약한 요건은 missing, 공고 표현과 어긋나거나 근거 없이 과장된 부분은 mismatch에 쓴다.\n- missing의 how에는 [이력서]나 [경험발굴]에 이미 있는 경험 중 쓸 수 있는 것을 지목하고, 없으면 "(새 사실 필요)"라고 쓴다. 새 사실을 지어내지 않는다.\n':'')+'\n'+srcBlock(src)+extraBlocks()+'[학생 소재 메모]\n'+(memo||'(없음)')+'\n\n[학생 본문]\n'+d.body+
         '\n\n출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식: {"summary":"한 줄 종합 평가","fixes":[{"quote":"본문 인용","problem":"문제점","suggestion":"고쳐 쓴 문장 예시"}],"cliche":["상투적이거나 일반적인 표현"]'+(src.n?',"jd":{"matched":["본문에 반영된 공고 요건 최대 6개"],"missing":[{"req":"공고 요건","where":"본문에서 넣을 위치","how":"보강 방법"}],"mismatch":["어긋난 부분 최대 4개"]}':'')+'}  fixes는 가장 중요한 순서로 최대 5개'+(src.n?', missing은 최대 6개':'')+'.';
         r=await ask(p,src,mg,k);
         if(!r||!Array.isArray(r.fixes))throw {message:'AI 응답 형식이 올바르지 않습니다. 다시 시도하세요.'};
@@ -3592,13 +3638,13 @@ hist:{n:'사학과',cnt:1,
   }
   function guideBlock(s){
     var hbG=(!S.guide&&window.__ipHB&&window.__ipHB.guide)?window.__ipHB.guide():null;
-    var g=S.guide?S.guide[s.k]:(hbG?hbG.g[s.k]:null);
+    var g=S.guide?S.guide[s.k]:(hbG?hbG.g[s.k]:null),gen=false;if(!g&&GEN[s.k]){g=GEN[s.k];gen=true}
     var h='<div class="gblk"><h4>작성 틀</h4><p class="gs">'+esc(s.frame)+'</p><ol>'+s.steps.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ol></div>'+
     '<div class="gblk"><h4>점검 목록</h4><ul class="chk">'+s.checks.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
     '<div class="gblk"><h4>예시 문장 <span class="tag ex">가상 틀</span></h4><p class="exs">'+esc(s.ex)+'</p><div class="subt">[ ] 안을 내 사실로 채우세요.</div></div>';
     h+='<div class="gblk"><h4>직무 맞춤 예시 '+(hbG?'<span class="tag ex">'+esc(hbG.row.ind+' × '+hbG.row.job)+' · 핸드북 기준</span>':'')+(S.guideJob?'<span class="tag'+(S.guideExample?' ex':'')+'">'+esc(S.guideJob)+(S.guideExample?' · 예시':'')+'</span>':'')+'</h4>';
-    if(g){s.gkeys.forEach(function(kk){h+='<div class="gk"><b>'+kk[1]+'</b>'+list(g[kk[0]])+'</div>'});
-      if(S.guideJob&&S.job.trim()&&S.guideJob!==S.job.trim())h+='<div class="subt err">입력한 직무('+esc(S.job.trim())+')와 다른 직무 기준입니다. 아래 버튼으로 새로 만드세요.</div>'}
+    if(g){if(gen)h+='<div class="subt"><span class="tag ex">범용 예시</span> 직무와 상관없이 쓰는 작성 예시입니다.</div>';s.gkeys.forEach(function(kk){h+='<div class="gk"><b>'+kk[1]+'</b>'+list(g[kk[0]])+'</div>'});
+      if(!gen&&S.guideJob&&S.job.trim()&&S.guideJob!==S.job.trim())h+='<div class="subt err">입력한 직무('+esc(S.job.trim())+')와 다른 직무 기준입니다. 아래 버튼으로 새로 만드세요.</div>'}
     else h+='<div class="subt">위 지원 정보에서 <b>산업과 지원직무</b>를 선택하면 그 직무에 맞춘 예시가 표시됩니다. (AI 사용 시 아래 버튼으로 더 세밀하게 만들 수 있습니다.)</div>';
     h+='<div class="runbtns" style="margin-top:6px"><button type="button" class="btn ghost sm2" data-act="mkguide">이 직무에 맞춰 예시 만들기</button></div><div class="runmsg" id="t5gg" role="status"></div></div>';
     return h;
@@ -3654,11 +3700,11 @@ hist:{n:'사학과',cnt:1,
       try{
         var src2=getSources();
         var pr='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 아래 직무에 지원하는 대학생이 자기소개서를 쓸 때 참고할 예시 가이드를 만드세요.\n'+info()+'\n- 일반적인 직무 지식에 기반해 쓰되 특정 기업의 사실은 쓰지 않는다.\n- 학생이 쓸 수 있는 "경험 소재"와 "조사 포인트"를 직무 업무에 맞춰 제안한다. 각 항목은 한 문장.\n'+RULES+'\n'+(src2.n?'[채용공고·직무기술서]\n'+src2.text+'\n\n':'')+
-        '출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식: {"motive":{"company_points":[],"job_points":[],"link_examples":[],"plan_examples":[]},"fit":{"knowledge":[],"skill":[],"attitude":[]},"org":{"problem":[],"comm":[],"challenge":[]}} 각 배열 2~3개.';
+        '출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식: {"motive":{"company_points":[],"job_points":[],"link_examples":[],"plan_examples":[]},"fit":{"knowledge":[],"skill":[],"attitude":[]},"org":{"problem":[],"comm":[],"challenge":[]},"proj":{"picks":[],"apply":[],"verify":[]},"ai":{"problem":[],"method":[],"verify":[]}} 각 배열 2~3개. proj는 직무와 이어지는 프로젝트·공모전·연구 경험 소재와 실전 적용·수치 검증 예시, ai는 AI를 설계해 쓴 문제 해결 경험(단순 질의응답 제외)의 문제 정의·활용 방식·성과 검증 예시.';
         var rr=await ask(pr,src2,gm,'guide');
         if(!rr||!rr.motive||!rr.fit||!rr.org)throw {message:'AI 응답 형식이 올바르지 않습니다. 다시 시도하세요.'};
         var ar=function(x){return Array.isArray(x)?x.map(String).slice(0,5):[]};
-        var G={};SECS.forEach(function(s){G[s.k]={};s.gkeys.forEach(function(kk){G[s.k][kk[0]]=ar(rr[s.k][kk[0]])})});
+        var G={};SECS.forEach(function(s){if(!rr[s.k])return;G[s.k]={};s.gkeys.forEach(function(kk){G[s.k][kk[0]]=ar(rr[s.k][kk[0]])})});
         S.guide=G;S.guideJob=S.job.trim();S.guideExample=false;save();side();var g2=$('t5gg');g2.className='runmsg ok';g2.textContent='직무 맞춤 예시를 만들었습니다.';
       }catch(err){var g3=$('t5gg');if(ctrls.guide&&ctrls.guide.signal.aborted){g3.className='runmsg';g3.textContent='중지했습니다.'}else{g3.className='runmsg err';g3.textContent=errText(err)}el.disabled=false}
       delete ctrls.guide;
