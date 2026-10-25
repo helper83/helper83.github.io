@@ -1440,13 +1440,13 @@ hist:{n:'사학과',cnt:1,
 (function(){
   var $=function(id){return document.getElementById(id)};
   var T=[['tab1','view1'],['tab2','view2'],['tab8','view8'],['tab4','view4'],['tab7','view7'],['tab5','view5'],['tab6','view6']];
-  var SUB=['미션1 · 사람 평가 · 평가표로 직접 평가하고, 컨설팅 보기에서 고칠 부분을 확인합니다','미션2 · AI 평가 · 채용공고·직무기술서를 올려 공고 기준으로 AI가 평가 초안을 만듭니다','참고 · 직무대영역 → 직무 → 세부직무와 필요 역량을 탐색합니다 (번호 없는 참고용)','미션3 · 공고와 직무기술서에 맞춰 직무 관련 이력서를 작성합니다','미션4 · 경험을 STAR로 정리해 이력서·자소서 소재로 만듭니다','미션5 · 소재 메모 → 본문 → 점검 순서로 자기소개서를 씁니다','선택 · 제출이 필요한 직무만 포트폴리오 개요를 작성합니다'];
+  var SUB=['미션1 · 사람 평가 · 평가표로 직접 평가하고, 컨설팅 보기에서 고칠 부분을 확인합니다','미션2 · AI 평가 · 채용공고·직무기술서를 올려 공고 기준으로 AI가 평가 초안을 만듭니다','참고 · 직무대영역 → 직무 → 세부직무와 필요 역량을 탐색합니다 (번호 없는 참고용)','미션3 · 공고와 직무기술서에 맞춰 직무 관련 이력서를 작성합니다','미션4 · 경험을 STAR로 정리해 이력서·자소서 소재로 만듭니다','','선택 · 제출이 필요한 직무만 포트폴리오 개요를 작성합니다'];
   var labels=T.map(function(t){return $(t[0]).textContent.trim()});
   var cur=0;
   function show(i,user){
     cur=i;
     T.forEach(function(t,j){var b=$(t[0]);b.setAttribute('aria-selected',String(j===i));b.tabIndex=j===i?0:-1;b.setAttribute('aria-controls',t[1]);$(t[1]).hidden=(j!==i);$(t[1]).setAttribute('role','tabpanel');$(t[1]).setAttribute('aria-labelledby',t[0])});
-    var sub=$('sub');if(sub)sub.textContent=SUB[i];
+    var sub=$('sub');if(sub){sub.textContent=SUB[i];sub.hidden=!SUB[i]}
     document.title='헬퍼손 지원서 - '+labels[i].replace(/^\S+\s/,'');
     try{localStorage.setItem('ipsurvey-tab-v2',String(i))}catch(e){}
     var b=$(T[i][0]);if(b.scrollIntoView)b.scrollIntoView({block:'nearest',inline:'center'});
