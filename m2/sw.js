@@ -1,4 +1,4 @@
-const CACHE = 'helpertom-mini-v13';
+const CACHE = 'helpertom-mini-v14';
 const FILES = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
