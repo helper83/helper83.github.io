@@ -11,7 +11,7 @@ button,select,input,textarea{font:inherit;color:inherit}h1,h2,h3{line-height:1.3
 /* header & route stepper */
 header{position:sticky;top:0;z-index:60;background:var(--surface);border-bottom:1px solid var(--line)}
 .head-row{max-width:960px;margin:0 auto;padding:10px 18px 6px;display:flex;align-items:center;gap:14px;justify-content:space-between}
-.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-mark{width:36px;height:36px;display:block;object-fit:contain;flex:0 0 auto}.brand-name{font-weight:700;font-size:16px;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-mark{width:36px;height:36px;display:block;object-fit:contain;flex:0 0 auto}.brand-name{font-weight:700;font-size:16px;white-space:nowrap}.brand-txt{min-width:0}.fb{font-size:12px;line-height:1.4;color:var(--muted);white-space:nowrap}.fb a{color:var(--primary,#1E7BC4);text-decoration:underline;display:inline-block;padding:15px 0;margin:-15px 0}
 .head-right{display:flex;align-items:center;gap:8px}
 .progress-pills{display:flex;gap:6px;justify-content:flex-end}.pill{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;background:var(--sunk);border:1px solid var(--line2);font-size:12px;color:var(--ink2);white-space:nowrap}.pill b{font-weight:700;color:var(--ink)}.pill.done{background:var(--ok-tint);border-color:#BFE0CC;color:var(--ok)}.pill.done b{color:var(--ok)}
 .reset{min-height:44px;padding:0 8px;border:0;background:none;color:var(--primary-ink);font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap}
@@ -70,7 +70,7 @@ details.exbox{margin:12px 0;border:1.5px solid var(--line);border-radius:var(--r
 .resultrow{display:flex;gap:10px;border-top:1px solid var(--line2);padding:10px 0;align-items:flex-start}.resultrow:first-of-type{border-top:0}.rank{width:24px;height:24px;border-radius:50%;background:var(--sunk);color:var(--primary-ink);display:grid;place-items:center;flex:none;font-size:12px;font-weight:700;margin-top:2px}.resultrow h3{margin:0;font-size:15px}.resultrow p{font-size:13px;color:var(--muted);margin:2px 0 0}
 .statement{padding:14px 16px;border-radius:var(--r-lg);background:var(--tint);border:1px solid var(--line-blue);margin-top:14px}.statement h2{margin:0 0 6px;font-size:20px}
 .srow{margin:5px 0;font-size:14px}.srow b{display:inline-block;min-width:54px;color:var(--primary-ink)}
-/* 전공 연계 */.mj{margin-top:18px;border:1.5px solid var(--line-blue);background:var(--tint);border-radius:var(--r-lg);padding:14px 16px}.mj h2,.mj h3{font-size:16px;margin:0 0 8px}.mj .srow{margin:8px 0;font-size:14px}.mj .srow b{display:block;min-width:0;margin-bottom:2px}.mj-hint{margin-top:12px;border:1px dashed var(--line-blue);border-radius:var(--r-md);padding:10px 12px;font-size:13px;color:var(--ink2)}.mj a{color:var(--primary-ink);text-decoration:underline;overflow-wrap:anywhere}
+/* 전공 연계 */.mj{margin-top:18px;border:1.5px solid var(--line-blue);background:var(--tint);border-radius:var(--r-lg);padding:14px 16px}.mj h2,.mj h3{font-size:16px;margin:0 0 8px}.mj .srow{margin:8px 0;font-size:14px}.mj .srow b{display:block;min-width:0;margin-bottom:2px}.lg .lgi{margin:6px 0;font-size:13px;line-height:1.6}.lg .lgs{font-size:12px}.mj-hint{margin-top:12px;border:1px dashed var(--line-blue);border-radius:var(--r-md);padding:10px 12px;font-size:13px;color:var(--ink2)}.mj a{color:var(--primary-ink);text-decoration:underline;overflow-wrap:anywhere}
 footer{max-width:960px;margin:0 auto;padding:4px 18px 40px;font-size:12px;color:var(--muted)}
 @media(max-width:640px){
  body{padding-bottom:76px;background:#F7F8FA}
@@ -82,8 +82,8 @@ footer{max-width:960px;margin:0 auto;padding:4px 18px 40px;font-size:12px;color:
  .mobile-bottom .stop{padding:4px 1px 2px;border:0;gap:1px;min-height:54px}.mobile-bottom .stop .dot{width:26px;height:26px;font-size:12px}.mobile-bottom .stop .lbl{font-size:11px;letter-spacing:-.06em}.mobile-bottom .stop .meta{display:none}
  footer{padding:4px 12px 88px}
 }
-@media print{*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff;padding:0}header,.mobile-bottom,#accNow,.home-top,.no-print,.acc.done,.acc.lock,.acc.open>.acc-h,.acc-body>.lead,.skip-link{display:none!important}main,footer{max-width:100%;padding:0}.acc{border:0!important;box-shadow:none!important}.acc-body{padding:0}.experience,.statement{break-inside:avoid}}
-</style></head><body><a class="skip-link" href="#app">본문 바로가기</a><header id="siteHeader"><div class="head-row"><div class="brand"><img class="brand-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjI1IiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMzY3OEYyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjM1OEQ4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTUiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMTggMTUgVjQ5IE0zNyAxNSBWNDkgTTE4IDMyIEgzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0zMSA1MSBMMzkgMzkgTDQ3IDQyIEw1NyAyNiIgc3Ryb2tlPSIjRjlDQjVFIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="" width="36" height="36" aria-hidden="true"><div class="brand-name">헬퍼손 경험이해</div></div><div class="head-right"><div class="progress-pills" id="progressPills" aria-live="polite"></div><button type="button" class="reset no-print hidden" id="resetBtn" onclick="resetAll()">처음부터 다시</button></div></div><nav class="route no-print" aria-label="진행 단계"><ol id="routeList"></ol></nav></header><main id="app" tabindex="-1"></main><nav class="mobile-bottom no-print" id="mobileBottom" aria-label="진행 단계"></nav><footer>교육용 시제품 · 답변에 기반한 탐색 제안이며 공인 심리검사 또는 검증된 직무 적합도 진단이 아닙니다. 입력값은 이 브라우저 안에서만 처리·임시 저장되며 외부 서버로 전송되지 않습니다. 공용 PC에서는 사용 후 '처음부터 다시'로 지워 주세요. 산업·직무 후보는 교육용 예시 목록이며 전체 산업·직무를 대표하지 않습니다. 전공 연계 정보는 공개된 학과정보·통계 기준의 일반 정보이므로 최신 채용공고와 학과 안내로 꼭 확인하세요.</footer><script>
+@media print{.fb{display:none!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff;padding:0}header,.mobile-bottom,#accNow,.home-top,.no-print,.acc.done,.acc.lock,.acc.open>.acc-h,.acc-body>.lead,.skip-link{display:none!important}main,footer{max-width:100%;padding:0}.acc{border:0!important;box-shadow:none!important}.acc-body{padding:0}.experience,.statement{break-inside:avoid}}
+</style></head><body><a class="skip-link" href="#app">본문 바로가기</a><header id="siteHeader"><div class="head-row"><div class="brand"><img class="brand-mark" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCIgeTE9IjAiIHgyPSIwLjI1IiB5Mj0iMSI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMzY3OEYyIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjM1OEQ4Ii8+PC9saW5lYXJHcmFkaWVudD48L2RlZnM+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTUiIGZpbGw9InVybCgjZykiLz48cGF0aCBkPSJNMTggMTUgVjQ5IE0zNyAxNSBWNDkgTTE4IDMyIEgzNyIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0zMSA1MSBMMzkgMzkgTDQ3IDQyIEw1NyAyNiIgc3Ryb2tlPSIjRjlDQjVFIiBzdHJva2Utd2lkdGg9IjciIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==" alt="" width="36" height="36" aria-hidden="true"><div class="brand-txt"><div class="brand-name">헬퍼손 경험이해</div><div class="fb">의견 보내기: <a href="mailto:hp83@naver.com">hp83@naver.com</a></div></div></div><div class="head-right"><div class="progress-pills" id="progressPills" aria-live="polite"></div><button type="button" class="reset no-print hidden" id="resetBtn" onclick="resetAll()">처음부터 다시</button></div></div><nav class="route no-print" aria-label="진행 단계"><ol id="routeList"></ol></nav></header><main id="app" tabindex="-1"></main><nav class="mobile-bottom no-print" id="mobileBottom" aria-label="진행 단계"></nav><footer>교육용 시제품 · 답변에 기반한 탐색 제안이며 공인 심리검사 또는 검증된 직무 적합도 진단이 아닙니다. 입력값은 이 브라우저 안에서만 처리·임시 저장되며 외부 서버로 전송되지 않습니다. 공용 PC에서는 사용 후 '처음부터 다시'로 지워 주세요. 산업·직무 후보는 교육용 예시 목록이며 전체 산업·직무를 대표하지 않습니다. 전공 연계 정보는 공개된 학과정보·통계 기준의 일반 정보이므로 최신 채용공고와 학과 안내로 꼭 확인하세요.</footer><script>
 'use strict';
 const CATS=[['학업·전공','전공과목·과제·팀 프로젝트'],['대외활동·서포터즈·공모전','대외활동·홍보·공모전'],['아르바이트·인턴·현장실습','현장 업무·고객 대응'],['동아리·학생회·봉사','협업·운영·지원'],['취미·자기계발','자발적 몰입과 학습'],['위기·실패·극복','문제해결·변화·성찰']];
 const STEPS=['기본 정보','경험 선택','경험 작성','심화 질문','강점·추천','목표 설정','보고서'];
@@ -162,14 +162,15 @@ const STAR_KEYS=[['S','S 상황','언제·어디서·어떤 활동이었나요? 
 // 일반 정보이며 학교별 교육과정·자격 요건·채용 조건은 매년 달라지므로 최신 공고와 학과 안내로 확인해야 합니다.
 const JH='https://www.jinhak.com/jh/high3/univ-major/major-info/major-detail/';
 const MAJORS=[
-{id:'food_nutri',label:'식품영양학과',match:['식품영양'],
+{id:'food_nutri',legal:[["영양사 면허(국민영양관리법)", "이번에 법령 원문을 확인하지 못했습니다. 확인 필요: 응시자격·학과 요건은 국가법령정보센터와 한국보건의료인국가시험원 최신 공고.", []]],
+ label:'식품영양학과',match:['식품영양'],
  fields:['급식·외식 경영(산업체·학교·병원 급식)','임상·보건영양(병원·보건소·요양시설)','식품 개발·분석(식품회사·연구소)'],
  jobs:['영양사·임상영양','식품 연구개발(R&D)','식품 품질·위생관리(HACCP)'],
  inds:['급식·영양·건강관리','식품 R&D·품질안전','식품·외식','보건·복지'],
  certs:['영양사 면허(국가시험)','위생사 면허','조리기능사','식품(산업)기사','임상영양사(영양사 면허 후 교육·시험)'],
  kw:['식단','급식','영양상담','위생관리','메뉴개발','식품분석','레시피'],
  tip:'영양사·식품 R&D는 면허·자격이 취업 문턱이므로 경험에는 "어떤 대상에게 무엇을 어떻게 분석·상담·개선했는지"와 위생·기준을 지킨 행동을 숫자와 함께 적으세요.',
- srcs:[['진학사 식품영양·조리학과',JH+'F1202'],['동서대 식품영양 진로 로드맵','https://uni.dongseo.ac.kr/food/index.php?pCode=MN5000071']],
+ srcs:[['진학사 식품영양·조리학과',JH+'F1202'],['대학 식품영양 진로 로드맵(참고)','https://uni.dongseo.ac.kr/food/index.php?pCode=MN5000071']],
  ex:{S:"3학년 식품영양학과 '급식관리' 실습에서 학교 급식 영양사 보조로 4주간 참여했다.",T:"학생 600명 급식의 식단 구성과 위생 점검을 맡아 잔반을 줄이는 개선안을 만드는 과제였다.",A:"식단표를 영양 기준에 맞춰 검토하고 선호도 설문을 120명에게 받아 메뉴 조합을 수정했다. 조리 과정별 위생 점검표(HACCP 기준)를 만들어 매일 기록하고 조리원에게 개선 사항을 전달했다.",R:"잔반량이 평균 22% 줄었고 위생 점검 누락이 주 5건에서 1건으로 감소했다. 영양사 실습 평가에서 우수를 받았다."}},
 {id:'biz',label:'경영학과',match:['경영학','경영'],
  fields:['마케팅·영업','재무·회계','인사·조직','생산·운영·SCM','경영정보·컨설팅'],
@@ -234,7 +235,8 @@ const MAJORS=[
  tip:'경제학과는 "이론을 데이터와 정책 문제에 적용한 경험"이 강점입니다. 경험에는 사용한 자료·모형·결론과 한계를 함께 적고, 데이터 도구 활용 경험을 보강하세요.',
  srcs:[['진학사 경제학과',JH+'C1103']],
  ex:{S:"경제학과 '계량경제학' 수업의 3인 팀 과제에서 최저임금과 청년 고용의 관계를 분석했다.",T:"공공 통계 자료로 가설을 세우고 회귀분석 결과를 보고서로 정리하는 것이 목표였다.",A:"통계청 자료를 내려받아 전처리하고 파이썬과 엑셀로 회귀분석을 실시했다. 가설을 검증하고 한계를 정리해 정책 제안 보고서를 작성하고 발표를 맡았다.",R:"보고서가 수업 최고점을 받았고 학과 학술제에서 발표했다."}},
-{id:'lis',label:'문헌정보학과',match:['문헌정보'],
+{id:'lis',legal:[["사서(도서관법 시행령 별표 「사서자격의 구분 및 자격요건」)", "2급 정사서: 대학(전문대 제외)에서 문헌정보학·도서관학 전공 졸업, 또는 해당 석사학위 등. 준사서: 전문대 문헌정보과 졸업, 또는 대학 재학 중 문헌정보학을 부전공한 졸업자 등. 1급 정사서: 문헌정보학 박사 또는 2급 정사서 후 경력·학위 요건 충족. 도서관 근무·연구 경력의 인정 범위는 별표 비고 기준. (조회본에 개정일 표기가 없어 현행 여부 확인 필요)", [["도서관법 시행령 별표(사서 자격요건)", "https://www.law.go.kr/flDownload.do?gubun=&flSeq=133079309&bylClsCd=110201"]]]],
+ label:'문헌정보학과',match:['문헌정보'],
  fields:['도서관(공공·대학·학교)·사서','기업·기관 자료실·지식정보 관리','기록물 관리·아카이브','출판·언론사 자료·콘텐츠 기획'],
  jobs:['사서·정보서비스','기록물·아카이브 관리','학예사·문화유산 기획','콘텐츠 기획','데이터 분석'],
  inds:['도서관·박물관·문화유산','교육·HRD','공공행정','언론·출판·뉴스미디어','IT·디지털 서비스'],
@@ -243,16 +245,18 @@ const MAJORS=[
  tip:'사서직은 공채·자격 요건이 뚜렷합니다. 경험에는 이용자 응대·프로그램 운영·자료 정리 사례를 쓰고, 데이터·메타데이터 경험을 더하면 IT·콘텐츠 직무로도 확장됩니다.',
  srcs:[['진학사 문헌정보학과',JH+'C1404']],
  ex:{S:"문헌정보학과 현장실습으로 구립도서관에서 4주간 이용자 서비스 보조를 했다.",T:"장서 정리와 독서 프로그램 운영을 맡아 이용자 만족도를 높이는 과제였다.",A:"신착 도서를 분류·목록 작업하고 이용자 불편을 기록해 서가 안내를 개선했다. 초등생 독서 프로그램을 기획해 10회 운영하며 참여자 설문으로 보완했다.",R:"프로그램 참여 인원이 회당 평균 8명에서 15명으로 늘었고 도서관장 추천서를 받았다."}},
-{id:'welfare',label:'사회복지학과',match:['사회복지'],
+{id:'welfare',legal:[["사회복지사(사회복지사업법 시행령 별표 1)", "1급: 사회복지사업법 제11조 제3항의 국가시험 합격. 2급: 사회복지 관련 학과 학사·석사 이상 또는 전문학사 등으로 정해진 교과목을 이수한 경우 등(개정 2020.12.8 표기본). 필수·선택 교과목과 현장실습 시간은 최신 별표·학교 교과과정 확인 필요.", [["사회복지사업법 시행령 별표 1", "https://www.law.go.kr/flDownload.do?gubun=&flSeq=150045735&bylClsCd=110201"]]]],
+ label:'사회복지학과',match:['사회복지'],
  fields:['종합사회복지관·지역아동센터','공공기관(주민센터·복지부서)','병원·정신건강 기관(해당 수련)','학교·기업 사회공헌','NGO·재단'],
  jobs:['사회복지 서비스','공공행정·사업운영','교육기획·HRD','시장조사·리서치','경영지원'],
  inds:['보건·복지','공공행정','보육·아동·가족 서비스','교육·HRD'],
- certs:['사회복지사 1·2급(사회복지사업법, 현장실습 160시간 이상)','정신건강사회복지사(수련 필요)','학교사회복지사','사회조사분석사','직업상담사 2급'],
+ certs:['사회복지사 1·2급(사회복지사업법, 현장실습 포함·시간은 확인 필요)','정신건강사회복지사(수련 필요)','학교사회복지사','사회조사분석사','직업상담사 2급'],
  kw:['사례관리','복지관','프로그램기획','상담','자원봉사','욕구조사','지역사회'],
  tip:'사회복지 직무는 현장실습과 봉사 경험이 중요합니다. 경험에는 대상자 욕구를 파악해 프로그램을 설계·운영한 과정과 변화(수치·사례)를 적으세요.',
- srcs:[['진학사 아동·가족·복지학과',JH+'C1401'],['동서대 사회복지학과 자격 안내','https://uni.dongseo.ac.kr/welfare/index.php?pCode=licenses']],
+ srcs:[['진학사 아동·가족·복지학과',JH+'C1401'],['대학 사회복지학과 자격 안내(참고)','https://uni.dongseo.ac.kr/welfare/index.php?pCode=licenses']],
  ex:{S:"사회복지학과 현장실습으로 종합사회복지관에서 160시간 동안 사례관리 보조를 했다.",T:"독거 어르신 12명의 욕구를 조사하고 프로그램 운영을 돕는 역할이었다.",A:"어르신 방문 상담으로 욕구조사를 실시하고 사례관리 기록을 정리했다. 지역자원을 연계해 식사 지원 프로그램을 기획하고 자원봉사자 8명을 조율했다.",R:"프로그램 참여율이 60%에서 85%로 올랐고 실습기관으로부터 우수 실습생으로 평가받았다."}},
-{id:'child',label:'아동학과',match:['아동','유아','보육'],
+{id:'child',legal:[["보육교사 2급(영유아보육법 시행령 별표)", "전문대학 이상 수준의 학교에서 보건복지부령이 정한 보육 관련 교과목·학점을 이수하고 졸업, 또는 3급 취득 후 2년 이상 보육업무 경력과 승급교육. (조회본 개정일 2012.2.29 표기: 현행 기준과 교과목·학점은 보건복지부·대학 확인 필요)", [["영유아보육법 시행령 별표(보육교사 자격기준)", "https://www.law.go.kr/flDownload.do?gubun=&flSeq=100323523&bylClsCd=110201"]]]],
+ label:'아동학과',match:['아동','유아','보육'],
  fields:['어린이집·유치원·보육 기관','아동복지시설·지역아동센터','아동·가족 상담·센터','교육콘텐츠·키즈 기업(교구·도서)','공공기관(육아종합지원센터)'],
  jobs:['아동·보육 프로그램 기획','사회복지 서비스','교육기획·HRD','콘텐츠 기획','고객경험(CX) 관리'],
  inds:['보육·아동·가족 서비스','교육·HRD','보건·복지','미디어·콘텐츠'],
@@ -279,7 +283,8 @@ const MAJORS=[
  tip:'언론 직무는 취재·검증 경험을 봅니다. AI 활용이 늘수록 \'무엇을 취재할지 판단하고 검증·책임지는 능력\'이 더 중요해진다고 합니다. 경험에는 취재 과정과 검증 방법을 구체적으로 적으세요.',
  srcs:[['한국기자협회 「AI 시대 저널리즘의 경쟁력」(2026.7)','https://journalist.or.kr/news/article.html?no=61276'],['진학사 언론·방송·매체학과',JH+'C1407']],
  ex:{S:"저널리즘전공 교내 학보사에서 취재기자로 학생 식당 가격 인상 문제를 취재했다.",T:"한 달 안에 사실을 검증해 기획 기사를 쓰는 것이 목표였다.",A:"학생 100명 설문과 식당 담당자 인터뷰로 사실을 확인하고 가격 자료를 팩트체크했다. 데이터 표로 정리해 기사를 작성하고 편집장과 협의해 제목을 수정했다.",R:"기사가 학보 1면에 실렸고 식당 운영위가 가격 설명회를 열었다."}},
-{id:'korean',label:'국어국문학과',match:['국어국문','국문'],
+{id:'korean',legal:[["한국어교원(국립국어원 등급 기준)", "3급: 학위 과정에서 부전공 이수 등. 2급: 학위 과정에서 주전공·복수전공 이수, 또는 3급 취득 후 승급. 1급: 2급 취득 후 승급. 영역별 필수 과목·학점은 교육기관별로 다르므로 대학 교육과정과 국립국어원 과목 확인 페이지에서 확인해야 합니다. (본 앱은 세부 학점을 제시하지 않음)", [["국립국어원 한국어교원 자격", "https://kteacher.korean.go.kr/info/detail/grdStrd"]]]],
+ label:'국어국문학과',match:['국어국문','국문'],
  fields:['출판·편집·콘텐츠 기획','광고·홍보(카피라이터)','방송 작가·미디어 콘텐츠','교육(한국어교육·논술·교사)','공공기관·기업 문서·소통 직무'],
  jobs:['에디터·카피라이터','콘텐츠 기획','한국어교육·교육콘텐츠','기자·취재','브랜드 마케팅'],
  inds:['언론·출판·뉴스미디어','광고·마케팅','교육·HRD','미디어·콘텐츠'],
@@ -297,14 +302,15 @@ const MAJORS=[
  tip:'언어 전공은 "언어+직무" 조합이 강점입니다. AI 번역 확산으로 전문분야·검수·현지화 역량이 중요해지고 있어, 경험에는 번역한 분야와 오류를 잡고 다듬은 과정을 적으세요.',
  srcs:[['진학사 프랑스어·문학과',JH+'B1109'],['경향신문 번역·통번역 일자리 기획(2026.4)','https://www.khan.co.kr/article/202604200600081']],
  ex:{S:"불어불문학과 재학 중 프랑스 화장품 브랜드의 한국 온라인몰 상품 설명 번역 인턴을 4주간 했다.",T:"프랑스어 설명서 40건을 한국 소비자에게 맞게 번역하는 것이 목표였다.",A:"상품 설명을 번역하고 현지화 관점에서 표현을 고쳤다. 기계 번역 초안과 대조해 오류를 교정하고 고객 문의를 분석해 용어집을 만들었다.",R:"번역 오류 문의가 월 12건에서 3건으로 줄었고 인턴 종료 후 추가 의뢰를 받았다."}},
-{id:'history',label:'사학과',match:['사학','역사'],
+{id:'history',legal:[["학예사(박물관·미술관)", "「박물관 및 미술관 진흥법」 제6조(시행 2026.7.1 확인): 1·2·3급 정학예사와 준학예사로 구분. 준학예사는 문화체육관광부장관이 시행하는 시험에 합격해야 하고, 세부 자격요건(실무경력 등)은 대통령령으로 정함.", [["박물관 및 미술관 진흥법 제6조", "https://law.go.kr/LSW//lsLawLinkInfo.do?lsJoLnkSeq=1000630614&chrClsCd=010202&lsId=000824&print=print"]]], ["학예사 등급·시험(대학 안내 기준, 시행령 원문 대조 필요)", "준학예사: 시험 합격 + 학사 이상 1년·전문학사 3년·그 외 5년 실무경력. 3급 정학예사: 박사 1년·석사 2년 실무경력(또는 준학예사 후 7년). 2급은 3급 후 5년, 1급은 2급 후 7년 재직. 시험은 박물관학·외국어 + 선택 2과목(한국사·미술사학·고고학 등), 응시자격 제한 없음, 한국산업인력공단 시행.", [["대학 학예사 안내", "https://history.mokpo.ac.kr/history/2106/subview.do"], ["대학 사학과 관련 자격", "https://history.gwnu.ac.kr/history/3663/subview.do"]]], ["중등교사·한국사능력검정", "교직 이수·임용 요건과 한국사능력검정 급수 기준은 이번에 법령 원문을 확인하지 못했습니다. 확인 필요: 교육부·국사편찬위원회 최신 공고.", []]],
+ label:'사학과',match:['사학','역사'],
  fields:['박물관·문화재 기관(학예사·문화재 조사)','문화콘텐츠 기획·전시·출판','교육(교사·역사 교육 콘텐츠)','공공기관·연구소','언론·방송·다큐 제작'],
  jobs:['학예사·문화유산 기획','콘텐츠 기획','기록물·아카이브 관리','에디터·카피라이터','공공행정·사업운영'],
  inds:['도서관·박물관·문화유산','교육·HRD','미디어·콘텐츠','공공행정'],
- certs:['정학예사·준학예사(학예사 자격, 최신 요건 확인)','한국사능력검정','중등교사(교직 이수)','한자·고문서 해독','문화재 관련 자격(참고)'],
+ certs:['학예사(준학예사 시험 → 정학예사, 아래 법정 자격 참조)','한국사능력검정','중등교사(교직 이수)','한자·고문서 해독','문화재 관련 자격(참고)'],
  kw:['사료','전시기획','유물','답사','문화재','해설','콘텐츠기획'],
  tip:'사학 전공은 직무가 한정적으로 보이기 쉬워 "자료조사→해석→전달(전시·콘텐츠)" 경험을 직무 언어로 정리하세요. 학예사 등은 자격 요건이 명확하므로 공고를 먼저 확인하세요. (사학과 단독 공식 자료는 제한적이어서 인접 학과 정보를 참고함: 확인 필요)',
- srcs:[['진학사 문화인류·민속·미술사학과(인접 학과)',JH+'B1201'],['전주대 역사콘텐츠학과 진로(참고)','https://jj.ac.kr/iphak/exploration/human/history.do']],
+ srcs:[['진학사 문화인류·민속·미술사학과(인접 학과)',JH+'B1201'],['대학 역사콘텐츠학과 진로(참고)','https://jj.ac.kr/iphak/exploration/human/history.do']],
  ex:{S:"사학과 재학 중 지역 박물관에서 방학 동안 전시 보조 인턴을 했다.",T:"조선시대 생활사 전시의 자료조사와 해설문 작성을 맡았다.",A:"사료와 유물 기록을 조사해 전시 해설문을 작성하고 관람객 동선과 설명 패널을 기획했다. 초등학생 대상 체험 프로그램을 운영하고 설문으로 개선점을 찾았다.",R:"전시 관람객 만족도가 92%였고 해설문이 상설 전시 패널에 채택되었다."}},
 {id:'chinese',label:'중어중문학과',match:['중어중문','중국어'],
  fields:['한중 무역·해외영업·구매','중국 관련 마케팅·플랫폼 운영','번역·통역·현지화','관광·유통·외식 서비스','교육(어학원·교사)'],
@@ -322,7 +328,7 @@ const MAJORS=[
  certs:['식품기사·식품산업기사','위생사','HACCP 관련 교육','조리기능사(참고)'],
  kw:['제품개발','관능평가','발효','성분분석','공정개선','HACCP','품질검사'],
  tip:'식품 R&D·품질 직무는 실험 설계와 기준 준수 경험을 봅니다. 경험에는 "어떤 시료를 어떤 방법으로 시험해 무엇을 개선했는지"와 안전·위생 기준을 지킨 행동을 적으세요.',
- srcs:[['진학사 식품가공학과',JH+'F1102'],['동서대 식품영양 진로 로드맵(식품개발·분석)','https://uni.dongseo.ac.kr/food/index.php?pCode=MN5000071']],
+ srcs:[['진학사 식품가공학과',JH+'F1102'],['대학 식품영양 진로 로드맵(식품개발·분석, 참고)','https://uni.dongseo.ac.kr/food/index.php?pCode=MN5000071']],
  ex:{S:"식품공학전공 '식품가공학' 실험 수업의 4인 팀에서 저당 요거트 시제품을 개발했다.",T:"당 함량을 줄이면서 관능 평가 점수를 유지하는 레시피를 8주 안에 만드는 과제였다.",A:"발효 조건을 달리한 시제품 6종을 만들고 당도·pH를 측정해 성분을 분석했다. 관능평가 30명 데이터를 통계로 비교해 레시피를 수정하고 실험 기록을 위생 기준에 맞춰 관리했다.",R:"당 함량을 28% 줄이고도 관능 점수 4.1/5점을 얻어 학과 제품개발 발표회에서 1위를 했다."}},
 {id:'bioenv',label:'생명환경공학전공',match:['생명환경','환경공학','생명공학'],
  fields:['환경 엔지니어링(수질·대기·폐기물)·환경컨설팅','바이오·제약·화장품 연구·생산','식품·소재 연구','ESG·탄소·에너지 기업 환경 직무','공공기관(환경공단·연구원)·공무원'],
@@ -405,7 +411,7 @@ function majorCard(withTitle){const m=curMajor();
  if(!m)return `<div class="note" style="margin-top:14px">전공을 입력하면 전공별 진출 분야·준비 자격·경험 보강 팁을 함께 보여 드립니다. 1단계에서 전공을 입력해 보세요.${state.major?` (입력한 '${esc(state.major)}'는 이 앱의 전공 목록에 없어 일반 추천만 제공합니다.)`:''}</div>`;
  const topJ=ranked(JOBS).map(x=>x.name),topI=ranked(INDUSTRIES).map(x=>x.name);
  const ch=(arr,top)=>arr.map(n=>`<span class="chip ${top.includes(n)?'':'soft'}">${esc(n)}${top.includes(n)?' ✓':''}</span>`).join('');
- return `<div class="mj"><${withTitle?'h2':'h3'}>내 전공 연계 참고 · ${esc(m.label)}</${withTitle?'h2':'h3'}><div class="srow"><b>진출 분야</b> ${m.fields.map(esc).join(' · ')}</div><div class="srow"><b>연계 직무</b> ${ch(m.jobs,topJ)}</div><div class="srow"><b>연계 산업</b> ${ch(m.inds,topI)}</div><div class="srow"><b>준비·자격</b> ${m.certs.map(esc).join(' · ')}</div><div class="srow"><b>경험 보강</b> ${esc(m.tip)}</div><p class="help">✓ 표시는 내 경험에서도 추천된 항목입니다. 일반 정보이며 학교별 교육과정·자격 요건·채용 조건은 최신 공고로 확인하세요. 출처: ${m.srcs.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${esc(t)}</a>`).join(', ')}</p></div>`}
+ return `<div class="mj"><${withTitle?'h2':'h3'}>내 전공 연계 참고 · ${esc(m.label)}</${withTitle?'h2':'h3'}><div class="srow"><b>진출 분야</b> ${m.fields.map(esc).join(' · ')}</div><div class="srow"><b>연계 직무</b> ${ch(m.jobs,topJ)}</div><div class="srow"><b>연계 산업</b> ${ch(m.inds,topI)}</div><div class="srow"><b>준비·자격</b> ${m.certs.map(esc).join(' · ')}</div><div class="srow"><b>경험 보강</b> ${esc(m.tip)}</div>${m.legal?`<div class="srow lg"><b>법정 자격 요건</b>${m.legal.map(([t,d,ss])=>`<div class="lgi"><strong>${esc(t)}</strong><br>${esc(d)}${ss.length?` <span class="lgs">[${ss.map(([a,u])=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${esc(a)}</a>`).join(', ')}]</span>`:''}</div>`).join('')}<p class="help" style="margin-top:6px">법령·시행령은 개정될 수 있으므로 지원·응시 전 국가법령정보센터와 소관 기관 공고를 확인하세요. 앱은 요건 확인을 돕는 참고 정보입니다.</p></div>`:''}<p class="help">✓ 표시는 내 경험에서도 추천된 항목입니다. 일반 정보이며 학교별 교육과정·자격 요건·채용 조건은 최신 공고로 확인하세요. 출처: ${m.srcs.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${esc(t)}</a>`).join(', ')}</p></div>`}
 function strengthCards(sg){const max=Math.max(...sg.map(s=>s.score));return sg.map(s=>`<div class="scard"><h3>${esc(s.name)}</h3><p>${esc(s.desc)}</p><div class="bar" aria-hidden="true"><b style="width:${Math.max(12,Math.round(s.score/max*100))}%"></b></div><div>${s.found.slice(0,8).map(k=>`<span class="chip soft">${esc(k)}</span>`).join('')}</div><p>근거 경험: ${esc([...new Set(s.from)].join(', '))}</p></div>`).join('')}
 
 /* ---------- 렌더 (순차 아코디언) ---------- */
