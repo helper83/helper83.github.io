@@ -95,6 +95,9 @@ header .logo{display:block;width:36px;height:36px;flex:none}
 header .logo svg{display:block;width:36px;height:36px}
 header h1{font-size:16px;margin:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto}
 .tag{white-space:nowrap}
+.rstrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
+.rstrow .hint2{font-size:12px;color:var(--mute);flex:1 1 180px}
+button.btn.rst{min-height:44px;font-size:14px;padding:6px 12px;color:var(--pfink);background:#fff;border-color:var(--line)}
 .scgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .sc{display:flex;flex-direction:column;align-items:center;gap:4px;min-height:92px;padding:10px 4px;border:1.5px solid var(--line);border-radius:12px;background:#fff;font:inherit;cursor:pointer}
 .sc .chip{width:36px;height:36px;border-radius:var(--r-chip);display:grid;place-items:center;font-weight:700;font-size:16px;background:color-mix(in srgb,var(--tc) 20%,#fff);color:color-mix(in srgb,var(--tc) 62%,#000)}
@@ -572,6 +575,16 @@ function homeTab(el){
   fin.appendChild(item('var(--t2)','종','종합 성찰',all?'6영역 결과를 모아 나의 한 문장 쓰기':'6영역을 모두 마치면 열려요',g('syn.one','')?'작성함':'',g('syn.one','')?'ok':'',!all,function(){K.show('syn')}));
   fin.appendChild(item('var(--t3)','후','적합 산업·직무 후보',all?'탐색 후보와 다음 차시 이월 한 줄':'6영역을 모두 마치면 열려요',(g('cand.pick',[])||[]).length?'작성함':'',(g('cand.pick',[])||[]).length?'ok':'',!all,function(){K.show('cand')}));
   fin.appendChild(item('var(--t6)','출','결과 출력 (PDF)','지금까지 쓴 내용을 한 장으로 저장','','',false,function(){K.show('out')}))})}
+
+/* 단계별 초기화: 영역 a의 단계 i(0~5)만 지운다 */
+function delPath(p){K.del(p)}
+function stepHasData(a,i){function has(v){if(v==null||v==='')return false;if(typeof v==='object')return Object.keys(v).length>0;return true}
+ switch(i){case 0:return has(g('hook.'+a));case 1:return has(g('card.'+a));case 2:return has(g('test.'+a));case 3:return has(g('cmp.'+a));
+  case 4:return a==='eff'?has(g('eff.act')):wishCount(a)>0;case 5:return has(g('share.'+a))}return false}
+function resetStep(a,i){switch(i){case 0:delPath('hook.'+a);break;case 1:delPath('card.'+a);break;case 2:delPath('test.'+a);break;case 3:delPath('cmp.'+a);break;
+  case 4:if(a==='eff')delPath('eff.act');else POOL.forEach(function(p){delPath('wish.'+p.c+'.'+a);var w=g('wish.'+p.c);if(w&&typeof w==='object'&&!Object.keys(w).length)delPath('wish.'+p.c)});break;
+  case 5:delPath('share.'+a);break}}
+function resetDone(){K.persist();K.show('home',true)}
 function areaTab(a){return function(el){
  el.style.setProperty('--tc',AC[a]);
  var back=K.btn('‹ 탐색',function(){APP.area=null;K.show('home')},'ghost');back.classList.add('back','noprint');el.appendChild(back);
@@ -582,6 +595,8 @@ function areaTab(a){return function(el){
  bodies[0].appendChild(hookCard(a));
  if(a==='pers')persCard(bodies[1]);else if(a==='eff')effCard(bodies[1]);else cardArea(a,bodies[1]);
  testArea(a,bodies[2]);cmpArea(a,bodies[3]);recoArea(a,bodies[4]);shareCard(a,bodies[5]);
+ bodies.forEach(function(bd,i){var row=K.h('div',{class:'rstrow noprint'});var rb=K.confirmBtn('이 단계 다시 하기','한 번 더 누르면 이 단계 내용이 지워져요',function(){resetStep(a,i);resetDone()},'ghost sm rst');row.appendChild(rb);
+  row.appendChild(K.h('span',{class:'hint2'},'이 단계만 지워요. 뒤 단계 내용은 그대로 두니, 다시 한 뒤 확인하세요.'));bd.appendChild(row);K.reg(function(){row.style.display=stepHasData(a,i)?'flex':'none'})});
  var pin={},closed={},lastCur=null,items=[],wrap=K.h('div',{class:'accs'}),nextBox=K.h('div',{class:'nextbox noprint'});
  function cur(){return firstOpenStep(a)}
  function isExp(i,c){return stepUnlocked(a,i)&&((i===c&&!closed[i])||!!pin[i])}
@@ -591,6 +606,8 @@ function areaTab(a){return function(el){
   hd.addEventListener('click',function(){if(!stepUnlocked(a,i))return;var c=cur();if(isExp(i,c)){if(i===c)closed[i]=true;pin[i]=false}else{pin[i]=true;closed[i]=false}paint()});
   wrap.appendChild(it);items.push({it:it,num:num,tt:tt,sub:sub,hd:hd,body:bodies[i]})});
  el.appendChild(wrap);el.appendChild(nextBox);
+ var arow=K.h('div',{class:'rstrow noprint',style:'margin-top:14px'});arow.appendChild(K.confirmBtn('이 영역 전체 초기화','한 번 더 누르면 '+AN[a]+' 영역 6단계가 모두 지워져요',function(){for(var i=0;i<6;i++)resetStep(a,i);resetDone()},'ghost sm rst'));arow.appendChild(K.h('span',{class:'hint2'},AN[a]+' 영역만 지워요. 다른 영역은 그대로예요.'));el.appendChild(arow);
+ K.reg(function(){var any=false;for(var i=0;i<6;i++)if(stepHasData(a,i))any=true;arow.style.display=any?'flex':'none'});
  function paint(){var c=cur();
   items.forEach(function(x,i){var done=stepDone(a,i),un=stepUnlocked(a,i),ex=isExp(i,c);
    x.it.className='acc'+(done?' done':'')+(!un?' locked':'')+(i===c?' cur':'')+(ex?' exp':'');
@@ -720,7 +737,8 @@ function mount(){load();
   window.__show=show;
   function show(id,keep){curTab=id;watchers.length=0;main.innerHTML='';Array.prototype.forEach.call(nav.children,function(b){b.setAttribute('aria-selected',b.dataset.id===id?'true':'false')});var t=APP.tabs.filter(function(x){return x.id===id})[0];main.style.setProperty('--tc',APP.tcolor?APP.tcolor(id):'var(--t0)');try{t.render(main)}catch(e){console.error(e);main.appendChild(h('p',null,'화면을 그리는 중 문제가 생겼어요: '+e.message))}run();if(!keep)window.scrollTo(0,0)}
   show(APP.tabs[0].id)}
-window.K={picker:picker,stepHead:stepHead,checks:checks,listField:listField,datalist:datalist,h:h,add:add,get:get,set:set,field:field,lab:lab,btn:btn,confirmBtn:confirmBtn,card:card,radio:radio,check:check,select:select,bars:bars,table:table,note:note,copyBtn:copyBtn,copyText:copyText,promptCard:promptCard,timer:timer,aiLog:aiLog,outputTab:outputTab,reportText:reportText,reportView:reportView,reg:reg,changed:changed,S:function(){return S},show:function(id,keep){window.__show(id,keep)},cur:function(){return curTab},aiLinks:aiLinks,persist:persist};
+function del(p){var o=S,a=p.split('.');for(var i=0;i<a.length-1;i++){if(o==null||typeof o!=='object')return;o=o[a[i]]}if(o&&typeof o==='object')delete o[a[a.length-1]]}
+window.K={del:del,picker:picker,stepHead:stepHead,checks:checks,listField:listField,datalist:datalist,h:h,add:add,get:get,set:set,field:field,lab:lab,btn:btn,confirmBtn:confirmBtn,card:card,radio:radio,check:check,select:select,bars:bars,table:table,note:note,copyBtn:copyBtn,copyText:copyText,promptCard:promptCard,timer:timer,aiLog:aiLog,outputTab:outputTab,reportText:reportText,reportView:reportView,reg:reg,changed:changed,S:function(){return S},show:function(id,keep){window.__show(id,keep)},cur:function(){return curTab},aiLinks:aiLinks,persist:persist};
 window.addEventListener('DOMContentLoaded',function(){mount()});
 })();
 </script>
