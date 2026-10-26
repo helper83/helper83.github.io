@@ -95,6 +95,9 @@ header .logo{display:block;width:36px;height:36px;flex:none}
 header .logo svg{display:block;width:36px;height:36px}
 header h1{font-size:16px;margin:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1 1 auto}
 .tag{white-space:nowrap}
+.savewarn{display:flex;flex-direction:column;gap:2px;margin:12px 0 8px;padding:10px 12px;border:1.5px solid var(--warn);border-radius:10px;background:color-mix(in srgb,var(--warn) 8%,#fff);font-size:14px}
+button.btn.dim{opacity:.55}
+.q.miss{outline:2.5px solid var(--warn);outline-offset:3px;border-radius:10px}
 .rstrow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px;padding-top:10px;border-top:1px dashed var(--line)}
 .rstrow .hint2{font-size:12px;color:var(--mute);flex:1 1 180px}
 button.btn.rst{min-height:44px;font-size:14px;padding:6px 12px;color:var(--pfink);background:#fff;border-color:var(--line)}
@@ -299,16 +302,16 @@ function cardArea(a,box){
   if(n1){c.appendChild(K.h('p',{style:'font-weight:700'},'1차 선택: '+n1+'개 고르기 ('+p1.length+'/'+n1+')'));c.appendChild(pickGrid(items,p1,n1,'',function(id){var x=g(P+'.p1',[]).slice();var i=x.indexOf(id);if(i>=0){x.splice(i,1);K.set(P+'.top',g(P+'.top',[]).filter(function(t){return t!==id}))}else x.push(id);K.set(P+'.p1',x);K.changed();draw()}))}
   var pool=n1?items.filter(function(it){return p1.indexOf(it.id)>=0}):items;
   if(!n1||p1.length===n1){c.appendChild(K.h('p',{style:'font-weight:700'},(n1?'2차':'')+' 최종 Top3 고르기 ('+top.length+'/3) · 먼저 누른 순서가 1위·2위·3위'));c.appendChild(pickGrid(pool,top,3,'top',function(id){var x=g(P+'.top',[]).slice();var i=x.indexOf(id);if(i>=0)x.splice(i,1);else x.push(id);K.set(P+'.top',x);K.changed();draw()},function(it){var i=top.indexOf(it.id);return i>=0?(i+1)+'위 · ':''}))}
-  if(top.length===3){var need=[];c.appendChild(K.h('p',{style:'font-weight:700'},'Top3 이유와 근거를 직접 쓰세요'));top.forEach(function(id,i){var it=items.filter(function(x){return x.id===id})[0];var w=K.h('div',{class:'q'},K.h('div',{class:'qt'},(i+1)+'위 · '+it.n));
+  if(top.length===3){var need=[],wmap={};c.appendChild(K.h('p',{style:'font-weight:700'},'Top3 이유와 근거를 직접 쓰세요'));top.forEach(function(id,i){var it=items.filter(function(x){return x.id===id})[0];var w=K.h('div',{class:'q'},K.h('div',{class:'qt'},(i+1)+'위 · '+it.n));
     w.appendChild(K.lab('이유 한 줄',null,K.field(P+'.reason.'+id,{rows:2,locked:locked,ph:'왜 이 카드를 골랐나요?'})));if(!g(P+'.reason.'+id))need.push(it.n+' 이유');
     if(a==='value'||a==='strength'){w.appendChild(K.lab(a==='strength'?'증거 경험 한 줄':'경험 한 줄',a==='strength'?'잘한다는 주장에는 증거가 필요해요. 없으면 비워 두고 아래에서 [아직 증거 없음(잠재)]를 고르세요':null,K.field(P+'.exp.'+id,{rows:2,locked:locked,ph:a==='value'?'이 카드와 관련된 내가 한 경험 (없으면 "아직 없음"이라고 쓰세요)':'이 카드와 관련된 내가 한 경험'})));if(a==='value'&&!g(P+'.exp.'+id))need.push(it.n+' 경험')}
-    if(a==='strength'){w.appendChild(K.radio(P+'.conf.'+id,[{v:'have',t:'자신 있음 (증거 경험이 있어요)'},{v:'none',t:'아직 증거 없음 (잠재)'}],{locked:locked}));w.appendChild(K.lab('하위 능력 1개',null,K.select(P+'.sub.'+id,it.sub,{locked:locked,ph:'하위 능력 선택'})));if(!g(P+'.conf.'+id))need.push(it.n+' 자신 있음/없음');if(g(P+'.conf.'+id)==='have'&&!g(P+'.exp.'+id))need.push(it.n+' 증거 경험')}
-    c.appendChild(w)});
+    if(a==='strength'){w.appendChild(K.radio(P+'.conf.'+id,[{v:'have',t:'자신 있음 (증거 경험이 있어요)'},{v:'none',t:'아직 증거 없음 (잠재)'}],{locked:locked}));w.appendChild(K.lab('하위 능력 1개 (선택)',null,K.select(P+'.sub.'+id,it.sub,{locked:locked,ph:'하위 능력 선택'})));if(!g(P+'.conf.'+id))need.push(it.n+' 자신 있음/없음');if(g(P+'.conf.'+id)==='have'&&!g(P+'.exp.'+id))need.push(it.n+' 증거 경험')}
+    wmap[id]=w;c.appendChild(w)});
    var sv=K.h('div');c.appendChild(sv);
    K.reg(function(){sv.innerHTML='';if(locked()){sv.appendChild(K.h('span',{class:'tag ok'},'저장됨 · 잠김'));return}
-    var nd=[];top.forEach(function(id){var it=items.filter(function(x){return x.id===id})[0];if(!g(P+'.reason.'+id))nd.push(it.n+' 이유');if(a==='value'&&!g(P+'.exp.'+id))nd.push(it.n+' 경험');if(a==='strength'){var cf=g(P+'.conf.'+id);if(!cf)nd.push(it.n+' 자신 있음/없음');if(cf==='have'&&!g(P+'.exp.'+id))nd.push(it.n+' 증거 경험')}});
+    var nd=[],firstId=null;top.forEach(function(id){var it=items.filter(function(x){return x.id===id})[0];var n0=nd.length;if(!g(P+'.reason.'+id))nd.push(it.n+' 이유');if(a==='value'&&!g(P+'.exp.'+id))nd.push(it.n+' 경험');if(a==='strength'){var cf=g(P+'.conf.'+id);if(!cf)nd.push(it.n+' 자신 있음/없음');if(cf==='have'&&!g(P+'.exp.'+id))nd.push(it.n+' 증거 경험')}if(nd.length>n0&&firstId===null)firstId=id});
     if(!nd.length)sv.appendChild(K.confirmBtn('저장하고 잠그기','저장하면 수정할 수 없어요. 한 번 더 누르세요',function(){K.set(P+'.locked',true);K.changed();K.persist();lockDone(a)},'gold'));
-    else sv.appendChild(K.h('div',{class:'row',style:'align-items:center'},K.btn('저장하고 잠그기',null,'gold',{disabled:true}),K.note('아직 필요: '+nd.join(', '))))})}
+    else{var wb=K.btn('저장하고 잠그기',function(){var w=wmap[firstId];if(w){w.scrollIntoView({behavior:'smooth',block:'center'});w.classList.add('miss');setTimeout(function(){w.classList.remove('miss')},2500)}},'gold dim');wb.setAttribute('aria-disabled','true');sv.appendChild(K.h('div',{class:'savewarn',role:'status'},K.h('b',null,'아직 저장할 수 없어요. 아래를 채워 주세요'),K.h('span',null,nd.join(' · '))));sv.appendChild(wb)}})}
   box.appendChild(c)}
  draw()}
 function persCard(box){var P='card.pers';var locked=function(){return !!g(P+'.locked')};
@@ -729,7 +732,7 @@ function mount(){load();
   var root=document.getElementById('app');
   var tools=h('div',{class:'tools noprint'},APP.sample?confirmBtn('예시 채우기','한 번 더 누르면 현재 입력이 예시로 바뀝니다',function(){APP.sample(S,set,get);persist();curTab&&show(curTab)},'ghost sm'):null,confirmBtn('초기화','한 번 더 누르면 모두 지워집니다',function(){S={};persist();if(APP.reset)APP.reset();curTab&&show(APP.tabs[0].id)},'ghost sm'));
   var logo=h('span',{class:'logo'});logo.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="lg3" x1="0" y1="0" x2="0.25" y2="1"><stop offset="0" stop-color="#3678F2"/><stop offset="1" stop-color="#2358D8"/></linearGradient></defs><rect width="64" height="64" rx="15" fill="url(#lg3)"/><path d="M18 14V50M42 14V50M18 32H42" stroke="#fff" stroke-width="7" stroke-linecap="round" fill="none"/><path d="M31 49L40 38L47 43L58 26" stroke="#F9CB5E" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-  root.appendChild(h('header',{class:'top'},logo,h('div',{style:'min-width:0;flex:1 1 150px'},h('h1',null,APP.title),(function(){var f=h('div',{class:'fb noprint'},'비전HR컨설팅(');var a=h('a',{href:'mailto:hp83@naver.com?subject='+encodeURIComponent('['+APP.title+'] 문의')},'hp83@naver.com');a.setAttribute('aria-label','비전HR컨설팅 이메일 hp83@naver.com');f.appendChild(a);f.appendChild(document.createTextNode(')'));return f})()),tools));
+  root.appendChild(h('header',{class:'top'},logo,h('div',{style:'min-width:0;flex:1 1 150px'},h('h1',null,APP.title),(function(){var f=h('div',{class:'fb noprint'},'의견 보내기: ');var a=h('a',{href:'mailto:hp83@naver.com'},'hp83@naver.com');f.appendChild(a);return f})()),tools));
   root.appendChild(h('div',{id:'pii',role:'alert'},'전화번호·이메일·주민등록번호 형태가 감지됐어요. 빨간 칸의 해당 내용을 지워 주세요.'));
   var nav=h('nav',{class:'tabs',role:'tablist'});navEl=nav;var main=h('main');
   root.appendChild(nav);root.appendChild(main);root.appendChild(h('p',{class:'sticky-save noprint'},h('span',{id:'savest'},'자동 저장됨(이 브라우저에만)'),' · 탭의 빨간 점은 그 단계를 마쳤다는 표시예요 · 이 도구는 수업용 참고 도구입니다 · v2'));
