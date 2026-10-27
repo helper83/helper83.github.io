@@ -232,7 +232,7 @@ textarea,input[type=text],input[type=number],select{font-size:16px}
  textarea{font-size:15px}input[type=text],input[type=number],select{font-size:15px}
 }
 /* 탭 사이 가로줄(단계 막대) */
-nav.tabs{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}nav.tabs::-webkit-scrollbar{display:none}.stop{flex:1 0 auto;min-width:58px;padding-left:6px;padding-right:6px}.stop.lk{opacity:.5}
+nav.tabs{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}nav.tabs::-webkit-scrollbar{display:none}.stop{flex:1 0 auto;min-width:58px;padding-left:6px;padding-right:6px}.stop.lk{opacity:.5}.segrow{display:flex;gap:8px;margin:2px 0 12px}.seg{flex:1 1 0;min-height:44px;padding:8px 6px;border:1px solid var(--line2);border-radius:10px;background:#fff;color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer;line-height:1.25}.seg.on{background:var(--tc);border-color:var(--tc);color:#fff}
 .stop{position:relative}
 .stop .chp{z-index:1}
 @media(min-width:641px){nav.tabs{position:relative}}
@@ -474,7 +474,7 @@ function cand(){var rv=res('value'),ri=res('interest'),re=res('env');if(!(rv.don
 function candTab(el){
  if(gate(el,'적합 산업·직무 후보'))return;
  el.appendChild(K.card('cls:band',K.h('h2',null,'적합 산업·직무 후보 (10분)'),K.h('p',{class:'mute'},'추천이 아니라 탐색 후보입니다. 직무·산업 정보는 공식 사이트(고용24·커리어넷·헬퍼탐)에서 확인하세요.')));
- el.appendChild(K.card(K.note('내 학과의 연결 직무·자격·동향은 "성찰" 탭의 "내 학과 진로 안내"에서 볼 수 있어요.'),K.btn('내 학과 진로 안내 열기',function(){K.show('syn');setTimeout(function(){var e=document.getElementById('sec-major');if(e)e.scrollIntoView({behavior:'smooth',block:'start'})},80)},'ghost')));
+ el.appendChild(K.card(K.note('내 학과의 연결 직무·자격·동향은 "성찰" 탭의 "내 학과 진로 안내"에서 볼 수 있어요.'),K.btn('내 학과 진로 안내 열기',function(){APP.synSec='major';K.show('syn')},'ghost')));
  var box=K.h('div');el.appendChild(box);
  (function(){box.innerHTML='';var C=cand();if(!C){box.appendChild(K.card(K.note('가치·흥미·환경 검사를 모두 마치면 후보가 나타나요. (성격·강점은 계산에서 제외합니다)','hint')));return}
   box.appendChild(K.card(h3('직무 후보 TOP3 (내가 찜한 직무도 아래 ‘내 후보 정리’에서 고를 수 있어요)'),K.note('계산: 흥미 37.5% + 가치 25% + 환경 25% + 업무방식 12.5% (제안). 직무별 태깅은 수업용 임의 초안이라 근거 수준은 "참고"입니다. 강점·성격은 계산에서 제외했습니다.'),K.table(['직무','한 줄 설명','적합 근거(높은 축)','근거 수준'],C.jobs.map(function(o){return [o.p.n,o.p.d,o.ax.slice(0,2).map(function(x){return x[0]}).join('·'),'참고']}))));
@@ -710,9 +710,18 @@ function areaTabPage(a){return function(el){var i=AREAS.indexOf(a);
  if(!areaUnlocked(i)){var n=nextArea();el.style.setProperty('--tc',AC[a]);el.appendChild(K.card('cls:band',K.h('h2',null,AN[a]),K.h('p',{class:'mute'},'앞 영역을 먼저 마치면 열려요. (사례·카드·검사)')));el.appendChild(K.card(K.note('지금은 '+AN[n]+' 영역 차례예요.'),K.btn('이어서 하기 · '+AN[n]+' 영역',function(){go(n)},'gold')));return}
  if(a==='value')el.appendChild(lecPanel('home',LEC_IN.home,'도입','수업 도입 · 과정 안내',false));
  areaTab(a)(el)}}
-APP.tabs=AREAS.map(function(a){return {id:a,label:AN[a],chip:AN[a].charAt(0),render:areaTabPage(a)}}).concat([{id:'syn',label:'성찰',chip:'찰',render:function(el){var pg=K.h('div',{class:'noprint'});synTab(pg);lecSyn(pg);var mj=K.h('div',{id:'sec-major'});majorTab(mj);pg.appendChild(mj);el.appendChild(pg);K.outputTab(el,reportSecs,'자기이해_결과.pdf')}}]);
+APP.tabs=AREAS.map(function(a){return {id:a,label:AN[a],chip:AN[a].charAt(0),render:areaTabPage(a)}}).concat([{id:'syn',label:'성찰',chip:'찰',render:function(el){
+ var secs=[['syn','성찰 노트'],['major','내 학과 진로 안내'],['out','출력 · PDF 저장']],cur=APP.synSec||'syn';
+ var row=K.h('div',{class:'segrow noprint',role:'tablist','aria-label':'성찰 탭 구역'});el.appendChild(row);
+ var A=K.h('div',{class:'noprint'});synTab(A);lecSyn(A);el.appendChild(A);
+ var B=K.h('div',{class:'noprint'});majorTab(B);el.appendChild(B);
+ K.outputTab(el,reportSecs,'자기이해_결과.pdf');var C=el.lastChild;
+ var box={syn:A,major:B,out:C},bs=[];
+ function paint(){secs.forEach(function(x,i){var on=x[0]===cur;box[x[0]].style.display=on?'':'none';bs[i].setAttribute('aria-selected',on?'true':'false');bs[i].classList.toggle('on',on)})}
+ secs.forEach(function(x){var b=K.h('button',{type:'button',role:'tab',class:'seg','aria-selected':'false'},x[1]);b.addEventListener('click',function(){cur=x[0];APP.synSec=cur;paint();window.scrollTo(0,0)});bs.push(b);row.appendChild(b)});
+ paint()}}]);
 APP.tcolor=function(id){return AC[id]||'var(--t2)'};
-APP.reset=function(){APP.area=null};
+APP.reset=function(){APP.area=null;APP.synSec=null};
 </script>
 <script>/* ---- 공통 코어: 상태·저장·DOM·프롬프트 카드·타이머·출력 ---- */
 (function(){
