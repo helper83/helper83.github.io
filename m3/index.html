@@ -2251,7 +2251,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     });
     return out;
   }
-  function plain(m){return m.map(function(x){return (x.k==='h'?'\n':x.k==='b'?'  · ':'')+x.s}).join('\n')}
+  /* ---------- 표 항목 {k:'t',head:[],rows:[[]]} 공통 ---------- */
+  function colW(x,total){
+    var n=x.head.length,w=[],sum=0;
+    for(var i=0;i<n;i++){var mx=String(x.head[i]).length;x.rows.forEach(function(r){var l=String(r[i]==null?'':r[i]).length;if(l>mx)mx=l});w[i]=Math.min(Math.max(mx,4),24);sum+=w[i]}
+    var out=w.map(function(v){return Math.round(total*v/sum)}),d=total-out.reduce(function(a,b){return a+b},0);out[0]+=d;return out;
+  }
+  function plain(m){return m.map(function(x){if(x.k==='t')return [x.head.join(' | ')].concat(x.rows.map(function(r){return r.join(' | ')})).join('\n');return (x.k==='h'?'\n':x.k==='b'?'  · ':'')+x.s}).join('\n')}
 
   /* ---------- DOCX ---------- */
   var NS='xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"';
@@ -2262,9 +2268,18 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var rpr='<w:rPr>'+F+(o.bold?'<w:b/>':'')+(o.color?'<w:color w:val="'+o.color+'"/>':'')+'<w:sz w:val="'+(o.sz||21)+'"/></w:rPr>';
     return '<w:p>'+ppr+'<w:r>'+rpr+'<w:t xml:space="preserve">'+esc(s).replace(/&quot;/g,'"')+'</w:t></w:r></w:p>';
   }
+  function dtbl(x){
+    var W=colW(x,9298),bd=function(n){return '<w:'+n+' w:val="single" w:sz="4" w:space="0" w:color="BFC6D4"/>'};
+    function cell(s,w,hd){return '<w:tc><w:tcPr><w:tcW w:w="'+w+'" w:type="dxa"/>'+(hd?'<w:shd w:val="clear" w:color="auto" w:fill="F1F3F8"/>':'')+'</w:tcPr>'+wp(s,{bold:hd,sz:19,after:0})+'</w:tc>'}
+    var h='<w:tbl><w:tblPr><w:tblW w:w="9298" w:type="dxa"/><w:tblBorders>'+['top','left','bottom','right','insideH','insideV'].map(bd).join('')+'</w:tblBorders><w:tblLayout w:type="fixed"/><w:tblCellMar><w:top w:w="60" w:type="dxa"/><w:left w:w="100" w:type="dxa"/><w:bottom w:w="60" w:type="dxa"/><w:right w:w="100" w:type="dxa"/></w:tblCellMar></w:tblPr><w:tblGrid>'+W.map(function(w){return '<w:gridCol w:w="'+w+'"/>'}).join('')+'</w:tblGrid>';
+    h+='<w:tr><w:trPr><w:tblHeader/></w:trPr>'+x.head.map(function(t,i){return cell(t,W[i],1)}).join('')+'</w:tr>';
+    x.rows.forEach(function(r){h+='<w:tr><w:trPr><w:cantSplit/></w:trPr>'+x.head.map(function(t,i){return cell(r[i],W[i],0)}).join('')+'</w:tr>'});
+    return h+'</w:tbl>'+wp('',{after:60});
+  }
   async function buildDocx(m){
     await lib('jszip',hasZip);
     var body=m.map(function(x){
+      if(x.k==='t')return dtbl(x);
       if(x.k==='title')return wp(x.s,{bold:1,sz:36,center:1,after:240});
       if(x.k==='h')return wp(x.s,{bold:1,sz:26,color:'1F3A5F',before:240,after:100,border:1});
       if(x.k==='b')return wp('· '+x.s,{ind:420});
@@ -2287,7 +2302,21 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var head=sec.slice(0,sec.indexOf('</hs:sec>'));
     var n=1000;
     function hp(s,cp){return '<hp:p id="'+(++n)+'" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="'+cp+'"><hp:t>'+esc(s).replace(/&quot;/g,'"')+'</hp:t></hp:run></hp:p>'}
+    var HW=42520,BFX='<hh:borderFill id="3" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:rightBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:topBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:bottomBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/></hh:borderFill><hh:borderFill id="4" threeD="0" shadow="0" centerLine="NONE" breakCellSeparateLine="0"><hh:slash type="NONE" Crooked="0" isCounter="0"/><hh:backSlash type="NONE" Crooked="0" isCounter="0"/><hh:leftBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:rightBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:topBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:bottomBorder type="SOLID" width="0.12 mm" color="#BFC6D4"/><hh:diagonal type="SOLID" width="0.1 mm" color="#000000"/><hc:fillBrush><hc:winBrush faceColor="#F1F3F8" hatchColor="#999999" alpha="0"/></hc:fillBrush></hh:borderFill>';
+    function hcell(s,w,h,col,row,hd){
+      return '<hp:tc name="" header="'+(hd?1:0)+'" hasMargin="0" protect="0" editable="0" dirty="0" borderFillIDRef="'+(hd?4:3)+'"><hp:subList id="" textDirection="HORIZONTAL" lineWrap="BREAK" vertAlign="CENTER" linkListIDRef="0" linkListNextIDRef="0" textWidth="0" textHeight="0" hasTextRef="0" hasNumRef="0">'+hp(s,hd?6:0)+'</hp:subList><hp:cellAddr colAddr="'+col+'" rowAddr="'+row+'"/><hp:cellSpan colSpan="1" rowSpan="1"/><hp:cellSz width="'+w+'" height="'+h+'"/><hp:cellMargin left="510" right="510" top="141" bottom="141"/></hp:tc>';
+    }
+    function htbl(x){
+      var W=colW(x,HW),rows=[x.head].concat(x.rows),tot=0,trs='';
+      rows.forEach(function(r,ri){
+        var lines=1;r.forEach(function(c,i){var l=Math.ceil(String(c==null?'':c).length*1000/Math.max(W[i]-1020,1000));if(l>lines)lines=l});
+        var h=lines*1600+282;tot+=h;
+        trs+='<hp:tr>'+r.map(function(c,i){return hcell(c==null?'':c,W[i],h,i,ri,ri===0)}).join('')+'</hp:tr>';
+      });
+      return '<hp:p id="'+(++n)+'" paraPrIDRef="0" styleIDRef="0" pageBreak="0" columnBreak="0" merged="0"><hp:run charPrIDRef="0"><hp:tbl id="'+(++n)+'" zOrder="0" numberingType="TABLE" textWrap="TOP_AND_BOTTOM" textFlow="BOTH_SIDES" lock="0" dropcapstyle="None" pageBreak="CELL" repeatHeader="1" rowCnt="'+rows.length+'" colCnt="'+x.head.length+'" cellSpacing="0" borderFillIDRef="3" noAdjust="0"><hp:sz width="'+HW+'" widthRelTo="ABSOLUTE" height="'+tot+'" heightRelTo="ABSOLUTE" protect="0"/><hp:pos treatAsChar="1" affectLSpacing="0" flowWithText="1" allowOverlap="0" holdAnchorAndSO="0" vertRelTo="PARA" horzRelTo="COLUMN" vertAlign="TOP" horzAlign="LEFT" vertOffset="0" horzOffset="0"/><hp:outMargin left="0" right="0" top="0" bottom="0"/><hp:inMargin left="510" right="510" top="141" bottom="141"/>'+trs+'</hp:tbl><hp:t></hp:t></hp:run></hp:p>'+hp('',0);
+    }
     var add=m.map(function(x){
+      if(x.k==='t')return htbl(x);
       if(x.k==='title')return hp(x.s,5)+hp('',0);
       if(x.k==='h')return hp('',0)+hp(x.s,6);
       if(x.k==='b')return hp('  · '+x.s,0);
@@ -2299,6 +2328,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     for(var i=0;i<names.length;i++){
       var nm=names[i];
       if(nm==='Contents/section0.xml')out.file(nm,head+add+'</hs:sec>');
+      else if(nm==='Contents/header.xml'){var hx=await src.file(nm).async('string');out.file(nm,hx.replace('<hh:borderFills itemCnt="2">','<hh:borderFills itemCnt="4">').replace('</hh:borderFills>',BFX+'</hh:borderFills>'))}
       else if(nm==='Preview/PrvText.txt')out.file(nm,plain(m).slice(0,1000));
       else out.file(nm,await src.file(nm).async('uint8array'));
     }
@@ -2320,7 +2350,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     groups.forEach(function(g){
       var chunk=[],len=0,part=0;
       function flush(){if(chunk.length){pages.push({h:g.h+(part?' (계속)':''),items:chunk});chunk=[];len=0;part++}}
-      g.items.forEach(function(it){var c=Math.ceil(it.s.length/42)+1;if(len+c>13)flush();chunk.push(it);len+=c});
+      g.items.forEach(function(it){if(it.k==='t'){flush();for(var ri=0;ri<it.rows.length||ri===0;ri+=8)pages.push({h:g.h+(ri?' (계속)':''),items:[],table:{head:it.head,rows:it.rows.slice(ri,ri+8)}});return}var c=Math.ceil(it.s.length/42)+1;if(len+c>13)flush();chunk.push(it);len+=c});
       flush();
       if(!g.items.length)pages.push({h:g.h,items:[]});
     });
@@ -2334,6 +2364,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
         else runs.push({text:it.s,options:{breakLine:true,fontSize:15,fontFace:FONT,color:'222222',bold:false}});
       });
       if(runs.length)sl.addText(runs,{x:0.6,y:1.2,w:12.1,h:5.7,valign:'top',paraSpaceAfter:6,fit:'shrink'});
+      if(pg.table){var tw=colW(pg.table,121),hdr=pg.table.head.map(function(t){return {text:t,options:{bold:true,fill:{color:'F1F3F8'},color:'1F3A5F',fontFace:FONT,fontSize:13}}}),body=pg.table.rows.map(function(r){return pg.table.head.map(function(t,i){return {text:String(r[i]==null?'':r[i]),options:{fontFace:FONT,fontSize:13,color:'222222'}}})});
+        sl.addTable([hdr].concat(body),{x:0.6,y:1.2,w:12.1,colW:tw.map(function(v){return v/10}),border:{type:'solid',pt:0.75,color:'BFC6D4'},valign:'middle',margin:0.08})}
       sl.addText(String(i+2),{x:12.2,y:7.0,w:0.8,h:0.3,fontFace:FONT,fontSize:10,color:'888888',align:'right'});
     });
     return P.write({outputType:'uint8array'});
@@ -3079,18 +3111,24 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     return L.join('\n');
   }
   function rvt(head,rows){return '<div class="rvw"><table class="rvt"><thead><tr>'+head.map(function(x){return '<th>'+x+'</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r){return '<tr>'+r.map(function(c){return '<td>'+(c&&String(c).trim()?esc(c):'<span class="rvd">-</span>')+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'}
-  function pvHTML(){
-    var h='<div class="rvh">이 력 서</div><h4 class="rvs">지원 정보</h4>'+rvt(['지원회사','지원직무'],[[S.company,S.job]]);
-    var a=S.edu.filter(has);if(a.length)h+='<h4 class="rvs">교육사항</h4>'+rvt(['구분','교육명','교육내용','직무 관련성'],a.map(function(e){return [e.type,e.name,e.content,e.rel]}));
-    a=S.cert.filter(has);if(a.length)h+='<h4 class="rvs">자격증</h4>'+rvt(['자격증명','취득 정보','직무 관련성'],a.map(function(e){return [e.name,e.content,e.rel]}));
-    a=S.career.filter(has);if(a.length)h+='<h4 class="rvs">경력사항</h4>'+rvt(['회사','기간','계약형태','직위','직무내용'],a.map(function(e){return [e.company,e.period,e.contract,e.position,e.duty]}));
-    a=S.exp.filter(has);if(a.length)h+='<h4 class="rvs">경험사항</h4>'+rvt(['구분','경험명','기간','활동내용'],a.map(function(e){return [e.type,e.name,e.period,e.content]}));
-    return h;
+  function secs(){
+    var o=[['지원 정보',['지원회사','지원직무'],[[S.company,S.job]]]],a=S.edu.filter(has);
+    if(a.length)o.push(['교육사항',['구분','교육명','교육내용','직무 관련성'],a.map(function(e){return [e.type,e.name,e.content,e.rel]})]);
+    a=S.cert.filter(has);if(a.length)o.push(['자격증',['자격증명','취득 정보','직무 관련성'],a.map(function(e){return [e.name,e.content,e.rel]})]);
+    a=S.career.filter(has);if(a.length)o.push(['경력사항',['회사','기간','계약형태','직위','직무내용'],a.map(function(e){return [e.company,e.period,e.contract,e.position,e.duty]})]);
+    a=S.exp.filter(has);if(a.length)o.push(['경험사항',['구분','경험명','기간','활동내용'],a.map(function(e){return [e.type,e.name,e.period,e.content]})]);
+    return o;
+  }
+  function pvHTML(){return '<div class="rvh">이 력 서</div>'+secs().map(function(x){return '<h4 class="rvs">'+x[0]+'</h4>'+rvt(x[1],x[2])}).join('')}
+  function tmodel(){
+    var m=[{k:'title',s:'이 력 서'}];
+    secs().forEach(function(x){m.push({k:'h',s:x[0]});m.push({k:'t',head:x[1],rows:x[2].map(function(r){return r.map(function(c){return String(c==null?'':c).trim()||'-'})})})});
+    return m;
   }
   function preview(){$('t4prev').innerHTML=pvHTML()}
   var tt;function toast(t){var el=$('t4toast');el.textContent=t;clearTimeout(tt);tt=setTimeout(function(){el.textContent=''},2400)}
   $('t4copy').addEventListener('click',function(){try{navigator.clipboard.writeText(text()).then(function(){toast('복사했습니다')},function(){toast('복사가 막혀 있습니다')})}catch(e){toast('복사가 막혀 있습니다')}});
-  window.__ipExp.mount($('t4exp'),{id:'t4e',base:'이력서_초안',model:function(){return window.__ipExp.fromText(text())}});
+  window.__ipExp.mount($('t4exp'),{id:'t4e',base:'이력서_초안',model:function(){return tmodel()}});
 
   /* ---------- AI ---------- */
   var gm=$('t4msg'),ctrl=null;
