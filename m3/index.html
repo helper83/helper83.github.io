@@ -370,6 +370,8 @@ ul.hbl{list-style:none;padding-left:10px}
 .t3one{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;color:var(--muted)}
 .modebar{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .modebar .chip[aria-pressed=true]{background:var(--accent);border-color:var(--accent);color:#fff}
+.star5g{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}.star5g label{font-size:13px;font-weight:600}.star5 textarea[hidden]{display:none}@media(max-width:640px){.star5g{grid-template-columns:1fr}}
+.t5pick{margin:8px 0;padding:8px 10px;border:1px solid var(--line);border-left:3px solid #2b6cb0;border-radius:6px;background:#f7fbff}.t5pick b{font-size:14px}.t5pick .pkr{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}.t5pick select{min-height:44px;font-size:16px;max-width:100%;flex:1 1 220px}.t5pick .subt{font-size:13px}
 .impl{margin:8px 0}.impt{font-size:13px;font-weight:600;margin-bottom:4px}.impi{border:1px solid var(--line);border-left:3px solid #2b6cb0;border-radius:4px;padding:7px 9px;margin:6px 0;background:var(--paper)}
 .impi .tag.warn{background:#fff3cd;color:#7a5a00}.impi .tag.ok{background:#e3f5e8;color:#1b6b34}
 .cov5{width:100%;border-collapse:collapse;font-size:13px}.cov5 th,.cov5 td{border:1px solid var(--line);padding:5px 7px;text-align:left;vertical-align:top}.cov5 thead th{background:#f3f3f3;color:#222}
@@ -3811,7 +3813,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function fillForm(e){$('t7type').value=e?e.type:TYPES[0];['period','org','role','name','st','a','r'].forEach(function(k){$('t7'+k).value=e?(e[k]||''):''});$('t7raw').hidden=!(e&&e.raw);$('t7rawtxt').textContent=e&&e.raw?e.raw:'';$('t7add').textContent=e?'수정 내용 저장':'STAR 문장 만들어 목록에 추가'}
   $('t7type').innerHTML=TYPES.map(function(t){return '<option>'+esc(t)+'</option>'}).join('');
   fillForm(null);
-  var USEOPTS=[['지원동기 및 포부',[['motive|link','내 경험과 연결']]],['조직 적합성',[['org|problem','문제해결 경험'],['org|comm','의사소통 경험'],['org|challenge','도전 경험']]],['직무적합성 경험',[['proj|exp','경험 소재'],['proj|apply','실전 적용'],['proj|verify','검증·수치']]],['AI 기반 문제 해결 경험',[['ai|problem','문제 정의'],['ai|method','AI 활용 방식'],['ai|result','실제 성과']]]];
+  var USEOPTS=[['지원동기 및 포부',[['motive|link','내 경험과 연결']]],['조직 적합성',[['org|problem','문제해결 경험'],['org|comm','의사소통 경험'],['org|challenge','도전 경험']]],['직무 적합성',[['proj|exp','경험 소재'],['proj|apply','실전 적용'],['proj|verify','검증·수치']]],['AI 기반 문제 해결 경험',[['ai|problem','문제 정의'],['ai|method','AI 활용 방식'],['ai|result','실제 성과']]]];
   var LEG={'fit|knowledge':'proj|exp','fit|skill':'proj|apply','fit|attitude':'org|comm'};
   function useOpts(cur){cur=LEG[cur]||cur;return '<option value="">자소서에 쓸 소재로 선택…</option>'+USEOPTS.map(function(g){return '<optgroup label="'+g[0]+'">'+g[1].map(function(o){return '<option value="'+o[0]+'"'+(cur===o[0]?' selected':'')+'>'+g[0].split(' ')[0]+' › '+o[1]+'</option>'}).join('')+'</optgroup>'}).join('')}
   function sentence(e){
@@ -3988,7 +3990,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   $('t7kw').addEventListener('click',function(e){var b=e.target.closest('[data-act=kwdel]');if(b){S.custom=S.custom.filter(function(k){return k!==b.dataset.k});save();kwHTML()}});
   $('t7method').addEventListener('click',function(e){var b=e.target.closest('[data-m]');if(b){method=b.dataset.m;renderForm()}});
   srcList();
-  window.__ipT7={picked:function(){return S.exps.filter(function(x){return x.use}).map(function(x){return {id:x.id,use:LEG[x.use]||x.use,name:x.name,text:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw||''}}).filter(function(x){return x.text.trim()})},stars:function(){return S.exps.map(function(x){return {id:x.id,name:x.name,text:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw||''}}).filter(function(x){return x.text.trim()})},addKeywords:function(a){var n=0;a.forEach(function(k){k=String(k).trim();if(k&&S.custom.indexOf(k)<0&&!t4kw().some(function(x){return x===k})){S.custom.push(k);n++}});save();kwHTML();return n}};
+  window.__ipT7={picked:function(){return S.exps.filter(function(x){return x.use}).map(function(x){return {id:x.id,use:LEG[x.use]||x.use,name:x.name,st:x.st||'',a:x.a||'',r:x.r||'',text:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw||''}}).filter(function(x){return x.text.trim()})},list:function(){return S.exps.map(function(x){return {id:x.id,name:x.name||'',type:x.type||'',period:x.period||'',org:x.org||'',role:x.role||'',st:x.st||'',a:x.a||'',r:x.r||'',raw:x.raw||''}}).filter(function(x){return (x.st+x.a+x.r+x.raw).trim()})},stars:function(){return S.exps.map(function(x){return {id:x.id,name:x.name,text:[x.st,x.a,x.r].filter(Boolean).join(' ')||x.raw||''}}).filter(function(x){return x.text.trim()})},addKeywords:function(a){var n=0;a.forEach(function(k){k=String(k).trim();if(k&&S.custom.indexOf(k)<0&&!t4kw().some(function(x){return x===k})){S.custom.push(k);n++}});save();kwHTML();return n}};
   (function(){var b=$('t7exload');b.addEventListener('click',function(){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='한 번 더 누르면 입력 내용이 예시로 바뀝니다';return}b.dataset.armed='';b.textContent='시연용: 김민준 예시 불러오기';S=example();editing=null;fillForm(null);save();renderAll();gm('시연용 예시를 불러왔습니다','ok')})})();
   $('t7clear').addEventListener('click',function(){S={example:false,custom:S.custom,exps:[]};editing=null;fillForm(null);save();renderAll();gm('비웠습니다. 경험을 추가해 보세요','ok')});
 
@@ -4243,14 +4245,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       checks:['기업 이름만 바꿔도 통하는 문장은 지운다','사업부·제품·담당 업무가 구체적으로 나온다','기업 사실은 공식 자료(공시, 보도자료, 채용 페이지)로 확인한다','포부에 기간과 행동이 있다'],
       ex:'[기업]이 [최근 사업·제품 방향]을 추진하는 점에서 [직무]가 [구체 업무]로 기여할 수 있다고 생각했습니다. 저는 [경험]에서 [행동]으로 [결과]를 만들었고, 입사 후 1~3년 차에는 [업무]를 익히고 5년 차에는 [목표]를 이루겠습니다.',
       gkeys:[['company_points','조사할 기업 정보'],['job_points','직무 이해 포인트'],['link_examples','경험 연결 예시'],['plan_examples','포부 예시']]},
-    {k:'org',no:'2',title:'조직 적합성',sub:'문제해결, 의사소통, 도전 경험으로 조직에서 일하는 방식을 보여 주는 문항',
+    {k:'org',no:'2',title:'조직 적합성',sub:'문제해결, 의사소통, 도전 경험을 STAR(상황·과제·행동·결과)로 정리해 조직에서 일하는 방식을 보여 주는 문항',
       memos:[{f:'problem',label:'문제해결 경험',ph:'상황, 과제, 내가 한 행동, 결과'},{f:'comm',label:'의사소통 경험',ph:'의견이 달랐던 상황과 조정한 방법'},{f:'challenge',label:'도전 경험',ph:'어려운 환경에서 시도한 일과 결과'}],
       frame:'상황·과제·행동·결과(STAR)에 배운 점과 입사 후 적용을 더해 경험 1~2개 서술',
       steps:['상황과 과제를 두 문장 안에 쓰기','내가 한 행동을 1~2개로 좁혀 구체적으로 쓰기','결과를 수치나 변화로 쓰기','배운 점을 입사 후 업무 장면에 연결'],
       checks:['팀이 아니라 내가 한 행동이 중심이다','결과가 수치나 변화로 드러난다','배운 점이 조직 업무로 이어진다','한 문항에 경험은 1~2개만 쓴다'],
       ex:'[상황]에서 [과제]가 있었습니다. 저는 [행동 1~2개]를 했고, 그 결과 [수치·변화]를 얻었습니다. 이 경험에서 [배운 점]을 얻었고, 입사 후 [업무 장면]에 적용하겠습니다.',
       gkeys:[['problem','문제해결 경험 소재'],['comm','의사소통 경험 소재'],['challenge','도전 경험 소재']]},
-    {k:'proj',no:'3',title:'직무적합성 경험',sub:'프로젝트·공모전·논문·연구·학습·활동 경험을 [기간]·[경험]·[역할]로 시작해, 실전 적용과 수치 검증까지 쓰는 문항',limit:1000,
+    {k:'proj',no:'3',title:'직무 적합성',sub:'프로젝트·공모전·논문·연구·학습·활동 경험을 [기간]·[경험]·[역할]로 시작해, 실전 적용과 수치 검증까지 쓰는 문항',limit:1000,
       memos:[{f:'period',label:'기간',ph:'예: 2025.03~2025.06 (4개월)'},{f:'exp',label:'경험 (프로젝트·공모전·논문·연구·학습·활동)',ph:'경험 이름과 유형, 지원 직무와 이어지는 이유'},{f:'role',label:'역할',ph:'예: 4인 팀의 팀장, 시장 데이터 분석 담당'},{f:'apply',label:'실전 적용 (배운 것을 어디에 어떻게 썼는지)',ph:'학습에서 그치지 않고 실제 과제나 현장에 적용한 방법과 도구'},{f:'verify',label:'검증 과정과 수치',ph:'비교 기준(전·후, 목표 대비, 평가 결과)과 수치. 예: 처리 시간 40분→12분'}],
       frame:'[기간]·[경험]·[역할]을 맨 앞에 명시 → 실전 적용 → 검증 과정과 수치 → 직무 연결',
       rule:'- 본문 첫 문장은 "[기간] 0000.00~0000.00 [경험] 경험명 [역할] 맡은 역할" 형식으로 시작한다. 메모에 없는 항목은 "(입력 필요)"로 둔다.\n- 배운 내용을 나열하는 데서 끝내지 않고, 실제로 적용한 과정과 검증 결과를 수치와 함께 쓴다.\n',
@@ -4266,16 +4268,58 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       checks:['AI에 질문하고 답을 받은 수준이 아니라 설계한 절차가 있다','문제, AI 활용, 역할, 성과, 검증이 순서대로 나온다','성과 수치와 측정 방법이 함께 있다','AI 결과를 사람이 확인한 방법과 한계가 있다'],
       ex:'[대상·규모]에서 [기존 방식의 한계]라는 문제가 있었습니다. [데이터]를 [AI 기법·도구]로 [절차]에 따라 처리하는 방식을 설계했고, 저는 [설계·구현·검증 중 맡은 부분]을 맡았습니다. 그 결과 [수치 전]에서 [수치 후]로 개선했고, [테스트 데이터·측정 방법]으로 확인했으며 [한계와 보완]을 정리했습니다.',
       gkeys:[['problem','문제 정의 예시'],['method','AI 활용 방식 예시'],['verify','성과·검증 예시']]}];
+  SECS.forEach(function(s){if(s.k==='org')s.star=1;if(s.k==='org'||s.k==='proj'||s.k==='ai')s.pick=1});
   var GEN={proj:{picks:['전공 수업 팀 프로젝트에서 실제 데이터나 사례를 다룬 경험','공모전·경진대회에서 기획·분석·제작을 맡은 경험','졸업 논문·연구실 과제에서 실험이나 조사를 설계한 경험','현장실습·인턴·동아리에서 맡은 업무를 개선한 경험'],apply:['수업에서 배운 이론·도구를 실제 자료에 적용한 장면 (도구 이름과 사용 방법)','조사·분석·제작 과정에서 내가 직접 선택한 방법과 이유','기존 방식과 다르게 시도한 점과 그 이유'],verify:['전·후 비교 (예: 처리 시간 40분→12분)','목표 대비 달성률 (예: 목표 100건 중 120건)','평가 결과 (예: 참가 팀 중 순위, 점수, 피드백 반영 횟수)']},
   ai:{problem:['반복 작업에 드는 시간이나 오류 수 (예: 하루 40건 수작업 분류)','자료 양이 많아 사람이 모두 확인하기 어려운 상황','기존 방식의 정확도나 속도 한계'],method:['데이터를 모으고 정리한 방법과 AI 기법·도구 선택 이유','프롬프트·모델·자동화 절차를 설계한 과정','AI 결과를 사람이 검수하는 단계를 어디에 두었는지'],verify:['별도 테스트 데이터로 측정한 정확도 (예: 100건 중 87건 일치)','틀린 결과의 유형을 정리하고 보완한 내용','도입 전·후 시간·비용 비교와 남은 한계']}};
   var DEFAULT_GUIDE={motive:{company_points:['담당 사업부·제품군과 주력 판매 지역','최근 해외 시장 전략과 실적 자료(전자공시, 보도자료)','현지 법인과 유통 구조'],job_points:['담당 국가 거래처 발굴과 관리','판매 계획 수립과 실적 분석','수출 계약·대금결제 부서와의 협업'],link_examples:['유통채널 조사 경험 → 신규 거래처 발굴 업무','설문 설계 경험 → 현지 소비자 분석 업무'],plan_examples:['1~3년 차 국가별 판매데이터 분석과 거래처 관리 숙달 → 5년 차 담당 국가 채널 전략 기획 → 10년 차 시장 책임자']},fit:{knowledge:['무역실무(인코텀즈, 계약, 대금결제), 국제마케팅','담당 국가의 시장·산업 지식'],skill:['영어·중국어 등 외국어 실무 커뮤니케이션','Excel 데이터 정리와 분석, 시장조사 보고서 작성'],attitude:['낯선 환경에서 먼저 다가가는 소통 자세','정확성이 중요한 서류·계약 업무에서의 꼼꼼함']},org:{problem:['흩어진 데이터를 구조화해 업무 시간을 줄인 경험','거래처 요청이 부딪힐 때 우선순위를 정한 경험'],comm:['의견이 갈린 팀 프로젝트에서 기준을 합의한 경험','외국어 환경에서 오해를 줄이려 확인 절차를 만든 경험'],challenge:['경험 없는 시장·언어에 도전해 결과를 낸 경험','공모전·프로젝트에서 새 방식을 시도한 경험']}};
-  function example(){return {company:'삼성전자',job:'해외영업',example:true,notes:'',guide:DEFAULT_GUIDE,guideJob:'해외영업',guideExample:true,org:null,
+  function example0(){return {company:'삼성전자',job:'해외영업',example:true,notes:'',guide:DEFAULT_GUIDE,guideJob:'해외영업',guideExample:true,org:null,
     sec:{
       motive:{memo:{company:'삼성전자 DX부문 DA사업부: 생활가전 판매 전략을 세워 매출 확대와 브랜드 리더십을 높임 (채용공고 기준)',job:'담당 지역 시장·파트너 데이터 분석, 판매 전략 수립, 법인 실행 계획과 진척 관리 (직무기술서 기준)',link:'국제통상학 전공, A전자 해외영업 인턴, 베트남 유통채널 15개 조사',plan:'동남아시아 시장의 해외영업 전문가'},body:'',limit:800,out:null},
       org:{memo:{problem:'인턴 때 여러 Excel 파일에 나뉜 거래처 정보를 하나로 통합하고 필터 적용',comm:'교환학생 팀 프로젝트에서 가격 중심과 브랜드 이미지 중심 의견을 설문 항목 통합으로 조정',challenge:'중국어가 어려운 환경에서 현지 학생과 식사하며 대화를 늘려 팀장을 맡음'},body:'',limit:800,out:null},
       proj:{memo:{period:'2025.03~2025.06 (4개월)',exp:'교내 수출마케팅 공모전: 동남아 화장품 유통채널 진입 전략 제안',role:'4인 팀의 팀장, 유통채널 15개 조사와 마진 비교표 작성 담당',apply:'무역실무 수업에서 배운 인코텀즈·원가 계산을 채널별 견적 비교에 적용하고 Excel로 마진율 계산',verify:'채널 15개 중 마진율 15% 이상 5개 선별, 팀 제안서는 참가 18팀 중 3위 (시연용 가상 수치)'},body:'',limit:1000,out:null},
       ai:{memo:{problem:'인턴 때 거래처 문의 메일 하루 약 40건을 수작업으로 분류해 응답이 평균 6시간 늦어짐',method:'과거 메일 300건에 라벨을 붙여 Python과 LLM으로 분류하는 절차를 만들고, 확신이 낮은 메일은 사람이 검수',role:'분류 기준 설계, 분류 스크립트 작성, 정확도 검증 담당',result:'분류 시간 하루 90분에서 20분으로 감소 (시연용 가상 수치)',verify:'별도 테스트 100건에서 87건 일치, 오분류 유형을 정리해 규칙 보완'},body:'',limit:1000,out:null}}}}
+  function example(){var o=example0(),so={problem:{s:'인턴 때 거래처 정보가 여러 Excel 파일에 나뉘어 있었다',t:'거래처 정보를 한눈에 볼 수 있게 정리해야 했다',a:'여러 파일을 하나로 통합하고 필터를 적용했다',r:'(결과·수치 입력 필요)'},comm:{s:'교환학생 팀 프로젝트에서 가격 중심과 브랜드 이미지 중심 의견이 갈렸다',t:'의견을 조정해 하나의 설문을 만들어야 했다',a:'두 의견을 설문 항목에 모두 담는 방향으로 조정했다',r:'(결과 입력 필요)'},challenge:{s:'중국어가 어려운 환경이었다',t:'팀장을 맡아 팀을 이끌어야 했다',a:'현지 학생과 식사하며 대화를 늘렸다',r:'팀장을 맡게 됨'}};o.sec.org.star=so;Object.keys(so).forEach(function(f){o.sec.org.memo[f]=starCompose(so[f])});return o}
   function empty(){var o={company:'',job:'',example:false,notes:'',guide:null,guideJob:'',guideExample:false,sec:{}};SECS.forEach(function(s){var m={};s.memos.forEach(function(x){m[x.f]=''});o.sec[s.k]={memo:m,body:'',limit:s.limit||800,out:null}});return o}
+  var STARF=[['s','S 상황','언제·어디서·어떤 상황이었나요?'],['t','T 과제','그 상황에서 내가 맡은 과제·목표는 무엇이었나요?'],['a','A 행동','내가 직접 한 행동 1~2가지와 그렇게 한 이유'],['r','R 결과','결과를 수치나 변화로, 배운 점 한 줄']];
+  function starBlank(){return {s:'',t:'',a:'',r:''}}
+  function starCompose(o){return STARF.filter(function(f){return (o[f[0]]||'').trim()}).map(function(f){return f[1]+': '+o[f[0]].trim().replace(/\s*\n\s*/g,' / ')}).join('\n')}
+  function starParse(tx){
+    var o=starBlank(),cur=null,any=false;
+    String(tx||'').split('\n').forEach(function(l){var m=/^\s*([STAR])\s*(?:상황|과제|행동|결과)\s*[:：]\s*(.*)$/.exec(l);if(m){cur=m[1].toLowerCase();o[cur]=(o[cur]?o[cur]+' ':'')+m[2];any=true}else if(cur&&l.trim())o[cur]+=' '+l.trim()});
+    if(!any&&String(tx||'').trim())o.a=String(tx).trim();
+    return o;
+  }
+  function ensureStar(){SECS.forEach(function(s){if(!s.star)return;var d=S.sec[s.k];d.star=d.star||{};s.memos.forEach(function(m){if(!d.star[m.f])d.star[m.f]=(d.memo[m.f]||'').trim()?starParse(d.memo[m.f]):starBlank()})})}
+  function starDom(sec,f){var d=S.sec[sec],o=d.star[f];STARF.forEach(function(x){var el=document.getElementById('t5st_'+sec+'_'+f+'_'+x[0]);if(el)el.value=o[x[0]]||''});d.memo[f]=starCompose(o);var ta=document.getElementById('t5m_'+sec+'_'+f);if(ta)ta.value=d.memo[f]}
+  function starAdd(sec,f,parts){var o=S.sec[sec].star[f];STARF.forEach(function(x){var v=parts[x[0]];if(v)o[x[0]]=(o[x[0]]?o[x[0]].replace(/\s+$/,'')+'\n':'')+v});starDom(sec,f)}
+  function memoAppend(sec,f,t){var d=S.sec[sec];if(!d)return false;if(d.star&&d.star[f]){starAdd(sec,f,{a:t});return true}d.memo[f]=(d.memo[f]?d.memo[f].replace(/\s+$/,'')+'\n':'')+t;var ta=document.getElementById('t5m_'+sec+'_'+f);if(ta)ta.value=d.memo[f];return true}
+  function starBlock(s,m){var id='t5m_'+s.k+'_'+m.f;return '<div class="fld full star5"><label>'+m.label+'</label><div class="star5g">'+STARF.map(function(x){return '<div><label for="t5st_'+s.k+'_'+m.f+'_'+x[0]+'">'+x[1]+'</label><textarea id="t5st_'+s.k+'_'+m.f+'_'+x[0]+'" data-s="'+s.k+'" data-sm="'+m.f+'" data-st="'+x[0]+'" rows="2" placeholder="'+esc(x[2])+'"></textarea></div>'}).join('')+'</div><textarea id="'+id+'" data-s="'+s.k+'" data-m="'+m.f+'" hidden aria-hidden="true" tabindex="-1" readonly></textarea></div>'}
+  function pickBlock(s){return '<div class="t5pick" id="t5pk_'+s.k+'"></div>'}
+  function pickUI(k){
+    var el=document.getElementById('t5pk_'+k);if(!el)return;var T7=window.__ipT7,list=[];try{list=T7&&T7.list?T7.list():[]}catch(e){}
+    var sc=SECS.filter(function(x){return x.k===k})[0],prev=document.getElementById('t5pks_'+k),keep=prev?prev.value:'';
+    if(!list.length){el.innerHTML='<b>경험발굴(탭④)에서 가져오기</b><div class="subt">경험발굴 탭에 작성된 경험이 없습니다. 아래 칸에 직접 작성하세요. 경험발굴에서 STAR로 먼저 정리해 두면 여기로 가져올 수 있습니다.</div><button type="button" class="lk" data-act="goto7">탭④ 경험발굴에서 경험 작성하기 →</button>';return}
+    el.innerHTML='<b>경험발굴(탭④)에서 가져오기</b><div class="pkr"><select id="t5pks_'+k+'" aria-label="가져올 경험">'+list.map(function(x){return '<option value="'+esc(x.id)+'">'+esc(x.name||'(이름 없음)')+(x.type?' · '+esc(x.type.replace(/\s*\(.*\)$/,'')):'')+'</option>'}).join('')+'</select>'+(k==='org'?'<select id="t5pkf_org" aria-label="넣을 칸">'+sc.memos.map(function(m){return '<option value="'+m.f+'">'+esc(m.label)+'에 넣기</option>'}).join('')+'</select>':'')+'<button type="button" class="btn ghost sm2" data-act="pkgo" data-s="'+k+'">가져오기</button></div><div class="runmsg" id="t5pkm_'+k+'" role="status"></div><div class="subt">가져온 뒤 비어 있거나 부족한 부분은 직접 채워 쓰세요. 맞는 경험이 없으면 아래 칸에 새로 작성해도 됩니다.</div>';
+    if(keep){var s0=document.getElementById('t5pks_'+k);if(s0&&list.some(function(x){return x.id===keep}))s0.value=keep}
+  }
+  function pickAll(){['org','proj','ai'].forEach(pickUI)}
+  function pkGo(k,btn){
+    var T7=window.__ipT7,list=T7&&T7.list?T7.list():[],id=(document.getElementById('t5pks_'+k)||{}).value,x=list.filter(function(q){return q.id===id})[0],mg=document.getElementById('t5pkm_'+k),d=S.sec[k],sc=SECS.filter(function(q){return q.k===k})[0];
+    if(!x){mg.className='runmsg err';mg.textContent='가져올 경험을 선택하세요.';return}
+    var map,f=null,nonempty=false,tp=function(v){return String(v||'').replace(/\s*\(.*\)$/,'')};
+    if(k==='org'){f=(document.getElementById('t5pkf_org')||{}).value||'problem';var so=d.star[f];nonempty=STARF.some(function(q){return (so[q[0]]||'').trim()});map={s:x.st,a:x.a,r:x.r}}
+    else{
+      map=k==='proj'?{period:x.period,exp:[x.name,x.type?'('+tp(x.type)+')':''].filter(Boolean).join(' '),role:[x.org,x.role].filter(Boolean).join(' · '),apply:x.a,verify:x.r}:{problem:x.st,method:x.a,role:x.role,result:x.r};
+      nonempty=Object.keys(map).some(function(q){return (d.memo[q]||'').trim()});
+    }
+    if(nonempty&&btn.dataset.armed!=='1'){btn.dataset.armed='1';btn.textContent='한 번 더 누르면 덮어씁니다';mg.className='runmsg err';mg.textContent='선택한 칸에 이미 쓴 내용이 있습니다. 덮어써도 되면 한 번 더 누르세요.';return}
+    btn.dataset.armed='';btn.textContent='가져오기';
+    if(k==='org'){STARF.forEach(function(q){d.star[f][q[0]]=map[q[0]]||''});starDom(k,f)}
+    else Object.keys(map).forEach(function(q){d.memo[q]=map[q]||'';var ta=document.getElementById('t5m_'+k+'_'+q);if(ta)ta.value=d.memo[q]});
+    S.example=false;var bn=document.getElementById('t5banner');if(bn)bn.hidden=true;save();cov();
+    var miss=k==='org'?STARF.filter(function(q){return !(d.star[f][q[0]]||'').trim()}).map(function(q){return q[1]}):sc.memos.filter(function(m){return !(d.memo[m.f]||'').trim()}).map(function(m){return m.label.replace(/\s*\(.*\)$/,'')});
+    mg.className='runmsg ok';mg.textContent='「'+(x.name||'경험')+'」을 가져왔습니다.'+(k==='org'?' 경험발굴의 ‘상황·과제’는 S 상황 칸에 들어갔으니 T 과제는 따로 적어 보세요.':'')+(miss.length?' 비어 있는 칸: '+miss.join(', ')+' — 직접 채우세요.':'');
+  }
   var KEY='ipsurvey-t5-v1',S=null;
   try{var raw=localStorage.getItem(KEY);if(raw){var o=JSON.parse(raw);if(o&&o.sec)S=o}}catch(e){}
   if(!S)S=empty();
@@ -4290,11 +4334,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   /* ---------- left: writing ---------- */
   function build(){
+    ensureStar();
     var h='<div class="t4blk" id="t5infoblk"><h3>지원 정보</h3><input type="hidden" id="t5company"><input type="hidden" id="t5job"><dl class="hbkv" id="t5info" aria-live="polite"></dl><div class="subt" style="margin-top:6px">탭③ 이력서 작성에 입력한 지원 정보를 그대로 사용합니다. 바꾸려면 탭③에서 수정하세요.</div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto4">탭③에서 지원 정보 수정하기 →</button></div></div>';
     h+='<nav class="subnav5 no-print" id="t5nav" aria-label="문항 바로가기">'+SECS.map(function(s){return '<button type="button" data-go="'+s.k+'">'+'①②③④⑤'.charAt(+s.no-1)+' '+esc(s.title)+'</button>'}).join('')+'</nav>';
     SECS.forEach(function(s){
       h+='<div class="t4blk" id="t5s_'+s.k+'" data-s="'+s.k+'"><div class="sechd"><div><h3>'+s.no+'. '+s.title+'</h3><div class="subt">'+s.sub+'</div></div><button type="button" class="btn ghost sm2" data-act="guide" data-s="'+s.k+'">가이드 보기</button></div>'+
-      '<details class="memo" open><summary>소재 메모 (본문을 쓸 재료)</summary><div class="fg" style="margin-top:6px">'+s.memos.map(function(m){return '<div class="fld full"><label for="t5m_'+s.k+'_'+m.f+'">'+m.label+'</label><textarea id="t5m_'+s.k+'_'+m.f+'" data-s="'+s.k+'" data-m="'+m.f+'" rows="2" placeholder="'+esc(m.ph)+'"></textarea></div>'}).join('')+'</div></details><div class="impl" id="t5i_'+s.k+'"></div>'+
+      (s.pick?pickBlock(s):'')+'<details class="memo" open><summary>소재 메모 (본문을 쓸 재료)</summary><div class="fg" style="margin-top:6px">'+s.memos.map(function(m){if(s.star)return starBlock(s,m);return '<div class="fld full"><label for="t5m_'+s.k+'_'+m.f+'">'+m.label+'</label><textarea id="t5m_'+s.k+'_'+m.f+'" data-s="'+s.k+'" data-m="'+m.f+'" rows="2" placeholder="'+esc(m.ph)+'"></textarea></div>'}).join('')+'</div></details><div class="impl" id="t5i_'+s.k+'"></div>'+
       '<div class="fld full" style="margin-top:8px"><label for="t5b_'+s.k+'">자기소개서 본문</label><textarea id="t5b_'+s.k+'" data-s="'+s.k+'" data-b="1" rows="9" placeholder="소재 메모를 바탕으로 본문을 쓰세요."></textarea></div>'+
       '<div class="cnt5"><span id="t5c_'+s.k+'"></span><label>글자 수 제한 <input type="number" min="100" max="3000" step="50" id="t5l_'+s.k+'" data-s="'+s.k+'" data-l="1"> 자</label></div>'+
       '<div class="runmsg" id="t5g_'+s.k+'" role="status"></div><div class="aic5" id="t5r_'+s.k+'" hidden></div><div class="t5back no-print"><button type="button" data-go="nav">↑ 문항 바로가기로 돌아가기</button></div></div>';
@@ -4302,8 +4347,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     $('t5body').innerHTML=h;
     var cf0=$('t5m_motive_company');if(cf0&&cf0.parentNode)cf0.parentNode.insertAdjacentHTML('beforeend','<div class="cs5" id="t5cs"><div class="cs5h">기업 이해 검색<small>AI에게 한 번에 맡기기</small></div><label for="t5cs_q">1단계 · 회사 (지원회사가 자동으로 들어갑니다)</label><input type="text" id="t5cs_q" autocomplete="off" placeholder="회사 이름"><label style="margin-top:12px">2단계 · 검색 지침을 복사해 AI에 붙여넣기</label><div class="cs5n" style="margin-top:0">검색이 되는 AI에 붙여넣으면 기업 분석표와 문장 초안을 받습니다. 지원기업·직무는 자동으로 들어갑니다.</div><div class="cs5a"><button type="button" class="btn sm2" id="t5cs_copy">검색 지침 복사</button><span class="runmsg" id="t5cs_pm" role="status"></span></div><div class="cs5l"><a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">ChatGPT<span aria-hidden="true"> ↗</span></a><a href="https://claude.ai/new" target="_blank" rel="noopener noreferrer">Claude<span aria-hidden="true"> ↗</span></a><a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer">Perplexity<span aria-hidden="true"> ↗</span></a><a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer">Gemini<span aria-hidden="true"> ↗</span></a></div><label style="margin-top:4px">3단계 · 확인한 사실과 출처를 위 「기업 이해」 메모칸에 붙여넣기</label><details class="cs5d2"><summary>공고·경험 직접 넣기, 지침 보기</summary><label for="t5cs_jd">채용공고 원문 또는 주소 (비우면 탭③ 공고 사용)</label><textarea id="t5cs_jd" rows="3" placeholder="공고 본문이나 채용 페이지 주소"></textarea><label for="t5cs_ex">본인 경험·활동 3~5개 (비우면 경험발굴 탭 사용)</label><textarea id="t5cs_ex" rows="3" placeholder="한 줄에 하나씩"></textarea><label for="t5cs_pv">복사될 지침</label><textarea id="t5cs_pv" rows="10" readonly></textarea></details><div class="cs5n" id="t5cs_cnt"></div><div class="cs5n">출처가 없거나 [확인필요]인 내용은 지원동기에 단정해 쓰지 마세요. 이름·연락처 등 개인정보는 AI에 붙여넣지 않습니다.</div></div>');
     $('t5company').value=S.company;$('t5job').value=S.job;infoR();S.imp=S.imp||{};
-    SECS.forEach(function(s){var d=S.sec[s.k];s.memos.forEach(function(m){$('t5m_'+s.k+'_'+m.f).value=d.memo[m.f]||''});$('t5b_'+s.k).value=d.body;$('t5l_'+s.k).value=d.limit;count(s.k);showOut(s.k)});
-    $('t5banner').hidden=!S.example;impUI();cov();cs();
+    SECS.forEach(function(s){var d=S.sec[s.k];s.memos.forEach(function(m){$('t5m_'+s.k+'_'+m.f).value=d.memo[m.f]||'';if(s.star)starDom(s.k,m.f)});$('t5b_'+s.k).value=d.body;$('t5l_'+s.k).value=d.limit;count(s.k);showOut(s.k)});
+    $('t5banner').hidden=!S.example;impUI();cov();cs();pickAll();
   }
   function cs(){
    var el=$('t5cs_links');var qi=$('t5cs_q');
@@ -4362,13 +4407,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var t=e.target;
     if(t.id==='t5company'){S.company=t.value;S.example=false;window.__ipInfo.set({company:t.value},'t5')}
     else if(t.id==='t5job'){S.job=t.value;S.example=false;window.__ipInfo.set({job:t.value},'t5')}
+    else if(t.dataset.st){var so=S.sec[t.dataset.s].star[t.dataset.sm];so[t.dataset.st]=t.value;var tx=starCompose(so);S.sec[t.dataset.s].memo[t.dataset.sm]=tx;var mt=$('t5m_'+t.dataset.s+'_'+t.dataset.sm);if(mt)mt.value=tx;S.example=false}
     else if(t.dataset.m){S.sec[t.dataset.s].memo[t.dataset.m]=t.value;S.example=false}
     else if(t.dataset.b){S.sec[t.dataset.s].body=t.value;S.example=false;count(t.dataset.s)}
     else if(t.dataset.l){var v=parseInt(t.value,10);if(v>0){S.sec[t.dataset.s].limit=v;count(t.dataset.s)}}
     else return;
     $('t5banner').hidden=!S.example;save();cov();if(t.id==='t5company'||t.id==='t5job')links();
   });
-  body.addEventListener('focusin',function(e){var t=e.target,k=t.dataset&&t.dataset.s;if(k&&pill!==k&&(t.dataset.m||t.dataset.b)){pill=k;side()}});
+  body.addEventListener('focusin',function(e){var t=e.target,k=t.dataset&&t.dataset.s;if(k&&pill!==k&&(t.dataset.m||t.dataset.b||t.dataset.st)){pill=k;side()}});
   (function(){var b=$('t5exload');b.addEventListener('click',function(){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='한 번 더 누르면 입력 내용이 예시로 바뀝니다';return}b.dataset.armed='';b.textContent='시연용: 김민준 예시 불러오기';S=example();window.__ipInfo.set({company:S.company,job:S.job},'t5');save();build();side();msg('시연용 예시를 불러왔습니다','ok')})})();
   $('t5clear').addEventListener('click',function(){var g=S.guide,gj=S.guideJob,ge=S.guideExample;S=empty();S.guide=g;S.guideJob=gj;S.guideExample=ge;save();build();side();msg('비웠습니다. 소재 메모부터 작성하세요','ok')});
 
@@ -4393,8 +4439,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   /* ---------- 경험발굴(탭④) → 자기소개서 자동 반영 ---------- */
   var MLAB={},RR={};SECS.forEach(function(sc){sc.memos.forEach(function(m){MLAB[sc.k+'|'+m.f]=[sc.title,m.label.replace(/\s*\(.*\)$/,'')]})});
   function impText(x){return '['+x.name+'] '+x.text}
-  function rmImp(id){var o=S.imp[id];if(!o)return;var d=S.sec[o.sec];if(d){var m=d.memo[o.f]||'',i=m.indexOf(o.text);if(i>=0){m=(m.slice(0,i)+m.slice(i+o.text.length)).replace(/\n{2,}/g,'\n').replace(/^\n+|\n+$/g,'');d.memo[o.f]=m;var ta=$('t5m_'+o.sec+'_'+o.f);if(ta)ta.value=m}}delete S.imp[id]}
-  function addImp(x){var t=x.use.split('|'),d=S.sec[t[0]];if(!d||d.memo[t[1]]==null)return;var txt=impText(x);d.memo[t[1]]=(d.memo[t[1]]?d.memo[t[1]].replace(/\s+$/,'')+'\n':'')+txt;S.imp[x.id]={sec:t[0],f:t[1],text:txt,src:txt,name:x.name};var ta=$('t5m_'+t[0]+'_'+t[1]);if(ta)ta.value=d.memo[t[1]]}
+  function rmImp(id){var o=S.imp[id];if(!o)return;var d=S.sec[o.sec];
+    if(o.parts&&d&&d.star&&d.star[o.f]){var so=d.star[o.f];STARF.forEach(function(x){var p=o.parts[x[0]];if(!p)return;var v=so[x[0]]||'',i=v.indexOf(p);if(i>=0)so[x[0]]=(v.slice(0,i)+v.slice(i+p.length)).replace(/\n{2,}/g,'\n').replace(/^\n+|\n+$/g,'')});starDom(o.sec,o.f);delete S.imp[id];return}
+    if(d){var m=d.memo[o.f]||'',i=m.indexOf(o.text);if(i>=0){m=(m.slice(0,i)+m.slice(i+o.text.length)).replace(/\n{2,}/g,'\n').replace(/^\n+|\n+$/g,'');d.memo[o.f]=m;var ta=$('t5m_'+o.sec+'_'+o.f);if(ta)ta.value=m}}delete S.imp[id]}
+  function addImp(x){var t=x.use.split('|'),d=S.sec[t[0]];if(!d||d.memo[t[1]]==null)return;
+    if(d.star&&d.star[t[1]]){var pr={s:x.st?'['+x.name+'] '+x.st:'',a:x.a||'',r:x.r||''};if(!pr.s&&!pr.a&&!pr.r)pr.a=impText(x);starAdd(t[0],t[1],pr);S.imp[x.id]={sec:t[0],f:t[1],text:impText(x),src:impText(x),name:x.name,parts:pr};return}
+   var txt=impText(x);d.memo[t[1]]=(d.memo[t[1]]?d.memo[t[1]].replace(/\s+$/,'')+'\n':'')+txt;S.imp[x.id]={sec:t[0],f:t[1],text:txt,src:txt,name:x.name};var ta=$('t5m_'+t[0]+'_'+t[1]);if(ta)ta.value=d.memo[t[1]]}
   function sync(){
     S.imp=S.imp||{};var T7=window.__ipT7;if(!T7||!T7.picked)return;
     var pk=T7.picked(),seen={},ch=false;
@@ -4403,7 +4453,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       if(o)rmImp(x.id);addImp(x);ch=true});
     Object.keys(S.imp).forEach(function(id){if(!seen[id]){rmImp(id);ch=true}});
     if(ch){S.example=false;var bn=$('t5banner');if(bn)bn.hidden=true;save()}
-    impUI();cov();
+    impUI();cov();pickAll();
   }
   function showRef(id){
     var el=$('t5rr_'+id),r=RR[id];if(!el)return;if(!r){el.hidden=true;el.innerHTML='';return}
@@ -4413,7 +4463,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     S.imp=S.imp||{};
     SECS.forEach(function(sc){var el=$('t5i_'+sc.k);if(!el)return;
       var ids=Object.keys(S.imp).filter(function(id){return S.imp[id].sec===sc.k});
-      el.innerHTML=ids.length?'<div class="impt">경험발굴에서 가져온 소재 '+ids.length+'건 <span class="subt">— 위 소재 메모에 자동으로 들어갔습니다. 아래 버튼으로 공고·직무에 맞게 다듬을 수 있습니다.</span></div>'+ids.map(function(id){var o=S.imp[id];return '<div class="impi"><div><b>'+esc(o.name)+'</b> <span class="tag">'+esc((MLAB[o.sec+'|'+o.f]||['',''])[1])+'</span> '+(o.refined?'<span class="tag ok">다듬음</span>':'<span class="tag warn">다듬기 전</span>')+'</div><div class="runbtns" style="margin-top:5px"><button type="button" class="btn ghost sm2" data-act="refine" data-id="'+esc(id)+'">AI로 다듬기</button></div><div class="runmsg" id="t5rm_'+esc(id)+'" role="status"></div><div class="aic5" id="t5rr_'+esc(id)+'" hidden></div></div>'}).join(''):'';
+      el.innerHTML=ids.length?'<div class="impt">경험발굴에서 가져온 소재 '+ids.length+'건 <span class="subt">— 위 소재 메모에 자동으로 들어갔습니다. 아래 버튼으로 공고·직무에 맞게 다듬을 수 있습니다.</span></div>'+ids.map(function(id){var o=S.imp[id];return '<div class="impi"><div><b>'+esc(o.name)+'</b> <span class="tag">'+esc((MLAB[o.sec+'|'+o.f]||['',''])[1])+'</span> '+(o.parts?'<span class="tag ok">STAR 칸에 들어감</span>':(o.refined?'<span class="tag ok">다듬음</span>':'<span class="tag warn">다듬기 전</span>'))+'</div>'+(o.parts?'':'<div class="runbtns" style="margin-top:5px"><button type="button" class="btn ghost sm2" data-act="refine" data-id="'+esc(id)+'">AI로 다듬기</button></div>')+'<div class="runmsg" id="t5rm_'+esc(id)+'" role="status"></div><div class="aic5" id="t5rr_'+esc(id)+'" hidden></div></div>'}).join(''):'';
       ids.forEach(function(id){if(RR[id])showRef(id)});
     });
   }
@@ -4446,6 +4496,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   body.addEventListener('click',async function(e){
     var el=e.target.closest('[data-act]');if(!el)return;var act=el.dataset.act,k=el.dataset.s;
+    if(act==='pkgo'){pkGo(k,el);return}
+    if(act==='goto7'){var b7=document.getElementById('tab7');if(b7)b7.click();return}
     if(act==='guide'){pill=k;side();var sd=$('t5side');if(window.innerWidth<=900&&sd)sd.scrollIntoView({block:'start'});return}
     if(act==='stop'){if(ctrls[k])ctrls[k].abort();return}
     if(act==='apply'){var d=S.sec[k];if(d.out&&d.out.draft){d.body=d.body.trim()?d.body.replace(/\s+$/,'')+'\n\n'+d.out.draft:d.out.draft;$('t5b_'+k).value=d.body;count(k);S.example=false;$('t5banner').hidden=true;save();msgOf(k).className='runmsg ok';msgOf(k).textContent='본문에 넣었습니다'}return}
@@ -4552,7 +4604,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   sideEl.addEventListener('click',async function(e){
     var pb=e.target.closest('[data-pill]');if(pb){pill=pb.dataset.pill;side();return}
     var el=e.target.closest('[data-act]');if(!el)return;var act=el.dataset.act;
-    if(act==='addmemo'){var d=S.sec[el.dataset.s],f=el.dataset.f,t=el.dataset.t;d.memo[f]=(d.memo[f]?d.memo[f].replace(/\s+$/,'')+'\n':'')+t;var ta=$('t5m_'+el.dataset.s+'_'+f);if(ta)ta.value=d.memo[f];S.example=false;$('t5banner').hidden=true;save();el.textContent='추가했습니다';return}
+    if(act==='addmemo'){var d=S.sec[el.dataset.s],f=el.dataset.f,t=el.dataset.t;memoAppend(el.dataset.s,f,t);S.example=false;$('t5banner').hidden=true;save();el.textContent='추가했습니다';return}
     if(act==='orgstop'||act==='gstop'){var c=ctrls[act==='orgstop'?'org':'guide'];if(c)c.abort();return}
     if(act==='organize'){
       var om=$('t5om'),src=getSources();
@@ -4590,8 +4642,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   var HBMAP={'성공경험':['proj','apply'],'실패경험':['org','problem'],'협업경험':['org','comm'],'갈등·조정경험':['org','comm'],'문제해결경험':['org','problem'],'도전·학습경험':['org','challenge'],'윤리·원칙경험':['org','comm']};
   function addMemo(sec,f,t){
     var d=S.sec[sec];if(!d)return false;
-    d.memo[f]=(d.memo[f]?d.memo[f].replace(/\s+$/,'')+'\n':'')+t;
-    var ta=$('t5m_'+sec+'_'+f);if(ta)ta.value=d.memo[f];
+    memoAppend(sec,f,t);
     S.example=false;var bn=$('t5banner');if(bn)bn.hidden=true;save();return true;
   }
   function mountHB(){
