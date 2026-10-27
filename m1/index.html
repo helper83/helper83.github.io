@@ -725,7 +725,8 @@ var store={
   get:function(k){try{var v=localStorage.getItem(k);if(v!==null)return v}catch(e){}return mem[k]||null},
   set:function(k,v){mem[k]=v;try{localStorage.setItem(k,v);return true}catch(e){return false}}
 };
-function load(){try{var r=store.get(APP.key);if(r)S=JSON.parse(r)||{}}catch(e){S={}}}
+function load(){try{var r=store.get(APP.key);if(r)S=JSON.parse(r)||{}}catch(e){S={}}
+ try{var ce=S.card&&S.card.eff;if(ce){var NEW=['대인관계','의사소통','자기관리','학업','디지털·AI 활용','문제해결','도전·실패극복','진로탐색','진로의사결정','취업준비'],old=false;Object.keys(ce.score||{}).forEach(function(k){if(NEW.indexOf(k)<0)old=true});if(ce.low&&NEW.indexOf(ce.low)<0)old=true;if(old){delete S.card.eff;if(S.test)delete S.test.eff;delete S.eff;if(S.cmp)delete S.cmp.eff}}}catch(e){}}
 function persist(){var ok=store.set(APP.key,JSON.stringify(S));var el=document.getElementById('savest');if(el)el.textContent=ok?'자동 저장됨(이 브라우저에만)':'저장소를 쓸 수 없어요. 화면을 닫으면 사라지니 [텍스트 복사]를 해 두세요'}
 function changed(){clearTimeout(saveT);saveT=setTimeout(persist,300);run()}
 var navEl=null;
