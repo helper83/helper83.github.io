@@ -573,6 +573,21 @@ body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;p
 .panel,.card,table,tr{break-inside:avoid;box-shadow:none}
 }
 /* QA-APPSKILL:END */
+/* QA-TOUCH:BEGIN 터치 영역 44px (AS-04) */
+@media(max-width:1023px){
+button,summary,select,.btn,.chip,.dt,.lk,.sm,.step,.x,.kx{min-height:44px}
+.step{min-width:44px}
+.x{min-width:44px}
+button.sm,button.btn,.btn.sm2,.t4blk button,#t5cs_copy{min-width:44px;min-height:44px!important}
+input[type=radio],input[type=checkbox]{min-width:22px;min-height:22px}
+input[id^=s_],select[id^=s_]{min-height:44px;min-width:56px}
+summary{display:flex;align-items:center}
+#t1mEval,#t1mCon,#clear,#ipreset,#t8efmt,#t8ego,#t6efmt,#t6ego{min-height:44px}
+input[type=checkbox],input[type=radio]{width:22px;height:22px;margin:11px}
+a[href^="mailto:"]{display:inline-block;padding:14px 4px;margin:-14px -4px}
+}
+@media(min-width:1400px){.wrap,main,.page{max-width:1280px;margin-left:auto;margin-right:auto}}
+/* QA-TOUCH:END */
 </style>
 
 <div class="wrap">
