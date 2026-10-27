@@ -330,6 +330,12 @@ ul.hbl{list-style:none;padding-left:10px}
 .pager button{border:1px solid var(--line);background:var(--surface);color:var(--fg);border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:600;max-width:100%;text-align:left}
 .pager button.next{background:var(--accent);border-color:var(--accent);color:var(--accent-fg);margin-left:auto}
 .pager small{display:block;font-weight:400;opacity:.8;font-size:12px}
+/* AUTOSAVE */
+.svbar{margin:0 0 8px;font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.svbar .svst{flex:1 1 220px;line-height:1.5}
+.svbar .svst.warn{color:var(--warn)}
+.svbar button,.svbar label.svb{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px;min-height:44px;display:inline-flex;align-items:center;font-family:inherit}
+.svbar input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
 .foot{margin:10px 0 24px;font-size:13px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 .foot button{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:13px}
 .foot .danger{border-color:var(--warn);color:var(--warn)}
@@ -537,7 +543,7 @@ small{font-size:13px}
 @page{size:A4;margin:14mm}
 @media print{
 body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;padding-bottom:0}
-.tabs,.aidlg,button,.pager,.no-print{display:none!important}
+.tabs,.aidlg,button,.pager,.svbar,.no-print{display:none!important}
 .panel,.card,table,tr{break-inside:avoid;box-shadow:none}
 }
 /* QA-APPSKILL:END */
@@ -814,6 +820,135 @@ body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;p
       </section>
     </div>
   </div>
+
+  <script>
+/* AUTOSAVE: 브라우저 저장(localStorage) + 내 계정 저장(db) 이중 저장, 백업 파일 저장·불러오기 */
+(function(){
+  var SK='ip-ai-key-v1',ok=false,col=null,dbOn=false,dbErr=false,wiping=false,last=0,pend={},q={},busy=false,timer=null,imp=null;
+  function mine(k){return typeof k==='string'&&k.indexOf('ip')===0&&k!==SK}
+  function isData(k){return mine(k)&&k!=='ipsurvey-tab-v2'&&k!=='ipsurvey-fmt'&&k!=='ipsurvey-t1mode'}
+  try{localStorage.setItem('ip-probe','1');localStorage.removeItem('ip-probe');ok=true}catch(e){}
+  var rawSet=null,rawRem=null;
+  try{rawSet=Storage.prototype.setItem;rawRem=Storage.prototype.removeItem}catch(e){}
+  function snap(){var o={};try{Object.keys(localStorage).forEach(function(k){if(mine(k)){var v=localStorage.getItem(k);if(v!=null)o[k]=v}})}catch(e){}return o}
+  function pad(n){return n<10?'0'+n:''+n}
+  function hhmm(){var d=new Date(last);return pad(d.getHours())+':'+pad(d.getMinutes())}
+  function paint(){
+    var el=document.getElementById('svst');if(!el)return;
+    var t,w=false;
+    if(imp){t='백업 파일의 '+Object.keys(imp).length+'개 항목을 불러옵니다. 지금 입력한 내용은 덮어써집니다.';el.className='svst';el.innerHTML=t+' <button type="button" id="svgo">불러오기</button> <button type="button" id="svno">취소</button>';return}
+    if(!ok){t='⚠ 이 화면에서는 브라우저 저장이 막혀 있어 새로고침하면 입력이 사라집니다. 입력 후 「백업 파일 저장」을 눌러 보관하거나, 일반 브라우저 창에서 여세요.';w=true}
+    else{
+      t='자동 저장 켜짐 · 이 브라우저 ✓';
+      if(dbErr){t+=' · 내 계정 저장 오류(용량·연결) → 백업 파일을 권장합니다';w=true}
+      else if(dbOn)t+=' · 내 계정 ✓';
+      else t+=' · 내 계정 저장은 로그인 상태의 Claude 화면에서만 켜집니다';
+      if(last)t+=' (마지막 '+hhmm()+')';
+    }
+    el.className='svst'+(w?' warn':'');el.textContent=t;
+  }
+  function flushQ(){
+    if(busy||!col||wiping)return;busy=true;
+    (function next(){
+      var ks=Object.keys(q);
+      if(!ks.length){busy=false;dbErr=false;dbOn=true;paint();return}
+      var k=ks[0],v=q[k];delete q[k];
+      var d;try{d=col.doc('m3_'+k)}catch(e){busy=false;dbErr=true;paint();return}
+      var p=v==null?d.delete():d.set({k:k,v:v,at:Date.now()});
+      p.then(next,function(){busy=false;dbErr=true;paint()});
+    })();
+  }
+  function move(){timer=null;Object.keys(pend).forEach(function(k){q[k]=pend[k]});pend={};flushQ()}
+  function sched(k,v){
+    if(!mine(k)||wiping)return;
+    last=Date.now();paint();
+    pend[k]=v;if(!col)return;
+    if(timer)clearTimeout(timer);timer=setTimeout(move,1200);
+  }
+  if(rawSet&&rawRem){
+    try{
+      Storage.prototype.setItem=function(k,v){var r=rawSet.apply(this,arguments);try{if(this===window.localStorage)sched(k,String(v))}catch(e){}return r};
+      Storage.prototype.removeItem=function(k){var r=rawRem.apply(this,arguments);try{if(this===window.localStorage)sched(k,null)}catch(e){}return r};
+    }catch(e){}
+  }
+  function putLocal(o){var n=0;Object.keys(o).forEach(function(k){if(mine(k)&&typeof o[k]==='string'){try{rawSet.call(localStorage,k,o[k]);n++}catch(e){}}});return n}
+  function initDb(){
+    if(!window.claude||!window.claude.use)return;
+    Promise.all([window.claude.use('db'),window.claude.use('user')]).then(function(r){
+      var db=r[0],u=r[1];if(!db||!u)return null;
+      return u.id().then(function(id){
+        if(!id)return null;
+        col=db.collection('data/users/'+id);
+        return col.get();
+      });
+    }).then(function(qs){
+      if(!qs||!col)return;
+      var remote={},rn=0;
+      qs.docs.forEach(function(d){if(d.id.indexOf('m3_')!==0)return;var x=d.data();if(x&&typeof x.k==='string'&&typeof x.v==='string'&&mine(x.k)){remote[x.k]=x.v;rn++}});
+      var local=snap(),hasLocal=Object.keys(local).some(isData);
+      dbOn=true;
+      if(!hasLocal&&rn&&ok){
+        if(putLocal(remote)>0){location.reload();return}
+      }
+      Object.keys(local).forEach(function(k){if(remote[k]!==local[k])q[k]=local[k]});
+      Object.keys(pend).forEach(function(k){q[k]=pend[k]});pend={};
+      paint();flushQ();
+    }).catch(function(){dbErr=true;paint()});
+  }
+  function wipe(){
+    wiping=true;
+    if(!col)return Promise.resolve();
+    var job=col.get().then(function(qs){return Promise.all(qs.docs.filter(function(d){return d.id.indexOf('m3_')===0}).map(function(d){return col.doc(d.id).delete()}))}).catch(function(){});
+    return Promise.race([job,new Promise(function(res){setTimeout(res,4000)})]);
+  }
+  window.__ipSave={wipe:wipe,snap:snap};
+  function stamp(){var d=new Date();return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())}
+  function exportFile(){
+    var s=snap(),n=Object.keys(s).filter(isData).length,msg=document.getElementById('svst');
+    if(!n&&msg){msg.className='svst warn';msg.textContent='저장할 입력 내용이 아직 없습니다.';return}
+    var txt=JSON.stringify({app:'helperson-m3',v:1,at:new Date().toISOString(),data:s});
+    var name='헬퍼손지원서_백업_'+stamp()+'.json';
+    function anchor(){var b=new Blob([txt],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)}
+    var p=(window.claude&&window.claude.use)?window.claude.use('downloads'):Promise.resolve(null);
+    p.then(function(dl){if(dl)return dl.save({filename:name,data:txt});anchor()}).catch(function(){try{anchor()}catch(e){}});
+  }
+  function onFile(f){
+    if(!f)return;var rd=new FileReader();
+    rd.onload=function(){
+      var el=document.getElementById('svst');
+      try{var o=JSON.parse(String(rd.result));if(!o||o.app!=='helperson-m3'||!o.data)throw 0;
+        var d={};Object.keys(o.data).forEach(function(k){if(mine(k)&&typeof o.data[k]==='string')d[k]=o.data[k]});
+        if(!Object.keys(d).length)throw 0;imp=d;paint();
+      }catch(e){if(el){el.className='svst warn';el.textContent='이 파일은 헬퍼손 지원서 백업 파일이 아닙니다.'}}
+    };
+    rd.readAsText(f);
+  }
+  function mount(){
+    var foot=document.querySelector('.foot'),host=foot?foot.parentNode:document.querySelector('.wrap');if(!host)return;
+    var b=document.createElement('div');b.className='svbar no-print';b.id='svbar';
+    b.innerHTML='<span class="svst" id="svst" role="status" aria-live="polite"></span><button type="button" id="svexp">백업 파일 저장</button><label class="svb" for="svfile">백업 파일 불러오기</label><input type="file" id="svfile" accept=".json,application/json">';
+    if(foot)host.insertBefore(b,foot);else host.appendChild(b);
+    b.addEventListener('click',function(e){
+      var t=e.target.closest('button');if(!t)return;
+      if(t.id==='svexp')exportFile();
+      else if(t.id==='svno'){imp=null;paint()}
+      else if(t.id==='svgo'&&imp){
+        if(!ok){imp=null;paint();return}
+        if(putLocal(imp)>0){var e2=document.getElementById('svst');if(e2)e2.textContent='불러오는 중…';
+          wiping=false;Object.keys(imp).forEach(function(k){q[k]=imp[k]});imp=null;
+          var go=function(){location.reload()};
+          if(col){flushQ();setTimeout(go,1500)}else go();}
+      }
+    });
+    document.getElementById('svfile').addEventListener('change',function(){onFile(this.files&&this.files[0]);this.value=''});
+    paint();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount);else mount();
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'&&timer){clearTimeout(timer);move()}});
+  window.addEventListener('pagehide',function(){if(timer){clearTimeout(timer);move()}});
+  initDb();
+})();
+  </script>
 
   <script>
 /* 학과별 진로 가이드 데이터 — 2026-10-25 조사. st: ok=공식 자료로 확인, chk=확인 필요(비공식·미확인) */
@@ -1505,7 +1640,7 @@ hist:{n:'사학과',cnt:1,
     var b=e.target.closest('button');if(!b)return;
     if(b.id==='ipreset'){foot.innerHTML='<span>모든 탭의 입력·예시 수정 내용이 지워집니다. 계속할까요?</span><button type="button" class="danger" id="ipyes">지우기</button><button type="button" id="ipno">취소</button>'}
     else if(b.id==='ipno'){foot.innerHTML='<span>입력한 내용은 이 브라우저에만 저장됩니다.</span><button type="button" id="ipreset">저장된 내용 모두 지우기</button>'}
-    else if(b.id==='ipyes'){try{Object.keys(localStorage).filter(function(k){return k.indexOf('ipsurvey-')===0}).forEach(function(k){localStorage.removeItem(k)})}catch(err){}location.reload()}
+    else if(b.id==='ipyes'){try{Object.keys(localStorage).filter(function(k){return k.indexOf('ipsurvey-')===0}).forEach(function(k){localStorage.removeItem(k)})}catch(err){}var go=function(){location.reload()};try{(window.__ipSave&&window.__ipSave.wipe?window.__ipSave.wipe():Promise.resolve()).then(go,go)}catch(err){go()}}
   });
   if(wrap){wrap.appendChild(pg);wrap.appendChild(foot)}
   var s=0;try{s=parseInt(localStorage.getItem('ipsurvey-tab-v2'),10)||0}catch(e){}
