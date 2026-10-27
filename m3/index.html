@@ -4294,10 +4294,9 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     h+='<nav class="subnav5 no-print" id="t5nav" aria-label="문항 바로가기">'+SECS.map(function(s){return '<button type="button" data-go="'+s.k+'">'+'①②③④⑤'.charAt(+s.no-1)+' '+esc(s.title)+'</button>'}).join('')+'</nav>';
     SECS.forEach(function(s){
       h+='<div class="t4blk" id="t5s_'+s.k+'" data-s="'+s.k+'"><div class="sechd"><div><h3>'+s.no+'. '+s.title+'</h3><div class="subt">'+s.sub+'</div></div><button type="button" class="btn ghost sm2" data-act="guide" data-s="'+s.k+'">가이드 보기</button></div>'+
-      '<details class="memo" open><summary>소재 메모 (초안을 만들 재료)</summary><div class="fg" style="margin-top:6px">'+s.memos.map(function(m){return '<div class="fld full"><label for="t5m_'+s.k+'_'+m.f+'">'+m.label+'</label><textarea id="t5m_'+s.k+'_'+m.f+'" data-s="'+s.k+'" data-m="'+m.f+'" rows="2" placeholder="'+esc(m.ph)+'"></textarea></div>'}).join('')+'</div></details><div class="impl" id="t5i_'+s.k+'"></div>'+
-      '<div class="fld full" style="margin-top:8px"><label for="t5b_'+s.k+'">자기소개서 본문</label><textarea id="t5b_'+s.k+'" data-s="'+s.k+'" data-b="1" rows="9" placeholder="소재 메모를 바탕으로 본문을 쓰세요. AI 초안은 아래 버튼으로 받을 수 있습니다."></textarea></div>'+
+      '<details class="memo" open><summary>소재 메모 (본문을 쓸 재료)</summary><div class="fg" style="margin-top:6px">'+s.memos.map(function(m){return '<div class="fld full"><label for="t5m_'+s.k+'_'+m.f+'">'+m.label+'</label><textarea id="t5m_'+s.k+'_'+m.f+'" data-s="'+s.k+'" data-m="'+m.f+'" rows="2" placeholder="'+esc(m.ph)+'"></textarea></div>'}).join('')+'</div></details><div class="impl" id="t5i_'+s.k+'"></div>'+
+      '<div class="fld full" style="margin-top:8px"><label for="t5b_'+s.k+'">자기소개서 본문</label><textarea id="t5b_'+s.k+'" data-s="'+s.k+'" data-b="1" rows="9" placeholder="소재 메모를 바탕으로 본문을 쓰세요."></textarea></div>'+
       '<div class="cnt5"><span id="t5c_'+s.k+'"></span><label>글자 수 제한 <input type="number" min="100" max="3000" step="50" id="t5l_'+s.k+'" data-s="'+s.k+'" data-l="1"> 자</label></div>'+
-      '<div class="runbtns" style="margin-top:8px"><button type="button" class="btn" data-act="draft" data-s="'+s.k+'">AI 초안 만들기</button><button type="button" class="btn ghost" data-act="review" data-s="'+s.k+'">AI 점검하기</button><button type="button" class="btn ghost" data-act="stop" data-s="'+s.k+'" hidden>중지</button></div>'+
       '<div class="runmsg" id="t5g_'+s.k+'" role="status"></div><div class="aic5" id="t5r_'+s.k+'" hidden></div><div class="t5back no-print"><button type="button" data-go="nav">↑ 문항 바로가기로 돌아가기</button></div></div>';
     });
     $('t5body').innerHTML=h;
@@ -4422,7 +4421,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var el=$('t5cov');if(!el)return;S.imp=S.imp||{};var n0=0;try{n0=getSources().n}catch(e){}
     var rows=SECS.map(function(sc){var d=S.sec[sc.k],emp=sc.memos.filter(function(m){return !(d.memo[m.f]||'').trim()}),n=Object.keys(S.imp).filter(function(id){return S.imp[id].sec===sc.k}).length,bl=d.body.trim().length;
       return '<tr><th scope="row">'+sc.no+'. '+esc(sc.title)+'</th><td>'+n+'건</td><td>'+(sc.memos.length-emp.length)+'/'+sc.memos.length+'</td><td>'+(emp.length?esc(emp.map(function(m){return m.label.replace(/\s*\(.*\)$/,'')}).join(', ')):'모두 채움')+'</td><td>'+(bl?bl.toLocaleString()+'자':'미작성')+'</td></tr>'}).join('');
-    el.innerHTML='<h3>소재 현황</h3><div class="subt">경험발굴(탭④)에서 ‘자소서 소재로’ 고른 경험은 여기로 자동으로 들어옵니다. 비어 있는 소재만 새로 쓰고, 가져온 소재는 ‘AI로 다듬기’로 정교하게 만드세요. 채용공고·직무기술서: '+(n0?('탭③에서 '+n0+'건 연결됨 — AI 점검하기가 공고 요건과 비교합니다'):'아직 없음 — 탭③에 올리면 AI 점검하기가 공고 요건과 비교합니다')+'</div><div class="tblwrap"><table class="cov5"><thead><tr><th>문항</th><th>가져온 경험</th><th>소재칸 채움</th><th>아직 빈 소재</th><th>본문</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto7">탭④ 경험발굴에서 소재 고르기 →</button></div>';
+    el.innerHTML='<h3>소재 현황</h3><div class="subt">경험발굴(탭④)에서 ‘자소서 소재로’ 고른 경험은 여기로 자동으로 들어옵니다. 비어 있는 소재만 새로 쓰고, 가져온 소재는 ‘AI로 다듬기’로 정교하게 만드세요. 채용공고·직무기술서: '+(n0?('탭③에서 '+n0+'건 연결됨 — ‘AI로 다듬기’가 공고 요건을 참고합니다'):'아직 없음 — 탭③에 올리면 ‘AI로 다듬기’가 공고 요건을 참고합니다')+'</div><div class="tblwrap"><table class="cov5"><thead><tr><th>문항</th><th>가져온 경험</th><th>소재칸 채움</th><th>아직 빈 소재</th><th>본문</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="subt" style="margin-top:6px"><button type="button" class="lk" id="t5goto7">탭④ 경험발굴에서 소재 고르기 →</button></div>';
   }
   $('t5cov').addEventListener('click',function(e){if(e.target.id==='t5goto7'){var b=document.getElementById('tab7');if(b)b.click()}});
   function extraBlocks(){
@@ -4440,7 +4439,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function msg(t,cls){var el=$('t5gm');el.className='runmsg'+(cls?' '+cls:'');el.textContent=t}
   function list(a){return a&&a.length?'<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>':''}
   function showOut(k){
-    var d=S.sec[k],el=$('t5r_'+k),o=d.out;if(!o){el.hidden=true;el.innerHTML='';return}
+    var d=S.sec[k],el=$('t5r_'+k),o=d.out;if(true){el.hidden=true;el.innerHTML='';return}
     el.hidden=false;
     if(o.type==='draft')el.innerHTML='<b>AI 초안</b> <span class="subt">학생 메모만으로 쓴 초안입니다. 사실과 수치를 직접 확인해 고쳐 쓰세요.</span><div class="pv2">'+esc(o.draft)+'</div>'+(o.notes&&o.notes.length?'<b>쓰기 전에 확인할 점</b>'+list(o.notes):'')+'<div class="runbtns" style="margin-top:6px"><button type="button" class="btn sm2" data-act="apply" data-s="'+k+'">본문에 넣기</button></div>';
     else el.innerHTML='<b>AI 점검</b> '+esc(o.summary||'')+jdHTML(o)+(o.fixes&&o.fixes.length?'<div class="fixes">'+o.fixes.map(function(f){return '<div class="fx"><div class="q">“'+esc(f.quote)+'”</div><div><b>문제</b> '+esc(f.problem)+'</div><div><b>제안</b> '+esc(f.suggestion)+'</div></div>'}).join('')+'</div>':'')+(o.cliche&&o.cliche.length?'<b>상투적 표현</b>'+list(o.cliche):'');
@@ -4671,13 +4670,43 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if(f.f==='summary')cls='fld full';
     return '<div class="'+cls+'"><label for="'+id+'">'+f.label+'</label>'+inp+'</div>'}
   function renderOut(p){var o=p.out;if(!o)return '';var li=function(a){return a&&a.length?'<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>':''};
-    return '<b>AI 점검</b> '+esc(o.summary||'')+(o.missing&&o.missing.length?'<div><b>가이드 대비 빠진 것</b>'+li(o.missing)+'</div>':'')+(o.fixes&&o.fixes.length?'<div class="fixes">'+o.fixes.map(function(f){return '<div class="fx"><div class="q">'+esc(f.field)+'</div><div><b>문제</b> '+esc(f.problem)+'</div><div><b>제안</b> '+esc(f.suggestion)+'</div></div>'}).join('')+'</div>':'')}
+    return '<b>점검</b> '+esc(o.summary||'')+(o.missing&&o.missing.length?'<div><b>가이드 대비 빠진 것</b>'+li(o.missing)+'</div>':'')+(o.fixes&&o.fixes.length?'<div class="fixes">'+o.fixes.map(function(f){return '<div class="fx"><div class="q">'+esc(f.field)+'</div><div><b>문제</b> '+esc(f.problem)+'</div><div><b>제안</b> '+esc(f.suggestion)+'</div></div>'}).join('')+'</div>':'')}
+  function checkProject(t,p){
+    var all=COMMON.concat(t.fields),v=function(f){return String(p[f]||'').trim()},miss=[],fx=[],ok=0,tot=0,nf=0,nfill=0;
+    function chk(pass,field,problem,sug){tot++;if(pass)ok++;else fx.push({field:field,problem:problem,suggestion:sug})}
+    all.forEach(function(f){if(f.f==='link')return;nf++;if(v(f.f))nfill++;else miss.push('‘'+f.label+'’ 칸이 비어 있습니다.')});
+    var rf=t.fields.filter(function(f){return f.f==='result'||f.f==='verify'})[0];
+    if(rf&&v(rf.f))chk(/\d/.test(v(rf.f)),rf.label,'수치가 없어 성과가 드러나지 않습니다.','전후 비교 형식으로 쓰세요: [지표]를 [전]에서 [후]로 (수치 입력) 개선했다.');
+    if(v('role'))chk(/기여|%|담당|팀장|역할|맡/.test(v('role')),'내 역할과 기여도','내가 한 범위와 기여도가 분명하지 않습니다.','「팀 규모 / 내 담당 업무 / 기여도(%)」를 함께 쓰세요. 예) 5명 중 기획·분석 담당, 기여도 (수치 입력)%');
+    if(v('summary'))chk(v('summary').length>=20&&/\d|결과|개선|달성|증가|감소|순위|위|수상/.test(v('summary')),'한 줄 요약','요약이 짧거나 결과가 드러나지 않습니다.','「무엇을·왜·어떤 결과」 한 문장으로: [프로젝트]에서 [내 역할]로 [한 일]을 하여 (수치 입력)의 결과를 냈다.');
+    if(t.k==='it'||t.k==='design'){
+      if(!v('link'))chk(false,'링크','결과물을 확인할 링크가 없습니다.',t.k==='it'?'GitHub 저장소(README 정비)나 배포 주소·시연 영상 링크를 넣으세요.':'시안·결과물을 볼 수 있는 링크(Behance, Figma, PDF)를 넣으세요.');
+      else chk(/^https?:\/\//.test(v('link')),'링크','주소 형식이 올바르지 않습니다.','https:// 로 시작하는 전체 주소를 넣고, 눌러서 열리는지 확인하세요.');
+    }
+    if(t.k==='it'){
+      if(v('stack'))chk(/위해|때문|이유|선택|장점/.test(v('stack')),'기술 스택과 선택 이유','기술 이름만 있고 고른 이유가 없습니다.','「[기술]을 쓴 이유: [장점·요구사항]」 형식으로 이유를 한 줄 더하세요.');
+      if(v('trouble'))chk(/원인|해결|수정|개선/.test(v('trouble')),'트러블슈팅','문제의 원인과 해결 과정이 드러나지 않습니다.','「문제 → 원인 → 해결 방법 → 결과」 순서로 쓰세요.');
+    }else if(t.k==='design'){
+      if(v('process'))chk(/스케치|와이어|시안|수정|피드백/.test(v('process')),'제작 과정','제작 단계가 보이지 않습니다.','스케치 → 와이어프레임 → 시안 → 수정 중 내가 한 단계와 고친 이유를 쓰세요.');
+      if(v('verify'))chk(/테스트|피드백|설문|전후|before|after/i.test(v('verify')),'검증과 결과','검증 방법이 보이지 않습니다.','사용성 테스트·피드백·Before/After 중 한 가지로 확인한 결과를 쓰세요.');
+    }else if(t.k==='marketing'){
+      if(v('insight'))chk(/\d|데이터|설문|조사|관찰|분석/.test(v('insight')),'타깃과 인사이트','인사이트의 근거가 보이지 않습니다.','어떤 데이터·설문·관찰에서 그 인사이트를 얻었는지 한 줄 더하세요.');
+      if(v('result'))chk(/대비|전후|→|에서|증가|감소|%/.test(v('result')),'성과 (수치)','전후 비교 기준이 없습니다.','비교 기준(이전 캠페인, 전년 동기 등)을 함께 쓰세요.');
+    }else if(t.k==='sales'){
+      if(v('analysis'))chk(/자료|조사|통계|출처|데이터|비교/.test(v('analysis')),'시장·데이터 분석','분석 근거와 출처가 보이지 않습니다.','조사한 자료의 출처와 분석 방법을 한 줄로 쓰세요.');
+      if(v('proposal'))chk(/\d/.test(v('proposal')),'제안 (전략·가격·채널)','제안에 숫자(가격·예산·예상 효과)가 없습니다.','가격, 예산, 예상 매출 중 하나를 (수치 입력)으로 채우세요.');
+    }
+    var sh=all.filter(function(f){return f.f!=='link'&&f.f!=='name'&&f.f!=='period'&&v(f.f)&&v(f.f).length<20}).map(function(f){return f.label});
+    if(sh.length)chk(false,'짧은 칸','너무 짧은 칸이 있습니다: '+sh.slice(0,4).join(', '),'배경·한 일·이유를 한 문장씩 더해 2~3문장으로 쓰세요.');
+    var nodes=all.filter(function(f){return f.f!=='link'&&f.f!=='name'&&f.f!=='period'&&v(f.f)}).length;
+    return {summary:'채운 칸 '+nfill+'/'+nf+' · 확인 항목 '+ok+'/'+tot+' 충족 · 보완할 점 '+fx.length+'개',missing:miss.slice(0,6),fixes:fx.slice(0,5)};
+  }
   function build(){
     var t=T(),h='<div class="t4blk"><h3>직무 유형</h3><div class="chips" role="group" aria-label="직무 유형">'+TYPES.map(function(x){return '<button type="button" class="chip" data-type="'+x.k+'" aria-pressed="'+(x.k===S.type)+'">'+x.label+'</button>'}).join('')+'</div><div class="subt" style="margin-top:6px">'+esc(t.desc)+' · 유형마다 입력 칸과 가이드가 다릅니다. 입력한 내용은 유형별로 따로 보관됩니다.</div></div>';
     h+='<div class="t4blk"><div class="sechd"><div><h3>프로젝트 <span class="cntb">'+S.projects[t.k].length+'건</span></h3><div class="subt">직무와 가장 가까운 2~3개를 고르세요</div></div><button type="button" class="btn ghost sm2" data-act="add">+ 프로젝트 추가</button></div><div class="ens">';
     S.projects[t.k].forEach(function(p,i){
       h+='<article class="en" data-id="'+p.id+'"><div class="eh"><b>프로젝트 '+(i+1)+'</b><button type="button" class="x" data-act="rm">삭제</button></div><div class="fg">'+COMMON.concat(t.fields).map(function(f){return fieldHTML(p,f)}).join('')+'</div>'+
-      '<div class="runbtns" style="margin-top:8px"><button type="button" class="btn ghost sm2" data-act="review">AI 점검하기</button><button type="button" class="btn ghost sm2" data-act="stop" hidden>중지</button></div><div class="runmsg" id="t6m_'+p.id+'" role="status"></div><div class="aic5" id="t6r_'+p.id+'"'+(p.out?'':' hidden')+'>'+renderOut(p)+'</div></article>';
+      '<div class="runbtns" style="margin-top:8px"><button type="button" class="btn ghost sm2" data-act="review">점검하기</button></div><div class="runmsg" id="t6m_'+p.id+'" role="status"></div><div class="aic5" id="t6r_'+p.id+'"'+(p.out?'':' hidden')+'>'+renderOut(p)+'</div></article>';
     });
     h+='</div></div>';
     $('t6body').innerHTML=h;$('t6banner').hidden=!S.example;
@@ -4700,26 +4729,10 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if(act==='add'){S.projects[S.type].push(blank(S.type));S.example=false;save();build();return}
     var en=el.closest('.en');if(!en)return;var p=find(en.dataset.id);if(!p)return;
     if(act==='rm'){S.projects[S.type]=S.projects[S.type].filter(function(x){return x.id!==p.id});if(!S.projects[S.type].length)S.projects[S.type].push(blank(S.type));S.example=false;save();build();return}
-    if(act==='stop'){if(ctrls[p.id])ctrls[p.id].abort();return}
     if(act==='review'){
       var t=T(),mg=$('t6m_'+p.id),filled=COMMON.concat(t.fields).filter(function(f){return p[f.f]&&p[f.f].trim()});
       if(filled.length<2){mg.className='runmsg err';mg.textContent='프로젝트 내용을 두 칸 이상 작성하세요.';return}
-      var sample=null;try{sample=await window.__ipAI.get()}catch(x){}
-      if(!sample){mg.className='runmsg err';mg.textContent='AI 점검은 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.';return}
-      var btns=en.querySelectorAll('[data-act=review]'),st=en.querySelector('[data-act=stop]');btns.forEach(function(b){b.disabled=true});st.hidden=false;
-      var c=new AbortController();ctrls[p.id]=c;
-      try{
-        var content=COMMON.concat(t.fields).map(function(f){return f.label+': '+(p[f.f]&&p[f.f].trim()?p[f.f].trim():'(비어 있음)')}).join('\n');
-        var pr='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생의 "'+t.label+'" 직무 포트폴리오 프로젝트 1건을 아래 가이드에 비추어 점검하세요.\n[가이드]\n서술 흐름: '+t.flow.join(' → ')+'\n꼭 담을 것: '+t.must.join(' / ')+'\n피할 것: '+t.avoid.join(' / ')+
-        '\n\n규칙:\n- 학생이 쓴 내용에 있는 사실만 근거로 한다. 없는 사실이나 수치는 만들지 않고, 필요한 수치는 "(수치 입력)"으로 비워 둔다.\n- 비어 있는 칸은 "빠진 것"에 포함한다.\n- 한국어로 쓴다.\n\n[학생 입력]\n'+content+
-        '\n\n출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식: {"summary":"한 줄 종합 평가","missing":["가이드 대비 빠진 것 최대 5개"],"fixes":[{"field":"칸 이름","problem":"문제점","suggestion":"고쳐 쓰는 방법이나 문장 예시"}]} fixes는 중요한 순서로 최대 4개.';
-        mg.className='runmsg';mg.innerHTML='<span class="spin"></span>점검 중…';
-        var r=await sample.json(pr,{cache:false,signal:c.signal});
-        if(!r||!Array.isArray(r.fixes))throw {message:'AI 응답 형식이 올바르지 않습니다. 다시 시도하세요.'};
-        p.out={summary:String(r.summary||''),missing:Array.isArray(r.missing)?r.missing.map(String).slice(0,6):[],fixes:r.fixes.slice(0,5).map(function(f){return {field:String(f.field||''),problem:String(f.problem||''),suggestion:String(f.suggestion||'')}})};
-        save();var box=$('t6r_'+p.id);box.hidden=false;box.innerHTML=renderOut(p);mg.className='runmsg ok';mg.textContent='점검을 마쳤습니다.';
-      }catch(err){if(c.signal.aborted){mg.className='runmsg';mg.textContent='중지했습니다.'}else{var code=err&&err.code;mg.className='runmsg err';mg.textContent=code==='not_granted'?'Claude 사용을 허용해야 AI 점검을 쓸 수 있습니다.':(code==='rate_limited'?'요청이 많습니다. 잠시 뒤 다시 시도하세요.':((err&&err.message)||'점검하지 못했습니다.'))}}
-      finally{btns.forEach(function(b){b.disabled=false});st.hidden=true;delete ctrls[p.id]}
+      p.out=checkProject(t,p);save();var box=$('t6r_'+p.id);box.hidden=false;box.innerHTML=renderOut(p);mg.className='runmsg ok';mg.textContent='점검을 마쳤습니다. (AI 없이 앱 안에서 점검)';
     }
   });
   (function(){var b=$('t6exload');b.addEventListener('click',function(){if(b.dataset.armed!=='1'){b.dataset.armed='1';b.textContent='한 번 더 누르면 입력 내용이 예시로 바뀝니다';return}b.dataset.armed='';b.textContent='시연용: 김민준 예시 불러오기';S=example();save();build();guide()})})();
