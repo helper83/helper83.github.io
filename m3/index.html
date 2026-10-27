@@ -3429,10 +3429,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   function cutv(v){v=String(v||'').split(/ {2,}/)[0];v=v.replace(new RegExp('\\s(?:'+LABS+')(?=[\\s:：]|$).*$'),'');return scrub(v)}
   function labk(l,re,keep){var m=new RegExp('^[\\s\\[\\(■□▶●·*\\-]*('+re+')(?=[\\s:：]|$)\\s*[:：]?\\s*(.*)$','i').exec(l);if(!m)return null;return {k:m[1].replace(/\s+/g,''),v:keep?scrub(m[2]):cutv(m[2])}}
   function lab(l,re,keep){var o=labk(l,re,keep);return o?o.v:null}
+  function joinSp(l){var t=l.split(' '),o=[],run=[];function fl(){if(run.length>=2)o.push(run.join(''));else run.forEach(function(x){o.push(x)});run=[]}t.forEach(function(x){if(/^[가-힣]$/.test(x))run.push(x);else{fl();o.push(x)}});fl();return o.join(' ')}
+  function cleanTName(v){return String(v||'').replace(/^[^가-힣A-Za-z0-9(]+/,'').replace(/\s*(?:개설|훈련\s*기간|교육\s*기간|수료\s*일|이수\s*일|발급|수료\s*번호|과정\s*번호|훈련\s*비|\d{4}\s*[.\-/년]).*$/,'').replace(/[\s:：,;]+$/,'').trim()}
   function normLines(t){
     var out=[];
     String(t||'').replace(/\r/g,'').split('\n').forEach(function(l){
-      l=l.replace(/[\t│¦｜|]+/g,'  ').replace(/ {3,}/g,'  ').trim();if(!l)return;
+      l=joinSp(l.replace(/[\t│¦｜|]+/g,'  ').replace(/ {3,}/g,'  ').trim());if(!l)return;
       var sg=l.split(/ {2,}/);
       if(sg.length>1&&sg.filter(isLab).length>=2)sg.forEach(function(x){if(x.trim())out.push(x.trim())});else out.push(l);
     });
@@ -3443,7 +3445,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     cdate:'취득\\s*일자?|합격\\s*일자?|발급\\s*일자?|발행\\s*일자?|시험\\s*일자?|응시\\s*일자?|인증\\s*일자?|등록\\s*일자?',
     corg:'발급\\s*기관|시행\\s*기관|발행\\s*기관|인증\\s*기관|주관\\s*기관|주관|기관\\s*명',
     cscore:'점수|등급|급수|성적|레벨|level|score',
-    tname:'교육\\s*과정\\s*명|훈련\\s*과정\\s*명|과정\\s*명|교육\\s*명|연수\\s*명|강좌\\s*명|프로그램\\s*명|교육\\s*제목|과목\\s*명',
+    tname:'교육\\s*과정\\s*명|훈련\\s*과정\\s*명|훈련\\s*과정|교육\\s*과정|과정\\s*명|교육\\s*명|연수\\s*명|강좌\\s*명|프로그램\\s*명|교육\\s*제목|과목\\s*명',
     tper:'교육\\s*기간|수강\\s*기간|연수\\s*기간|훈련\\s*기간|교육\\s*일시|이수\\s*기간|기간',
     thour:'교육\\s*시간|이수\\s*시간|총\\s*시간|훈련\\s*시간|시간',
     torg:'교육\\s*기관|수료\\s*기관|운영\\s*기관|훈련\\s*기관|발급\\s*기관|기관\\s*명|주관|주최',
@@ -3467,13 +3469,13 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     lines.forEach(function(l){
       var m;re.lastIndex=0;
       while((m=re.exec(l))){
-        var nm=m[1].replace(/^(?:\d+\s+)+/,'').trim(),gb='',g=/^(전공필수|전공선택|전공기초|교양필수|교양선택|핵심교양|균형교양|기초교양|일반선택|자유선택|교양|전필|전선|교필|교선|일선)\s+/.exec(nm);
-        if(g){gb=g[1];nm=nm.slice(g[0].length)}
+        var nm=m[1].replace(/^(?:\d+\s+)+/,'').trim(),gb='',g;
+        while((g=/^(전공필수|전공선택|전공기초|교양필수|교양선택|핵심교양|균형교양|기초교양|일반선택|자유선택|교양|전필|전선|전기|교필|교선|교기|일선|자선|박기|박필|박선|박공|석기|석필|석선|석공)\s+(?=[가-힣A-Za-z])/.exec(nm))){gb=g[1];nm=nm.slice(g[0].length)}
         nm=nm.replace(/^[A-Za-z]{2,5}\d{3,5}\s+/,'').trim();
         if(nm.length<2||!(/[가-힣]/.test(nm)||/[A-Za-z]{4,}/.test(nm)))continue;
         if(/평점|평균|합계|취득\s*학점|이수\s*학점|누계|학기|학년|성적|과목명|교과목명|총계|총점/.test(nm))continue;
         var k=cpt(nm);if(seen[k])continue;seen[k]=1;
-        out.push({type:'학교 교과',name:nm+' ('+m[3]+')',content:(gb?gb+' · ':'')+m[2]+'학점',rel:'',src:f.name,_t:nm});
+        out.push({type:'학교 교과',name:nm+' ('+m[3]+')',content:m[2]+'학점',rel:'',src:f.name,_t:nm});
       }
     });
     return out;
@@ -3530,8 +3532,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     function push(){if(cur&&cur.name)out.push(cur);cur=null}
     lines.forEach(function(l){
       if(PIRE.test(l.slice(0,16)))return;
-      if((v=lab(l,L.tname))!==null){push();cur={name:v,period:'',hours:'',org:''};want=!v;return}
-      if(want&&cur&&!isLab(l)){cur.name=scrub(l);want=false;return}
+      if((v=lab(l,L.tname))!==null){push();cur={name:cleanTName(v),period:'',hours:'',org:''};want=!cur.name;return}
+      if(want&&cur&&!isLab(l)){cur.name=cleanTName(scrub(l));want=false;return}
       if(!cur)return;
       if((v=lab(l,L.tper))!==null){if(!cur.period)cur.period=per(v||l);return}
       if((v=lab(l,L.thour))!==null){var h=/(\d+(?:\.\d+)?)/.exec(v);if(h&&!cur.hours)cur.hours=h[1];return}
@@ -3540,7 +3542,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     push();
     if(!out.length){
       var q=/[“"'『「《]([^”"'』」》\n]{3,40})[”"'』」》]/.exec(txt),ln=lines.filter(function(l){return /과정/.test(l)&&l.length<=40&&!PIRE.test(l.slice(0,16))&&!/수료증|이수증|증명서/.test(l)})[0];
-      var nm=q?q[1]:(ln||'');if(nm)out.push({name:scrub(nm),period:'',hours:'',org:''});
+      var nm=q?q[1]:(ln||''),cm=/과정\s*[:：]\s*(.+)/.exec(nm);if(cm)nm=cm[1];nm=cleanTName(scrub(nm));if(nm)out.push({name:nm,period:'',hours:'',org:''});
     }
     var online=/온라인|사이버|e-?learning|인강|k-?mooc|coursera|udemy|인프런|edwith|유튜브/i.test(txt),done=/수료|이수/.test(txt);
     return out.map(function(o){return {type:online?'온라인 강의':'직업교육',name:o.name,content:[o.org,o.period,o.hours?o.hours+'시간'+(done?' 수료':''):(done?'수료':'')].filter(Boolean).join(', '),rel:'',src:f.name,_t:o.name+' '+o.org}});
