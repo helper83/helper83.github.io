@@ -2457,7 +2457,7 @@ hist:{n:'사학과',cnt:1,
   }
   if(window.__ipInfo)window.__ipInfo.on(function(v,src){if(DB&&!sel.job||src){autoJob()}mounts.forEach(function(x){x.render()});hints();subsHB.forEach(function(f){try{f()}catch(e){}})});
   window.__ipHB={mount:mount,load:load,guide:guide,on:function(f){subsHB.push(f)},
-    setSel:function(p){if(p.ind!=null)sel.ind=p.ind;if(p.job!=null){sel.job=p.job;if(p.lock!=null)lastJob=p.lock}pickAll()},jobName:function(jc){if(!IND)return '';var n='';Object.keys(IND.hbj).forEach(function(k){if(!n&&IND.hbj[k]===jc)n=k});return n||(IND.jp[jc]&&IND.jp[jc].n)||''},
+    setSel:function(p){if(p.ind!=null)sel.ind=p.ind;if(p.job!=null){sel.job=p.job;if(p.lock!=null)lastJob=p.lock}pickAll()},jobCode:function(n){return IND&&IND.hbj?(IND.hbj[n]||''):''},jobName:function(jc){if(!IND)return '';var n='';Object.keys(IND.hbj).forEach(function(k){if(!n&&IND.hbj[k]===jc)n=k});return n||(IND.jp[jc]&&IND.jp[jc].n)||''},
     bindInd:function(el){binds=binds.filter(function(b){return document.body.contains(b)});binds.push(el);fillBind(el);el.addEventListener('change',function(){sel.ind=el.value;pickAll()});load().then(function(){var dl=document.getElementById('ipjobs');if(dl)dl.innerHTML=DB.meta.jobs.map(function(j){return '<option value="'+esc(j)+'">'}).join('');autoJob();pickAll()},function(){})},
     jobs:function(){return DB?DB.meta.jobs.slice():[]},sel:function(){return {ind:sel.ind,job:sel.job}},row:function(){return DB?rowFor(sel.ind,sel.job):null},inds:function(){return INDN.slice()}};
 })();
@@ -2520,6 +2520,20 @@ hist:{n:'사학과',cnt:1,
     var q=ST.q.trim().toLowerCase();
     return D.rows.filter(function(r){return (!ST.grp||r[7]===ST.grp)&&(!ST.cat||r[3]===ST.cat)&&(!ST.reg||r[5]===ST.reg)&&(!q||(r[1]+' '+r[2]+' '+r[3]+' '+r[4]).toLowerCase().indexOf(q)>=0)});
   }
+  var IC=[[/에너지|전력|가스|신재생|수소|배터리/,['에너지·환경','국가인프라','산업/진흥']],[/환경|자원순환|수처리/,['상수도','하수도','에너지·환경','생활/환경']],[/농림|식품|음료|외식/,['식품·유통','산업/진흥']],[/반도체|디스플레이|전기·전자|통신|정보보안|AI|소프트웨어|IT서비스|인터넷|게임|핀테크|로봇/,['산업/진흥','기업지원','연구·교육','교육/연구','국가인프라']],[/은행|증권|보험|금융/,['신용보증','기업지원','개발·투자']],[/건설|부동산|플랜트/,['도시개발공사','공영개발','개발·투자','시설관리공단']],[/운송|해운|항만|철도|물류|항공|공항|택배/,['도시철도공사','자동차운송','국가인프라','기타공사']],[/병원|의료|제약|바이오|헬스/,['의료','건강/보건']],[/교육|학교|학원/,['장학','교육/연구','연구·교육']],[/사회복지|돌봄|실버|반려/,['사회/복지','문화·복지·관광','건강/보건']],[/관광|호텔|레저|스포츠|문화|콘텐츠|도서관|박물관|미디어|출판|엔터/,['문화·복지·관광','문화/생활']],[/공공행정|치안|국방|안전/,['공공/안전','국가인프라']],[/무역|상사|유통|리테일|이커머스/,['식품·유통','기업지원','산업/진흥']],[/연구개발|시험인증/,['연구·교육','교육/연구','산업/진흥']],[/사업지원|인력/,['취업/직업','기업지원']],[/기계|자동차|조선|항공·우주|철강|화학|소재|전자·가전/,['산업/진흥','기업지원','연구·교육']]];
+  function indCats(n){var a=[];IC.forEach(function(x){if(x[0].test(n))x[1].forEach(function(c){if(a.indexOf(c)<0)a.push(c)})});return a}
+  function relCtx(){
+    var H=hb(),s=H?H.sel():{ind:'',job:''},ij='';try{ij=(window.__ipInfo&&window.__ipInfo.get().job)||''}catch(e){}
+    var job=(s.job||ij||'').trim(),ind=(s.ind||'').trim();
+    return {job:job,ind:ind,code:(H&&H.jobCode&&job)?H.jobCode(job):'',cats:ind?indCats(ind):[]};
+  }
+  function relOf(r,C){
+    var o={j:0,i:0,jn:''};if(!C)return o;
+    if(C.job){var p=D.P[r[0]],jobs=(p&&p[5])||[];
+      for(var k=0;k<jobs.length;k++){var j=jobs[k];if(C.code&&j[0]===C.code){o.j=2;o.jn=j[1];break}if(j[1]&&(j[1].indexOf(C.job)>=0||C.job.indexOf(j[1])>=0)&&o.j<1){o.j=1;o.jn=j[1]}}}
+    if(C.cats.length&&C.cats.indexOf(r[3])>=0)o.i=1;
+    return o;
+  }
   function cats(){var a=[];D.rows.forEach(function(r){if((!ST.grp||r[7]===ST.grp)&&a.indexOf(r[3])<0)a.push(r[3])});return a.sort()}
   function opts(list,cur,all){return '<option value="">'+all+'</option>'+list.map(function(x){return '<option'+(x===cur?' selected':'')+'>'+esc(x)+'</option>'}).join('')}
   function selCard(){
@@ -2531,15 +2545,18 @@ hist:{n:'사학과',cnt:1,
       '<div class="subt" style="margin:4px 0">모집 직무(눌러서 맞춤 가이드 기준 직무 선택 · ✓는 직접 공고·직무기술서 근거, 나머지는 기관 기능 기반으로 공고 확인 필요)</div><div class="chips">'+(jobs||'<span class="subt">헬퍼탐에 등록된 직무가 없습니다</span>')+'</div>'+
       (I.url?'<div class="subt" style="margin-top:6px"><a href="'+esc(I.url)+'" target="_blank" rel="noopener noreferrer">기관 공식 홈페이지</a>'+(I.rec&&I.rec!==I.url?' · <a href="'+esc(I.rec)+'" target="_blank" rel="noopener noreferrer">채용 페이지</a>':'')+' · <a href="https://job.alio.go.kr" target="_blank" rel="noopener noreferrer">공공기관 채용정보시스템(ALIO)</a></div>':'')+'</div>';
   }
-  function tblHTML(){
-    var f=filtered(),show=f.slice(0,ST.n),selc=sel.code;
-    var h='<div class="subt" style="margin:6px 0">'+f.length.toLocaleString()+'개 기관'+(f.length>show.length?' 중 '+show.length+'개 표시':'')+'</div><div class="tblwrap"><table class="pubtbl"><thead><tr><th>기관명</th><th>구분</th><th>유형</th><th>분류</th><th>소관·지자체</th><th>지역</th><th>직원수</th><th></th></tr></thead><tbody>';
-    show.forEach(function(r){h+='<tr'+(r[0]===selc?' class="on"':'')+'><th scope="row">'+esc(r[1])+'</th><td>'+esc(r[7])+'</td><td>'+esc(r[2])+'</td><td>'+esc(r[3])+'</td><td>'+esc(r[4])+'</td><td>'+esc(r[5])+'</td><td>'+(r[6]?r[6].toLocaleString():'-')+'</td><td><button type="button" class="sm" data-pub="sel" data-c="'+esc(r[0])+'">'+(r[0]===selc?'선택됨':'선택')+'</button></td></tr>'});
+  function tblHTML(rel){
+    var f=filtered(),C=null,RI={},nrel=0,on=!!rel&&!ST.relOff;
+    if(rel){C=relCtx();if(on&&(C.job||C.cats.length)){f.forEach(function(r){var o=relOf(r,C);RI[r[0]]=o;if(o.j||o.i)nrel++});f=f.map(function(r,i){return [r,i]}).sort(function(a,b){var x=RI[a[0][0]],y=RI[b[0][0]];return (y.j*3+y.i)-(x.j*3+x.i)||a[1]-b[1]}).map(function(z){return z[0]})}}
+    var show=f.slice(0,ST.n),selc=sel.code;
+    var rh='';if(rel){rh='<div class="subt" style="margin:6px 0"><label style="display:inline-flex;align-items:center;gap:6px;min-height:44px;font-weight:600"><input type="checkbox" data-pubrel="1"'+(on?' checked':'')+'> 선택한 산업·직무와 관련된 기관 먼저 보기</label><br>'+((C.job||C.ind)?('선택한 산업: <b>'+esc(C.ind||'선택 안 함')+'</b> · 직무: <b>'+esc(C.job||'선택 안 함')+'</b>'+(on?(nrel?' — 관련 기관 '+nrel.toLocaleString()+'곳을 위로 올렸습니다. 산업 관련은 기관 분류 기준의 추정이며, 기관 공고로 확인하세요.':' — 관련 기관을 찾지 못해 기본 순서로 보여 줍니다.'):'')):'탭③에서 산업과 직무를 고르면 관련 기관이 위로 올라옵니다.')+'</div>'}
+    var h=rh+'<div class="subt" style="margin:6px 0">'+f.length.toLocaleString()+'개 기관'+(f.length>show.length?' 중 '+show.length+'개 표시':'')+'</div><div class="tblwrap"><table class="pubtbl"><thead><tr><th>기관명</th><th>구분</th><th>유형</th><th>분류</th><th>소관·지자체</th><th>지역</th><th>직원수</th><th></th></tr></thead><tbody>';
+    show.forEach(function(r){h+='<tr'+(r[0]===selc?' class="on"':'')+'><th scope="row">'+esc(r[1])+(function(){var o=RI[r[0]];if(!o||!(o.j||o.i))return '';return '<div style="margin-top:4px">'+(o.j===2?'<span class="tag ok" title="'+esc(o.jn)+'">직무 일치</span> ':(o.j===1?'<span class="tag" title="'+esc(o.jn)+'">직무 유사</span> ':''))+(o.i?'<span class="tag ex">산업 관련(추정)</span>':'')+'</div>'})()+'</th><td>'+esc(r[7])+'</td><td>'+esc(r[2])+'</td><td>'+esc(r[3])+'</td><td>'+esc(r[4])+'</td><td>'+esc(r[5])+'</td><td>'+(r[6]?r[6].toLocaleString():'-')+'</td><td><button type="button" class="sm" data-pub="sel" data-c="'+esc(r[0])+'">'+(r[0]===selc?'선택됨':'선택')+'</button></td></tr>'});
     if(!show.length)h+='<tr><td colspan="8" class="subt">조건에 맞는 기관이 없습니다. 검색어나 필터를 바꿔 보세요.</td></tr>';
     h+='</tbody></table></div>'+(f.length>show.length?'<div class="runbtns" style="margin-top:6px"><button type="button" class="btn ghost sm2" data-pub="more">더 보기 (+30)</button></div>':'');
     return h;
   }
-  function mountList(box,closed){
+  function mountList(box,closed,rel){
     var id='pl'+boxes.length+Math.random().toString(36).slice(2,5);
     box.innerHTML='<details class="hbd"'+(closed?'':' open')+'><summary>공공기관 목록표 (헬퍼탐 · 중앙공공기관·지방공기업·지방출자출연기관)</summary><div class="subt" style="margin:6px 0">공공기관에 지원한다면 여기서 기관을 고르세요. 민간기업 산업과는 둘 중 하나만 적용됩니다.</div><div id="'+id+'sel"></div><div class="fg pubflt" style="margin-top:8px"><div class="fld"><label for="'+id+'g">구분</label><select id="'+id+'g"></select></div><div class="fld"><label for="'+id+'c">분류</label><select id="'+id+'c"></select></div><div class="fld"><label for="'+id+'r">지역</label><select id="'+id+'r"></select></div><div class="fld"><label for="'+id+'q">기관 검색</label><input type="text" id="'+id+'q" placeholder="기관명·소관부처·분류"></div></div><div id="'+id+'t"></div><div class="subt" style="margin-top:6px" id="'+id+'n"></div></details>';
     var $=function(s){return box.querySelector('#'+id+s)};
@@ -2547,14 +2564,15 @@ hist:{n:'사학과',cnt:1,
       $('g').innerHTML=opts(D.grps,ST.grp,'전체');$('c').innerHTML=opts(cats(),ST.cat,'전체');$('r').innerHTML=opts(D.regs,ST.reg,'전체');$('q').value=ST.q;
       $('n').textContent='출처: 헬퍼탐 앱 내장 자료(기준 '+D.at+'). '+D.basis+' / '+D.lbasis;
     }
-    function render(){if(!D)return;$('sel').innerHTML=selCard();$('t').innerHTML=tblHTML()}
+    function render(){if(!D)return;$('sel').innerHTML=selCard();$('t').innerHTML=tblHTML(rel)}
     box.addEventListener('change',function(e){var t=e.target;
       if(t===$('g')){ST.grp=t.value;if(ST.cat&&cats().indexOf(ST.cat)<0)ST.cat='';ST.n=30;head();render()}
       else if(t===$('c')){ST.cat=t.value;ST.n=30;render()}
-      else if(t===$('r')){ST.reg=t.value;ST.n=30;render()}});
-    box.addEventListener('input',function(e){if(e.target===$('q')){ST.q=e.target.value;ST.n=30;$('t').innerHTML=tblHTML()}});
+      else if(t===$('r')){ST.reg=t.value;ST.n=30;render()}
+      else if(t.dataset&&t.dataset.pubrel){ST.relOff=!t.checked;ST.n=30;render()}});
+    box.addEventListener('input',function(e){if(e.target===$('q')){ST.q=e.target.value;ST.n=30;$('t').innerHTML=tblHTML(rel)}});
     box.addEventListener('click',function(e){var b=e.target.closest('[data-pub]');if(!b)return;var a=b.dataset.pub;
-      if(a==='sel')choose(b.dataset.c);else if(a==='clear')clearSel();else if(a==='more'){ST.n+=30;$('t').innerHTML=tblHTML()}else if(a==='job')pickJob(b.dataset.j)});
+      if(a==='sel')choose(b.dataset.c);else if(a==='clear')clearSel();else if(a==='more'){ST.n+=30;$('t').innerHTML=tblHTML(rel)}else if(a==='job')pickJob(b.dataset.j)});
     boxes.push({box:box,render:render});
     $('t').innerHTML='<div class="subt" style="padding:8px 0"><span class="spin"></span>공공기관 자료를 불러오는 중…</div>';
     load().then(function(){head();render()},function(err){$('t').innerHTML='<div class="runmsg err">'+esc((err&&err.message)||'공공기관 자료를 불러오지 못했습니다')+'</div>'});
@@ -3266,7 +3284,7 @@ hist:{n:'사학과',cnt:1,
     return {st:keep[0],a:keep.slice(1,-1).join(' '),r:keep[keep.length-1]};
   }
   var pgb7=$('t7pub');if(pgb7&&window.__ipPub)window.__ipPub.mountGuide(pgb7,{blocks:['types','ncsq','match','ncs'],open:['ncsq'],hintEmpty:false,onQ:function(t,kw){if(aiQ.some(function(x){return x.q===t}))return false;aiQ.push({keyword:kw,type:'',q:t});qHTML();return true},owned:function(){return S.exps.map(function(e){return short(e.type)})}});
-  var pl7=$('t7publ');if(pl7&&window.__ipPub&&!pl7.dataset.m){pl7.dataset.m='1';window.__ipPub.mountList(pl7)}
+  var pl7=$('t7publ');if(pl7&&window.__ipPub&&!pl7.dataset.m){pl7.dataset.m='1';window.__ipPub.mountList(pl7,false,true)}
   var hbBox=$('t7hb');
   if(window.__ipHB&&hbBox)window.__ipHB.mount(hbBox,{id:'t7h',blocks:['ind','q','exps','rec','ksa','kpi'],open:['q'],use:{q:'발굴 질문에 담기',exps:'입력칸에 불러오기'},
     onUse:function(kind,p){
