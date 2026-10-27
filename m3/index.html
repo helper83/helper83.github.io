@@ -488,6 +488,18 @@ body{font-size:15px;line-height:1.65}
 .t4body .t4blk,#t5nav,#t4nav,.t4prevwrap{scroll-margin-top:72px}
 @media print{.subnav5,.t5back{display:none!important}}
 /* T5-SUBNAV:END */
+/* T2-COMPARE:BEGIN (AI 평가 ↔ 사람 평가 점수 비교) */
+.ev td.hs,.ev th.hs{text-align:center;white-space:nowrap}
+.ev td.hs b{font-size:16px}
+.ev td.df{text-align:center;white-space:nowrap;font-size:15px;font-weight:700;color:var(--fg)}
+.ev td.df.big{background:#FFF1DC;color:#7A3E00;box-shadow:inset 0 0 0 2px #E8A24A}
+.ev .total{white-space:nowrap}
+@media(min-width:641px){.hmini{display:none}}
+.hmini{margin-top:6px;font-size:13px;color:var(--muted);text-align:center;white-space:normal}.hmini b{font-size:14px;color:var(--fg)}.hmini.big{background:#FFF1DC;color:#7A3E00;border-radius:6px;padding:2px 4px;box-shadow:inset 0 0 0 2px #E8A24A}
+@media(max-width:640px){.ev th.hs,.ev td.hs,.ev td.df{display:none}#view2 table.ev{min-width:0}#view2 .ev td.area{white-space:normal;width:64px}#view2 .ev td{padding:6px 5px}#view2 .ev td.pts{width:40px}#view2 .ev td.sc{width:100px}}
+#t2cmp{margin:8px 14px 4px;font-size:14px;line-height:1.55;color:var(--fg)}
+@media print{.ev td.df.big{box-shadow:none}}
+/* T2-COMPARE:END */
 @media print{.cs5{display:none!important}}
 /* T5-COSEARCH:END */
 @media print{.fb,.action-bar,.no-print,.note-head{display:none!important}.print-head{display:flex!important;align-items:center;gap:10px;margin-bottom:10px;font-size:14px}.print-head img{width:32px;height:32px}.print-head b{font-size:16px}}
@@ -743,11 +755,12 @@ body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;p
           <div class="runmsg" id="t2msg" role="status"></div>
         </div>
         <div class="jobbox" id="t2job" hidden></div>
+        <div id="t2cmp" role="status"></div>
         <div class="ev-scroll">
           <table class="ev">
-            <thead><tr><th>평가영역</th><th>세부 평가기준 · AI 근거</th><th>배점</th><th>평가점수</th></tr></thead>
+            <thead><tr><th>평가영역</th><th>세부 평가기준 · AI 근거</th><th>배점</th><th>AI 점수</th><th class="hs">사람 점수<br><small>탭①</small></th><th class="hs">차이<br><small>AI−사람</small></th></tr></thead>
             <tbody id="t2rows"></tbody>
-            <tfoot><tr><td colspan="2" style="text-align:center">합계</td><td class="pts" style="text-align:center">100</td><td><div class="total"><b id="t2sum">0</b><span>/ 100</span></div><div class="bar"><i id="t2sumbar"></i></div></td></tr></tfoot>
+            <tfoot><tr><td colspan="2" style="text-align:center">합계</td><td class="pts" style="text-align:center">100</td><td><div class="total"><b id="t2sum">0</b><span>/ 100</span></div><div class="bar"><i id="t2sumbar"></i></div></td><td class="hs"><div class="total"><b id="t2hsum">0</b><span>/ 100</span></div></td><td class="df" id="t2dsum">–</td></tr></tfoot>
           </table>
         </div>
         <div class="opinion">
@@ -1417,6 +1430,7 @@ hist:{n:'사학과',cnt:1,
 
   $('op').addEventListener('input',function(){state.opinion=this.value;state.sample=false;$('opcnt').textContent=this.value.length+'자';$('banner').hidden=true;save()});
   function clearAll(){state={scores:{},opinion:'',sample:false};save();render()}
+  window.__ipT1Scores=function(){return {scores:JSON.parse(JSON.stringify(state.scores||{})),sample:!!state.sample}};
   $('clear').addEventListener('click',clearAll);$('reset').addEventListener('click',function(){clearAll();toast('초기화했습니다')});
 
   function toast(t){var el=$('toast');el.textContent=t;setTimeout(function(){el.textContent=''},2200)}
@@ -1739,7 +1753,7 @@ hist:{n:'사학과',cnt:1,
   function buildRows(){
     rowsEl.innerHTML=ITEMS.map(function(it){
       return '<tr class="row" data-k="'+it.k+'"><td class="area">'+it.area+'</td><td class="crit"><span class="ct-t" id="t2c_'+it.k+'"></span><div class="why" id="t2w_'+it.k+'"></div></td><td class="pts">'+it.max+'</td>'+
-      '<td class="sc"><div class="scbox"><button type="button" class="step" data-d="-1" aria-label="'+it.area+' 1점 감소">−</button><input type="number" inputmode="numeric" min="0" max="'+it.max+'" step="1" id="t2s_'+it.k+'" aria-label="'+it.area+' 점수 (0~'+it.max+')"><button type="button" class="step" data-d="1" aria-label="'+it.area+' 1점 증가">+</button></div><div class="bar"><i></i></div></td></tr>';
+      '<td class="sc"><div class="scbox"><button type="button" class="step" data-d="-1" aria-label="'+it.area+' 1점 감소">−</button><input type="number" inputmode="numeric" min="0" max="'+it.max+'" step="1" id="t2s_'+it.k+'" aria-label="'+it.area+' 점수 (0~'+it.max+')"><button type="button" class="step" data-d="1" aria-label="'+it.area+' 1점 증가">+</button></div><div class="bar"><i></i></div><div class="hmini" id="t2m_'+it.k+'"></div></td><td class="hs"><b id="t2h_'+it.k+'">–</b><span> / '+it.max+'</span></td><td class="df" id="t2d_'+it.k+'">–</td></tr>';
     }).join('');
   }
   function clamp(v,max){v=parseInt(v,10);if(isNaN(v))return '';return Math.max(0,Math.min(max,v))}
@@ -1754,6 +1768,24 @@ hist:{n:'사학과',cnt:1,
     }).join('');
     box.innerHTML='<h3>공고 분석 · '+esc([j.company,j.title].filter(Boolean).join(' · ')||'모집 정보')+'</h3><div class="sub">AI가 공고에서 읽어 낸 요건과 지원서 대조 결과입니다. 공고 원문과 비교해 확인하세요.</div>'+reqs;
   }
+  function cmp(){
+    var T=window.__ipT1Scores,h=T?T():{scores:{},sample:false},hs=h.scores||{},ht=0,big=[],any=false;
+    ITEMS.forEach(function(it){
+      var hv=hs[it.k],has=!(hv===undefined||hv===''),av=S.scores[it.k],an=(av===undefined||av==='')?0:av,hc=$('t2h_'+it.k),dc=$('t2d_'+it.k);
+      if(!hc||!dc)return;
+      hc.textContent=has?hv:'–';if(has){any=true;ht+=hv}
+      dc.className='df';var mi=$('t2m_'+it.k);if(mi)mi.className='hmini';
+      if(!has){dc.textContent='–';if(mi)mi.textContent='사람 점수 없음';return}
+      var d=an-hv;dc.textContent=d>0?('+'+d):(d<0?('−'+Math.abs(d)):'0');
+      if(mi)mi.innerHTML='사람 <b>'+hv+'</b> · 차이 <b>'+(d>0?('+'+d):(d<0?('−'+Math.abs(d)):'0'))+'</b>';
+      if(Math.abs(d)>=Math.max(2,Math.round(it.max*0.25))){dc.classList.add('big');if(mi)mi.classList.add('big');dc.title='차이가 큰 항목';big.push(it.area+' (AI '+an+' / 사람 '+hv+')')}
+    });
+    var ai=sumNow(),hsum=$('t2hsum'),dsum=$('t2dsum'),cm=$('t2cmp');
+    if(hsum)hsum.textContent=ht;
+    if(dsum){var dd=ai-ht;dsum.textContent=any?(dd>0?('+'+dd):(dd<0?('−'+Math.abs(dd)):'0')):'–'}
+    if(cm)cm.textContent=any?('사람 평가 합계 '+ht+'점 · AI 평가 합계 '+ai+'점 · 차이(AI−사람) '+(ai-ht>0?'+':'')+(ai-ht)+'점'+(h.sample?' · 탭①이 시연용 예시 점수입니다':'')+(big.length?(' · 차이가 큰 항목: '+big.join(', ')):' · 항목별 차이가 크지 않습니다')):'탭① 사람 평가에 점수를 입력하면 이 표에 AI 점수와 나란히 표시됩니다.';
+  }
+  document.addEventListener('ip-tab',function(e){if(e.detail&&e.detail.id==='view2')cmp()});
   function render(){
     var title=S.job&&S.job.title;
     ITEMS.forEach(function(it){
@@ -1767,7 +1799,7 @@ hist:{n:'사학과',cnt:1,
     $('t2op').value=S.opinion||'';$('t2opcnt').textContent=($('t2op').value.length)+'자';
     var q=$('t2q');q.hidden=!(S.questions&&S.questions.length);
     $('t2ql').innerHTML=(S.questions||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
-    renderJob();updateSrcLine();
+    renderJob();updateSrcLine();cmp();
   }
   buildRows();render();
   rowsEl.addEventListener('click',function(e){
@@ -1789,8 +1821,8 @@ hist:{n:'사학과',cnt:1,
   $('t2copy').addEventListener('click',function(){
     var lines=['[공고 기반 지원서 평가 결과]'];
     if(S.job)lines.push('공고: '+[S.job.company,S.job.title].filter(Boolean).join(' · '));
-    ITEMS.forEach(function(it){var v=S.scores[it.k];v=(v===undefined||v==='')?0:v;lines.push(it.area+' ('+it.crit+'): '+v+' / '+it.max+(S.reasons[it.k]?'\n  근거: '+S.reasons[it.k]:''))});
-    lines.push('합계: '+sumNow()+' / 100','평가 의견: '+(S.opinion||'-'));
+    ITEMS.forEach(function(it){var v=S.scores[it.k];v=(v===undefined||v==='')?0:v;var hv=(window.__ipT1Scores?window.__ipT1Scores().scores:{})[it.k];lines.push(it.area+' ('+it.crit+'): AI '+v+' / '+it.max+((hv===undefined||hv==='')?'':' · 사람 '+hv+' / '+it.max)+(S.reasons[it.k]?'\n  근거: '+S.reasons[it.k]:''))});
+    lines.push('합계: AI '+sumNow()+' / 100'+(function(){var o=window.__ipT1Scores?window.__ipT1Scores().scores:{},t=0,a=false;ITEMS.forEach(function(it){var x=o[it.k];if(x!==undefined&&x!==''){a=true;t+=x}});return a?' · 사람 '+t+' / 100':''})(),'평가 의견: '+(S.opinion||'-'));
     if(S.questions&&S.questions.length)lines.push('면접 확인 질문:\n'+S.questions.map(function(q,i){return (i+1)+'. '+q}).join('\n'));
     var text=lines.join('\n');
     try{navigator.clipboard.writeText(text).then(function(){toast('복사했습니다')},function(){toast('복사가 막혀 있습니다')})}catch(e){toast('복사가 막혀 있습니다')}
