@@ -216,6 +216,19 @@ mark.iss.on{outline:2px solid var(--accent);outline-offset:1px}
 .t4prevwrap{padding:12px 14px 14px}
 .t4prevwrap h3{margin:0 0 6px;font-size:14px}
 /* T4-PREVIEW-TABLE */
+/* T4-DOCS-ORGANIZE */
+.orgbox{padding:2px 10px 10px}
+.orgbox .runbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.orgbox .orgnote{font-size:13px;color:var(--muted);line-height:1.55;margin-top:6px}
+.orgres{margin-top:8px}
+.orgres h4{margin:12px 0 4px;font-size:14px;color:var(--accent)}
+.orgres .oi{display:flex;gap:8px;align-items:flex-start;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:#fff;margin-top:6px}
+.orgres .oi input{width:20px;height:20px;margin-top:2px;flex:none}
+.orgres .oi label{font-size:13px;line-height:1.5;flex:1;min-width:0;overflow-wrap:anywhere}
+.orgres .oi label small{display:block;color:var(--muted);font-size:13px}
+.orgres .oi label b{font-size:14px}
+.orgres .ox{font-size:13px;color:var(--muted);line-height:1.55}
+.orgres details summary{min-height:44px;display:flex;align-items:center;cursor:pointer;font-size:13px;color:var(--accent)}
 .pv.rv{white-space:normal;font-family:var(--sans);font-size:13px;line-height:1.5;padding:12px}
 .rv .rvh{font-size:18px;font-weight:700;text-align:center;letter-spacing:.3em;margin:2px 0 8px}
 .rv .rvs{font-size:14px;font-weight:700;color:var(--accent);margin:14px 0 6px;padding-bottom:3px;border-bottom:1px solid var(--line)}
@@ -2980,7 +2993,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 
   /* ---------- uploads (공고, 직무기술서) ---------- */
   var files=[],fseq=0;
-  var ZONES=[{k:'posting',name:'채용공고·직무기술서',hint:'채용공고와 직무기술서(직무소개, NCS 직무설명, 인재상)를 함께 올립니다. 여러 파일 가능'}];
+  var ZONES=[{k:'posting',name:'채용공고·직무기술서',hint:'채용공고와 직무기술서(직무소개, NCS 직무설명, 인재상)를 함께 올립니다. 여러 파일 가능'},{k:'docs',name:'증빙서류',hint:'성적증명서·교육수료증·자격증·경력증명서 등 (사진, 스캔 PDF 가능). 여러 파일 가능'}];
   var ACCEPT='.docx,.pdf,.xlsx,.xls,.csv,.hwpx,.hwp,.pptx,.txt,.md,.png,.jpg,.jpeg,.webp,.gif';
   function addText(kind,name,text,ex){files.push({id:++fseq,kind:kind,name:name,ext:'txt',text:text,images:[],note:'',err:'',busy:false,example:!!ex})}
   function addExFiles(){if(D.EXAMPLE_POSTING){addText('posting','삼성전자 DX부문 DA사업부 해외영업 채용공고.txt',D.EXAMPLE_POSTING,true);addText('posting','삼성전자 해외영업 직무기술서.txt',D.EXAMPLE_JOB,true)}}
@@ -2994,7 +3007,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       return '<div class="zone" data-kind="'+Z.k+'"><div class="zhead"><b>'+Z.name+' 업로드</b><span>docx · pdf · hwp(x) · xlsx · pptx · 이미지</span></div>'+
       '<div class="drop" tabindex="0" role="button" data-act="pick">여기에 파일을 끌어다 놓거나 <button type="button" class="btn" data-act="pick">불러오기</button><div style="font-size:13px;margin-top:3px">'+Z.hint+'</div></div>'+
       '<input type="file" multiple hidden accept="'+ACCEPT+'" id="t4in_'+Z.k+'"><ul class="flist" id="t4fl_'+Z.k+'"></ul>'+
-      '<div class="zfoot"><button type="button" class="lk" data-act="pastetoggle">텍스트 직접 붙여넣기</button> <button type="button" class="lk" data-act="t2import">탭②에 올린 자료 가져오기</button><div class="pastebox" id="t4pb_'+Z.k+'" hidden><textarea id="t4pt_'+Z.k+'" placeholder="내용을 붙여넣으세요"></textarea><div class="row2"><button type="button" class="btn" data-act="pasteadd">추가</button></div></div></div></div>';
+      '<div class="zfoot"><button type="button" class="lk" data-act="pastetoggle">텍스트 직접 붙여넣기</button> '+(Z.k==='posting'?'<button type="button" class="lk" data-act="t2import">탭②에 올린 자료 가져오기</button>':'')+'<div class="pastebox" id="t4pb_'+Z.k+'" hidden><textarea id="t4pt_'+Z.k+'" placeholder="내용을 붙여넣으세요"></textarea><div class="row2"><button type="button" class="btn" data-act="pasteadd">추가</button></div></div></div></div>';
     }).join('');
   }
   async function addFiles(kind,list){
@@ -3036,6 +3049,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     var hb4=$('t4hb');if(hb4&&window.__ipHB&&!hb4.dataset.m){hb4.dataset.m='1';window.__ipHB.mount(hb4,{id:'t4h',blocks:['ind','co'],open:['ind'],noSel:true})}
     var pg4=$('t4pubg');if(pg4&&window.__ipPub&&!pg4.dataset.m){pg4.dataset.m='1';window.__ipPub.mountGuide(pg4,{blocks:['struct','blind','src'],open:[]})}
     ZONES.forEach(function(Z){renderFiles(Z.k)});
+    orgMount();
     counts();tips();injectReview();
   }
   $('t4body').addEventListener('click',function(e){
@@ -3101,7 +3115,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   $('t4clear').addEventListener('click',function(){S=empty();save();renderBody();preview();banner();gmsg('비웠습니다. 공고를 올리고 내용을 작성하세요','ok')});
 
   /* ---------- preview ---------- */
-  function has(e){return Object.keys(e).some(function(k){return k!=='id'&&e[k]&&String(e[k]).trim()})}
+  function has(e){return Object.keys(e).some(function(k){return k!=='id'&&k!=='type'&&k!=='contract'&&k!=='src'&&e[k]&&String(e[k]).trim()})}
   function text(){
     var L=['이 력 서','','■ 지원 정보','지원회사: '+(S.company||'-'),'지원직무: '+(S.job||'-')];
     var a=S.edu.filter(has);if(a.length){L.push('','■ 교육사항');a.forEach(function(e,i){L.push((i+1)+'. ['+e.type+'] '+e.name+(e.content?' - '+e.content:''));if(e.rel)L.push('   · 직무 관련성: '+e.rel)})}
@@ -3134,18 +3148,20 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   var gm=$('t4msg'),ctrl=null;
   function gmsg(t,cls){gm.className='runmsg'+(cls?' '+cls:'');gm.textContent=t}
   function busy(on){$('t4an').disabled=on;$('t4rv').disabled=on;$('t4stop').hidden=!on}
-  function sources(){
-    var list=files.filter(function(f){return !f.busy&&!f.err&&(f.text||f.images.length)});
+  function sources(kind){
+    kind=kind||'posting';var KL=kind==='docs'?'증빙서류':'채용공고·직무기술서';
+    var list=files.filter(function(f){return f.kind===kind&&!f.busy&&!f.err&&(f.text||f.images.length)});
     var per=Math.floor(90000/Math.max(1,list.length));
     var imgs=[],labels=[];
     var parts=list.map(function(f){
       f.images.forEach(function(b){imgs.push(b);labels.push('[이미지 '+imgs.length+'] '+f.name)});
       var cap=function(t,n){return t.length>n?t.slice(0,n)+'\n…(이하 생략)':t};
-      return '<자료: '+f.name+' ('+'채용공고·직무기술서'+')>\n'+(f.text?cap(f.text,per):'(이미지로 첨부됨)');
+      return '<자료: '+f.name+' ('+KL+')>\n'+(f.text?cap(f.text,per):'(이미지로 첨부됨)');
     });
     return {text:parts.join('\n\n'),imgs:imgs,labels:labels,n:list.length};
   }
-  async function ask(prompt,src){
+  async function ask(prompt,src,mm){
+    mm=mm||gm;
     var sample=null;try{sample=await window.__ipAI.get()}catch(e){}
     if(!sample)throw {message:'AI 기능은 Claude 화면에서 이 노트를 열었을 때 사용할 수 있습니다.'};
     var opts={cache:false};
@@ -3155,8 +3171,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       opts.images=src.imgs.slice(0,lim.images.maxCount);
     }
     ctrl=new AbortController();opts.signal=ctrl.signal;
-    opts.onText=function(o){gm.className='runmsg';gm.innerHTML='<span class="spin"></span>작성 중… ('+o.text.length.toLocaleString()+'자)'};
-    gm.className='runmsg';gm.innerHTML='<span class="spin"></span>분석 중…';
+    opts.onText=function(o){mm.className='runmsg';mm.innerHTML='<span class="spin"></span>작성 중… ('+o.text.length.toLocaleString()+'자)'};
+    mm.className='runmsg';mm.innerHTML='<span class="spin"></span>분석 중…';
     return sample.json(prompt,opts);
   }
   function errText(e){
@@ -3206,6 +3222,109 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     }catch(e){if(ctrl&&ctrl.signal.aborted)gmsg('중지했습니다.');else gmsg(errText(e),'err')}
     finally{busy(false);ctrl=null}
   });
+  /* ---------- 증빙서류 → 이력서 정리 (AI) ---------- */
+  var orgR=null,orgCtrl=null;
+  function orgMount(){
+    var z=document.querySelector('#t4body .zone[data-kind="docs"]');if(!z||z.querySelector('.orgbox'))return;
+    z.insertAdjacentHTML('beforeend','<div class="orgbox"><div class="runbtns"><button type="button" class="btn" data-act="organize" id="t4org">AI로 이력서 정리하기</button><button type="button" class="btn ghost" data-act="orgstop" id="t4orgstop" hidden>중지</button></div><div class="runmsg" id="t4orgm" role="status"></div><div class="orgnote">서류를 읽어 지원직무와 관련 있는 항목을 골라 교육·자격증·경력·경험으로 나눕니다. 이름·주민번호·주소·연락처는 결과에 넣지 않으며, 가려서 올리면 더 안전합니다. 결과는 확인한 뒤 선택해서 넣습니다.</div><div class="orgres" id="t4orgres"></div></div>');
+    orgRender();
+  }
+  var OSEC=[['edu','교육사항',function(e){return e.name+(e.type?' ['+e.type+']':'')}],['cert','자격증',function(e){return e.name}],['career','경력사항',function(e){return e.company+(e.position?' · '+e.position:'')}],['exp','경험사항',function(e){return e.name+(e.type?' ['+e.type+']':'')}]];
+  function orgRender(){
+    var box=$('t4orgres');if(!box)return;
+    if(!orgR){box.innerHTML='';return}
+    var h='',n=0;
+    OSEC.forEach(function(o){
+      var a=orgR[o[0]]||[];if(!a.length)return;
+      h+='<h4>'+o[1]+' '+a.length+'건</h4>';
+      a.forEach(function(e,i){n++;var det=[];
+        SEC.filter(function(s){return s.k===o[0]})[0].fields.forEach(function(fd){if(fd.f!=='name'&&fd.f!=='company'&&fd.f!=='type'&&fd.f!=='position'&&e[fd.f])det.push((fd.label)+': '+e[fd.f])});
+        h+='<div class="oi"><input type="checkbox" id="t4o_'+o[0]+'_'+i+'" data-oc="'+o[0]+':'+i+'" checked><label for="t4o_'+o[0]+'_'+i+'"><b>'+esc(o[2](e))+'</b><small>'+esc(det.join(' / '))+'</small>'+(e.src?'<small>서류: '+esc(e.src)+'</small>':'')+'</label></div>';
+      });
+    });
+    if(!n)h+='<div class="ox">직무와 관련 있는 항목을 찾지 못했습니다. 지원직무를 입력했는지, 서류가 읽히는지 확인하세요.</div>';
+    else h+='<div class="runbtns" style="margin-top:10px"><button type="button" class="btn" data-act="orgapply">선택한 항목을 이력서에 넣기</button><button type="button" class="btn ghost" data-act="orgcancel">닫기</button></div>';
+    if(orgR.excluded&&orgR.excluded.length)h+='<details><summary>직무와 관련이 낮아 뺀 항목 '+orgR.excluded.length+'건</summary><div class="ox"><ul>'+orgR.excluded.map(function(x){return '<li>'+esc(x.name)+(x.reason?' — '+esc(x.reason):'')+'</li>'}).join('')+'</ul></div></details>';
+    if(orgR.notes&&orgR.notes.length)h+='<h4>확인이 필요한 부분</h4><div class="ox"><ul>'+orgR.notes.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>';
+    box.innerHTML=h;
+  }
+  function pick(v,opts,blankOk){v=String(v==null?'':v).trim();return opts.indexOf(v)>=0?v:(blankOk?'':opts[0])}
+  function orgClean(r){
+    var out={edu:[],cert:[],career:[],exp:[],excluded:[],notes:[]},s=function(x){return String(x==null?'':x).trim().slice(0,600)};
+    OSEC.forEach(function(o){
+      var sec=SEC.filter(function(x){return x.k===o[0]})[0];
+      (Array.isArray(r[o[0]])?r[o[0]]:[]).slice(0,40).forEach(function(e){
+        if(!e||typeof e!=='object')return;var it={src:s(e.src).slice(0,120)};
+        sec.fields.forEach(function(fd){it[fd.f]=fd.t==='select'?pick(e[fd.f],fd.opts,fd.blank):s(e[fd.f])});
+        var key=o[0]==='career'?it.company:it.name;if(!key)return;out[o[0]].push(it);
+      });
+    });
+    (Array.isArray(r.excluded)?r.excluded:[]).slice(0,40).forEach(function(x){if(x&&x.name)out.excluded.push({name:s(x.name).slice(0,120),reason:s(x.reason).slice(0,200)})});
+    (Array.isArray(r.notes)?r.notes:[]).slice(0,10).forEach(function(x){if(s(x))out.notes.push(s(x))});
+    return out;
+  }
+  async function organize(){
+    var mm=$('t4orgm'),b=$('t4org'),st=$('t4orgstop');
+    var src=sources('docs');
+    function say(t,c){mm.className='runmsg'+(c?' '+c:'');mm.textContent=t}
+    if(!src.n){say('성적증명서·수료증·자격증·경력증명서 등을 먼저 불러오세요.','err');return}
+    if(!(S.job||'').trim()){say('위 지원 정보에 지원직무를 먼저 입력하세요. 직무에 맞는 항목만 고릅니다.','err');return}
+    var P=sources('posting'),ctx='';
+    if(S.analysis)ctx+='[공고 분석 결과]\n요약: '+S.analysis.summary+'\n필수: '+S.analysis.required.join(', ')+'\n우대: '+S.analysis.preferred.join(', ')+'\n키워드: '+S.analysis.keywords.join(', ')+'\n';
+    if(P.n)ctx+='[채용공고·직무기술서 발췌]\n'+P.text.slice(0,6000)+'\n';
+    b.disabled=true;st.hidden=false;orgR=null;orgRender();
+    try{
+      var p='당신은 대학 취업지원 컨설턴트를 돕는 보조자입니다. 학생이 올린 증빙서류(성적증명서, 교육수료증, 자격증, 경력증명서 등)를 읽고, 지원 직무에 맞는 이력서 항목으로 정리하세요.\n지원회사: '+(S.company||'(미입력)')+'\n지원직무: '+(S.job||'')+'\n'+RULES+
+      '- 서류에서 항목을 빠짐없이 읽은 뒤, 지원직무와 관련 있는 것은 모두 고른다(관련성이 높음·보통). 관련이 낮은 것은 고르지 말고 excluded에 이유와 함께 적는다.\n'+
+      '- 성적증명서: 직무와 관련된 교과목을 모두 edu(type "학교 교과")에 넣는다. name은 "교과명 (성적)", content는 서류나 공고로 알 수 있는 학습 내용만, 없으면 빈 문자열.\n'+
+      '- 교육수료증: edu에 넣고 type은 "직업교육" 또는 "온라인 강의". 기관명과 이수시간·기간은 content에 적는다.\n'+
+      '- 자격증: cert에 넣고 content에 발급기관·취득일·등급(점수)을 적는다. 만료·불합격 표시가 있으면 notes에 적는다.\n'+
+      '- 경력증명서: career에 넣는다. contract는 [정규직, 채용형 인턴, 체험형 인턴, 계약직, 아르바이트, 기타] 중 하나. duty에는 서류에 적힌 업무만 쓴다.\n'+
+      '- 학회·동아리·공모전·봉사 확인서: exp에 넣고 type은 [학회, 동아리, 프로젝트, 공모전, 봉사, 기타] 중 하나.\n'+
+      '- rel(직무와의 관련성)은 서류 내용과 지원직무를 연결해 1문장으로 쓴다. 서류에 없는 성과·수치는 쓰지 않는다.\n'+
+      '- 이름, 주민등록번호, 주소, 연락처, 학번, 발급번호는 결과에 넣지 않는다.\n- 글자가 흐리거나 읽기 어려우면 추측하지 말고 notes에 적고 해당 부분은 "(확인 필요)"로 둔다.\n- 같은 내용이 여러 서류에 있으면 한 번만 쓴다. src에는 근거가 된 서류 파일명을 적는다.\n'+
+      '\n'+ctx+'\n[증빙서류]\n'+src.text+(src.labels.length?'\n\n[첨부 이미지 목록]\n'+src.labels.join('\n'):'')+
+      '\n\n출력은 JSON 하나만 쓰고 다른 글은 쓰지 않는다. 형식:\n{"edu":[{"type":"학교 교과","name":"","content":"","rel":"","src":""}],"cert":[{"name":"","content":"","rel":"","src":""}],"career":[{"company":"","period":"","contract":"","position":"","duty":"","rel":"","src":""}],"exp":[{"type":"","name":"","period":"","content":"","src":""}],"excluded":[{"name":"","reason":""}],"notes":[""]}';
+      orgCtrl=true;
+      var r=await ask(p,src,mm);
+      if(!r||typeof r!=='object')throw {message:'AI 응답 형식이 올바르지 않습니다. 다시 시도하세요.'};
+      orgR=orgClean(r);orgRender();
+      var tot=orgR.edu.length+orgR.cert.length+orgR.career.length+orgR.exp.length;
+      say(tot?('직무와 관련 있는 항목 '+tot+'건을 골랐습니다. 확인한 뒤 이력서에 넣으세요.'):'관련 항목을 찾지 못했습니다.',tot?'ok':'err');
+    }catch(e){if(ctrl&&ctrl.signal&&ctrl.signal.aborted)say('중지했습니다.');else say(errText(e),'err')}
+    finally{b.disabled=false;st.hidden=true;ctrl=null;orgCtrl=null}
+  }
+  function orgApply(){
+    if(!orgR)return;
+    var picked={edu:[],cert:[],career:[],exp:[]};
+    document.querySelectorAll('#t4orgres input[data-oc]').forEach(function(c){if(!c.checked)return;var p=c.dataset.oc.split(':');picked[p[0]].push(orgR[p[0]][+p[1]])});
+    var tot=0;OSEC.forEach(function(o){tot+=picked[o[0]].length});
+    var mm=$('t4orgm');
+    if(!tot){mm.className='runmsg err';mm.textContent='넣을 항목을 하나 이상 선택하세요.';return}
+    var cleared=false;
+    if(S.example){var keep={company:S.company,job:S.job};S=empty();S.company=keep.company;S.job=keep.job;cleared=true}
+    var added=0,dup=0;
+    OSEC.forEach(function(o){
+      var k=o[0],cur=S[k];
+      for(var bi=cur.length-1;bi>=0;bi--)if(!has(cur[bi]))cur.splice(bi,1);
+      picked[k].forEach(function(e){
+        var key=function(x){return k==='career'?(x.company+'|'+x.period):x.name};
+        if(cur.some(function(x){return key(x)===key(e)})){dup++;return}
+        var n=blank(k);Object.keys(n).forEach(function(f){if(f!=='id'&&e[f]!=null&&e[f]!=='')n[f]=e[f]});cur.push(n);added++;
+      });
+      if(!cur.length)cur.push(blank(k));
+    });
+    S.example=false;save();orgR=null;renderBody();preview();banner();
+    var m2=$('t4orgm');if(m2){m2.className='runmsg ok';m2.textContent='이력서에 '+added+'건을 넣었습니다.'+(dup?' (이미 있는 '+dup+'건은 건너뜀)':'')+(cleared?' 예시 내용은 비웠습니다.':'')+' 각 항목을 확인하고 고쳐 쓰세요.'}
+  }
+  body.addEventListener('click',function(e){
+    var el=e.target.closest&&e.target.closest('[data-act]');if(!el)return;var a=el.dataset.act;
+    if(a==='organize')organize();
+    else if(a==='orgstop'){if(ctrl)ctrl.abort()}
+    else if(a==='orgapply')orgApply();
+    else if(a==='orgcancel'){orgR=null;orgRender();var m=$('t4orgm');if(m){m.className='runmsg';m.textContent=''}}
+  });
+
   function list(a){return a&&a.length?'<ul>'+a.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>':'<div class="subt">자료에서 찾지 못했습니다</div>'}
   function guide(){
     var box=$('t4guide'),a=S.analysis,r=S.review;
