@@ -1237,6 +1237,7 @@ hist:{n:'사학과',cnt:1,
           <div class="t4blk">
             <h3>1. 경험 입력 방법</h3>
             <div class="chips" id="t7method" role="group" aria-label="입력 방법" style="margin-bottom:10px"><button type="button" class="chip" data-m="fill" aria-pressed="true">① 항목 채우기</button><button type="button" class="chip" data-m="paste" aria-pressed="false">② 기존 글 정리하기</button></div>
+            <div class="subt" style="margin:-2px 0 10px">경험이 여러 개라면 ①에서 <b>＋ 경험 칸 더 추가</b>로 칸을 늘려 한 번에 입력하거나, ②에 기존 글을 한꺼번에 붙여넣어 정리하세요.</div>
             <div id="t7fill">
               <div class="fg">
                 <div class="fld full"><label for="t7type">경험 유형</label><select id="t7type"></select></div>
@@ -1248,8 +1249,9 @@ hist:{n:'사학과',cnt:1,
                 <div class="fld full"><label for="t7a">행동(A)과 활용 도구</label><textarea id="t7a" placeholder="내가 직접 한 행동 2~3가지와 사용한 도구"></textarea></div>
                 <div class="fld full"><label for="t7r">성과(R)</label><textarea id="t7r" placeholder="수치나 평가로 쓰고, 배운 점도 적습니다"></textarea></div>
               </div>
+              <div id="t7more"></div>
               <div id="t7raw" hidden style="margin-top:8px"><b style="font-size:13px;color:var(--muted)">붙여넣은 원문</b><div class="rawt" id="t7rawtxt"></div></div>
-              <div class="runbtns" style="margin-top:10px"><button type="button" class="btn" id="t7add">STAR 문장 만들어 목록에 추가</button><button type="button" class="btn ghost" id="t7clr">입력칸 비우기</button></div>
+              <div class="runbtns" style="margin-top:10px"><button type="button" class="btn" id="t7add">STAR 문장 만들어 목록에 추가</button><button type="button" class="btn ghost" id="t7addcard">＋ 경험 칸 더 추가</button><button type="button" class="btn ghost" id="t7clr">입력칸 비우기</button></div>
             </div>
             <div id="t7paste" hidden>
               <div class="drop drop7" id="t7drop" tabindex="0" role="button">여기에 파일을 끌어다 놓거나 <button type="button" class="btn">불러오기</button><div style="font-size:13px;margin-top:3px">docx · pdf · hwp(x) · xlsx · pptx 파일의 글을 아래 칸으로 가져옵니다</div></div>
@@ -3025,15 +3027,43 @@ hist:{n:'사학과',cnt:1,
     if(e.st)L.push('상황·과제: '+e.st);if(e.a)L.push('행동: '+e.a);if(e.r)L.push('성과: '+e.r);
     return L.join('\n');
   }
-  $('t7add').addEventListener('click',function(){
-    var v=readForm();
-    if(!v.name&&!v.st&&!v.a&&!v.r){gm('경험명이나 STAR 내용을 한 칸 이상 입력하세요','err');return}
-    if(!v.name)v.name=(v.st||v.a||v.r).slice(0,24);
-    if(editing){var e=S.exps.filter(function(x){return x.id===editing})[0];if(e){Object.assign(e,v);e.review=false;e.example=false}}
-    else S.exps.unshift(Object.assign({id:nid(),raw:'',review:false,example:false,src:pendSrc},v));
-    S.example=false;editing=null;pendSrc='';save();fillForm(null);srcList();renderAll();gm(editing?'':'목록에 추가했습니다','ok');
+  var xn=0;
+  function typeOpts(){return TYPES.map(function(t){return '<option>'+esc(t)+'</option>'}).join('')}
+  function xcard(){
+    xn++;var k='t7x'+xn;
+    return '<div class="xcard" data-x="'+xn+'" style="border:1px dashed var(--pf-line,#8FB4D4);border-radius:10px;padding:10px;margin-top:10px"><div class="sechd"><b class="xt">추가 경험</b><button type="button" class="x" data-xrm="1">삭제</button></div><div class="fg">'+
+    '<div class="fld full"><label for="'+k+'t">경험 유형</label><select id="'+k+'t" data-f="type">'+typeOpts()+'</select></div>'+
+    '<div class="fld"><label for="'+k+'p">활동 기간</label><input type="text" id="'+k+'p" data-f="period" placeholder="예) 2025. 3.~2025. 6."></div>'+
+    '<div class="fld"><label for="'+k+'o">조직·기관명</label><input type="text" id="'+k+'o" data-f="org" placeholder="예) 국제무역학회"></div>'+
+    '<div class="fld"><label for="'+k+'r">본인 역할</label><input type="text" id="'+k+'r" data-f="role" placeholder="예) 팀장, 학회원"></div>'+
+    '<div class="fld"><label for="'+k+'n">경험명</label><input type="text" id="'+k+'n" data-f="name" placeholder="예) 해외시장 진출 프로젝트"></div>'+
+    '<div class="fld full"><label for="'+k+'s">상황(S)과 과제(T)</label><textarea id="'+k+'s" data-f="st" placeholder="어떤 상황이었고, 내가 맡은 과제는 무엇이었나요?"></textarea></div>'+
+    '<div class="fld full"><label for="'+k+'a">행동(A)과 활용 도구</label><textarea id="'+k+'a" data-f="a" placeholder="내가 직접 한 행동 2~3가지와 사용한 도구"></textarea></div>'+
+    '<div class="fld full"><label for="'+k+'e">성과(R)</label><textarea id="'+k+'e" data-f="r" placeholder="수치나 평가로 쓰고, 배운 점도 적습니다"></textarea></div></div></div>';
+  }
+  function readCard(c){var o={};[].forEach.call(c.querySelectorAll('[data-f]'),function(el){o[el.dataset.f]=el.value.trim()});return o}
+  function renumX(){var cs=document.querySelectorAll('#t7more .xcard');[].forEach.call(cs,function(c,i){c.querySelector('.xt').textContent='추가 경험 '+(i+1)});var b=$('t7addcard');if(b)b.textContent='＋ 경험 칸 더 추가'+(cs.length?' (현재 '+(cs.length+1)+'칸)':'')}
+  $('t7addcard').addEventListener('click',function(){
+    var box=$('t7more');if(box.querySelectorAll('.xcard').length>=9){gm('한 번에 최대 10칸까지 입력할 수 있습니다','err');return}
+    box.insertAdjacentHTML('beforeend',xcard());renumX();var cs=box.querySelectorAll('.xcard'),last=cs[cs.length-1];if(last.scrollIntoView)last.scrollIntoView({behavior:'smooth',block:'center'});var f=last.querySelector('[data-f=name]');if(f)f.focus();gm('')
   });
-  $('t7clr').addEventListener('click',function(){editing=null;pendSrc='';fillForm(null);gm('')});
+  $('t7more').addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-xrm]');if(!b)return;var c=b.closest('.xcard');if(c)c.remove();renumX()});
+  $('t7add').addEventListener('click',function(){
+    var has=function(x){return !!(x.name||x.st||x.a||x.r)},v0=readForm(),prim=has(v0),list=[];
+    if(prim)list.push(v0);
+    [].forEach.call(document.querySelectorAll('#t7more .xcard'),function(c){var x=readCard(c);if(has(x))list.push(x)});
+    if(!list.length){gm('경험명이나 STAR 내용을 한 칸 이상 입력하세요','err');return}
+    var wasEdit=!!editing,fresh=[];
+    list.forEach(function(v,i){
+      if(!v.name)v.name=(v.st||v.a||v.r).slice(0,24);
+      if(i===0&&prim&&editing){var e=S.exps.filter(function(x){return x.id===editing})[0];if(e){Object.assign(e,v);e.review=false;e.example=false}}
+      else fresh.push(Object.assign({id:nid(),raw:'',review:false,example:false,src:(i===0&&prim)?pendSrc:''},v));
+    });
+    S.exps=fresh.concat(S.exps);
+    S.example=false;editing=null;pendSrc='';save();fillForm(null);$('t7more').innerHTML='';renumX();srcList();renderAll();
+    gm(fresh.length?('경험 '+fresh.length+'건을 목록에 추가했습니다'+(wasEdit?' (수정 내용도 저장)':'')):'수정 내용을 저장했습니다','ok');
+  });
+  $('t7clr').addEventListener('click',function(){editing=null;pendSrc='';fillForm(null);$('t7more').innerHTML='';renumX();gm('')});
   /* ---------- 탭③ 불러오기 ---------- */
   var pendSrc='';
   function mapType(it){
