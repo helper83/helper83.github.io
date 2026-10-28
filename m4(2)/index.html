@@ -1245,8 +1245,8 @@ const rng=(a,b)=>Array.from({length:b-a+1},(_,i)=>a+i);
 const GM=rng(94,144),GT=rng(145,162);
 const TT=['면접평가','인성','직무','상황','PT','토론','AI'];           /* 탭 번호 → 유형 키 */
 const TNAME=['면접평가','인성면접','직무면접','상황면접','PT면접','토론면접','AI면접'];
-const TDESC=['면접 평가의 3축과 절차를 이해하고, 영상을 보며 면접관으로 평가해 봅니다.'].concat(TYPES.map(t=>`“${t.q}” — 이론 → 영상 평가 → 답변 작성 → 예시 질문 → 마무리 순서로 한 번에 끝냅니다.`));
-const ST_T=[['theory','① 이론'],['eval','② 평가 실습'],['write','③ 답변 작성'],['ex','④ 예시 질문'],['done','⑤ 마무리']];
+const TDESC=['면접 평가의 3축과 절차를 이해하고, 영상을 보며 면접관으로 평가해 봅니다.'].concat(TYPES.map(t=>`“${t.q}” — 이론 → 영상 평가 → 답변 작성(예시 질문은 참고)으로 한 번에 끝냅니다.`));
+const ST_T=[['theory','① 이론'],['eval','② 평가 실습'],['write','③ 답변 작성'],['ex','④ 예시 질문']];
 const ST_E=[['theory','① 이론'],['eval','② 평가 실습'],['card','③ 준비 카드']];
 const stepsOf=t=>t===0?ST_E:ST_T;
 let curT=0,curS='theory';
@@ -1264,7 +1264,7 @@ function panelSpec(){
  if(curS==='write'){
   if(curT===1)return [['미션3 · 1분 자기소개 작성법과 직군별 예시',[19,20,21,22,23,24,163,164,25,26],0],['미션4 · 지원동기·포부 작성법',[30,31],0]];
   if(curT===5)return [['부록 · 토론 면접 완전 정복',GT,0]];}
- if(curS==='done'&&curT===6)return [['수료 배지',[92],1]];
+ if(curS==='ex'&&curT===6)return [['수료 배지',[92],1]];
  return [];}
 function panelHtml(sp){return sp.map(([title,ns,op])=>{const ss=ns.map(n=>SLD[n]).filter(Boolean);if(!ss.length)return'';
  const body=ss.length>3?ss.map(x=>`<details class="fws"><summary>${esc(x.h)}</summary>${fBlocks(x.b)}</details>`).join(''):ss.map(x=>`<div class="fwsl">${ss.length>1||x.h!==title?`<h3>${esc(x.h)}</h3>`:''}${fBlocks(x.b)}</div>`).join('');
