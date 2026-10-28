@@ -197,7 +197,7 @@ input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--ink);backgro
 body{word-break:keep-all;overflow-wrap:anywhere}
 .chip{min-height:46px;min-width:48px}
 .qgh{font-size:15px;margin:16px 0 4px;font-weight:800}.qgh:first-of-type{margin-top:8px}
-.qkg{margin:8px 0 0}.qkl{display:block;font-size:13px;color:var(--ink-sub);margin:0 0 4px;font-weight:600}.qkg .chips{margin:0 0 6px}.qkg .chip{min-height:38px;padding:4px 12px;font-size:14px}.qcur{margin:8px 0 12px;padding:10px 0 0;border-top:1px solid var(--line)}.qcur .qq{font-size:16px;font-weight:800;margin:0 0 4px}.rtag{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line,#cbd5e1)}.rtag.tp{color:#0f5132;background:#e7f5ee}.rtag.ti{color:#664d03;background:#fff4d6}.rtag.tl{color:#842029;background:#fdecea}.rsb{margin-top:6px}.rsr{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}.rsr b{flex:1 1 100%;font-size:13px}.rsl{text-decoration:none;font-size:13px;padding:4px 10px}
+.qkg{margin:8px 0 0}.qkl{display:block;font-size:13px;color:var(--ink-sub);margin:0 0 4px;font-weight:600}.qkg .chips{margin:0 0 6px}.qkg .chip{min-height:38px;padding:4px 12px;font-size:14px}.qcur{margin:8px 0 12px;padding:10px 0 0;border-top:1px solid var(--line)}.qcur .qq{font-size:16px;font-weight:800;margin:0 0 4px}.ggrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:10px 0}.gcard{border:1px solid var(--line,#cbd5e1);border-radius:12px;padding:10px;background:var(--card,#fff)}.gcard b{display:block}.gm{display:block;font-size:12px;color:var(--ink-sub);margin:2px 0 6px}.gs{background:#1f2a44;color:#fff;border-radius:10px;padding:10px;text-align:center;pointer-events:none}.gs .gt{font-size:12px;margin:0 0 8px;color:#dbe4ff}.gg3{display:grid;grid-template-columns:repeat(3,38px);gap:5px;justify-content:center}.gc{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;background:#34415f;font-style:normal;font-weight:700}.gc.on{background:#f6c344;color:#1f2a44}.gr{display:flex;gap:6px;justify-content:center;margin:6px 0}.gb{background:#4c6ef5;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:13px}.gbl{font-size:44px;line-height:1;color:#ff6b6b}.gst{font-size:28px;font-weight:800;color:#2f9e44;margin:4px 0 8px}.gs small{display:block;font-size:12px;color:#dbe4ff}.rtag{display:inline-block;margin-right:6px;padding:1px 7px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line,#cbd5e1)}.rtag.tp{color:#0f5132;background:#e7f5ee}.rtag.ti{color:#664d03;background:#fff4d6}.rtag.tl{color:#842029;background:#fdecea}.rsb{margin-top:6px}.rsr{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:6px 0}.rsr b{flex:1 1 100%;font-size:13px}.rsl{text-decoration:none;font-size:13px;padding:4px 10px}
 
 .fold-hd{margin:0;font-size:inherit}.fold-hd>button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;min-height:44px;cursor:pointer;font:inherit;font-size:18px;font-weight:800;color:var(--ink)}.fold-hd>button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}.fold-t{flex:1}.fold-s{font-size:13px;font-weight:600;color:var(--ink-sub)}.fold-c:after{content:'▾';font-size:16px;color:var(--ink-sub)}.fold-hd>button[aria-expanded=false] .fold-c:after{content:'▸'}.fold-b[hidden]{display:none}.fold-b{margin-top:6px}
 .cmf .jb{padding-top:4px}
@@ -968,6 +968,14 @@ function jobExFor(k){const R=curRole(),r=selRec(k);return (r&&r.x.ans)?r.x.ans:j
 function selQ(k){
   const jb=qJobOf(),recs=pptRecs(k).concat(recQs(curRole(),jb,k)),si=store.get('wq_'+role+'_'+k,null);
   const r=recs.find(x=>x.i===si)||recs[0];return r.x.q}
+function gameHtml(){
+ const cell=(c,t)=>`<i class="gc ${c||''}">${t||''}</i>`;
+ const cards=[
+  ['기억 과제 예시','작업기억',`<div class="gs"><p class="gt">깜빡인 순서를 기억해 같은 순서로 누르세요</p><div class="gg3">${[ '', '1', '', '2', '', '3', '', '', '' ].map((t,i)=>cell(t?'on':'',t)).join('')}</div></div>`,'순서·위치를 입으로 되뇌며 묶어서 기억합니다. 한 번 틀려도 다음 문제에 집중합니다.'],
+  ['주의 과제 예시','선택적 주의·반응 속도',`<div class="gs"><p class="gt">▲ 모양이 나오면 즉시 누르세요 (● ■는 누르지 마세요)</p><div class="gr">${['●','■','▲','●','■'].map((t,i)=>`<i class="gc${t==='▲'?' on':''}">${t}</i>`).join('')}</div><button type="button" class="gb" tabindex="-1" aria-hidden="true">누르기</button></div>`,'속도보다 규칙 준수가 먼저입니다. 안내사항(눌러야 할 때·누르지 말아야 할 때)을 먼저 확인합니다.'],
+  ['판단·위험 과제 예시','의사결정·위험 감수',`<div class="gs"><p class="gt">풍선을 부풀릴수록 보상이 커지지만 터지면 0점입니다</p><div class="gbl"><span class="bl">●</span></div><div class="gr"><button type="button" class="gb" tabindex="-1" aria-hidden="true">+ 펌프</button><button type="button" class="gb" tabindex="-1" aria-hidden="true">보상 받기</button></div><small>현재 보상 30점 · 펌프 6회</small></div>`,'정답이 하나가 아닌 과제입니다. 꾸미지 말고 평소 판단 방식대로 일관되게 응합니다.'],
+  ['규칙 전환 과제 예시','인지 유연성·간섭 통제',`<div class="gs"><p class="gt">글자의 ‘색’을 고르세요 (글자 뜻이 아닙니다)</p><div class="gst">파랑</div><div class="gr"><button type="button" class="gb" tabindex="-1" aria-hidden="true">빨강</button><button type="button" class="gb" tabindex="-1" aria-hidden="true">파랑</button><button type="button" class="gb" tabindex="-1" aria-hidden="true">초록</button></div></div>`,'규칙이 바뀌는 순간을 놓치지 않도록 안내 문구를 끝까지 읽습니다.']];
+ return `<div class="qcur"><p class="qq">[게임형 과제] 주의력·기억·판단 등 검사별 능력을 게임 화면으로 측정합니다</p><p class="dl">말·글로 답하는 문항이 없어 정답 예시 대신 <b>예시 화면</b>으로 유형을 익힙니다. 아래는 자주 볼 수 있는 과제를 단순화한 가상의 화면이며 실제 화면·종류는 기업·검사 도구마다 다릅니다.</p></div><div class="ggrid">${cards.map(c=>`<div class="gcard"><b>${c[0]}</b><span class="gm">측정: ${c[1]}</span>${c[2]}<p class="dl">${c[3]}</p></div>`).join('')}</div><details class="ma" open><summary>응시 전·중 공통 대응</summary><p class="dl">안내사항 숙지 → 충분한 휴식 → 한 과제의 실수에 매이지 않고 다음 과제에 집중합니다.</p><p class="dl"><span class="rtag tl">근거제한</span>평가 기준과 점수 산출 방식은 대부분 비공개입니다. 기업이 공개한 체험판·안내문으로 직접 확인하세요.</p></details>`}
 function renderRQ(){
   const box=$('#rq');if(!box)return;
   const k=wType,jb=qJobOf(),R=curRole(),pr=pptRecs(k),jr=recQs(R,jb,k),recs=pr.concat(jr);
@@ -975,14 +983,15 @@ function renderRQ(){
   const sel=recs.find(r=>r.i===si);
   const names=pr.map((r,n)=>r.x.ev||('대표 질문 '+(n+1)));names.forEach((t,n)=>{if(names.indexOf(t)!==n)names[n]=t+' '+(n+1)});
   const chip=(r,t)=>`<button type="button" class="chip qk" data-i="${r.i}" aria-pressed="${r.i===si}">${esc(t)}</button>`;
+  const gm=sel.ppt&&k==='AI'&&sel.x.ev==='게임형 과제';
   const qh=`<div class="qcur"><p class="qq">${sel.ppt&&sel.x.ev?'['+esc(sel.x.ev)+'] ':''}${esc(sel.x.q)}</p>${stepRows(sel.x.a,'div')}${sel.ppt?'':`<small style="display:block;margin-top:6px;color:var(--ink-sub);font-size:13px">${sel.db?'직무 데이터 기반 맞춤 질문':'직무명·KSA로 만든 질문(직무 데이터 없음)'}</small>`}</div>`;
   box.innerHTML=`   <div class="qkg"><span class="qkl">대표 질문</span><div class="chips" role="group" aria-label="대표 질문 키워드">${pr.map((r,n)=>chip(r,names[n])).join('')}</div></div>
    ${jr.length?`<div class="qkg"><span class="qkl">내 직무 맞춤 · ${esc(R.name||'직무 미입력')}</span><div class="chips" role="group" aria-label="내 직무 맞춤 질문">${jr.map((r,n)=>chip(r,'내 직무 '+(n+1))).join('')}</div></div>`:''}
-   ${qh}
-   ${sel&&sel.x.ans?`<details class="ma" open><summary>고른 질문의 답변 예시 (○○는 본인 경험으로 교체)</summary>${sel.x.ans.map((t,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[k].steps[i]||[''])[0])}</span>${esc(t)}</p>`).join('')}</details>`:''}
-   ${sel&&sel.ppt&&sel.x.tip&&sel.x.tip.length?`<details class="ma" open><summary>답변 포인트</summary>${sel.x.tip.map(t=>`<p class="dl">${esc(t)}</p>`).join('')}</details>`:''}
+   ${gm?gameHtml():qh}
+   ${!gm&&sel&&sel.x.ans?`<details class="ma" open><summary>고른 질문의 답변 예시 (○○는 본인 경험으로 교체)</summary>${sel.x.ans.map((t,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[k].steps[i]||[''])[0])}</span>${esc(t)}</p>`).join('')}</details>`:''}
+   ${!gm&&sel&&sel.ppt&&sel.x.tip&&sel.x.tip.length?`<details class="ma" open><summary>답변 포인트</summary>${sel.x.tip.map(t=>`<p class="dl">${esc(t)}</p>`).join('')}</details>`:''}
    ${sel&&sel.ppt&&(k==='PT'||k==='토론')?refHtml(k,+sel.i.slice(1)):''}`;
-  const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
+  const qs=$('#qsel');if(qs)qs.innerHTML=gm?`<b>게임형 과제</b> 말·글로 답하는 문항이 없습니다. 예시 화면으로 유형을 익혀 보세요.`:`<b>답할 질문</b> ${esc(sel.x.q)}`;
   {const JX=jobExFor(k);WSPEC[k].steps.forEach((s,i)=>{const t=document.getElementById('f'+i);if(t)t.placeholder='예) '+(JX[i]||String(s[2]).replace(/^예\) /,''))})}
   box.onclick=e=>{const b=e.target.closest('.qk');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^[gp]/.test(d)?d:+d);renderRQ()}};
   if(typeof cm3G==='function'&&cm3G)cm3G()}
