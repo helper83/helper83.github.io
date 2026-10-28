@@ -578,6 +578,7 @@ function viewWrite(){
   <section class="card" id="rq"></section>
   <div class="split"><section class="card">
    <div class="prog"><span>${esc(k)}면접 · ${esc(F.f)} · ${secTxt}</span><b id="prog">1/${N}</b></div>
+   <p class="ev-emph" id="qsel2" style="margin:0 0 10px"></p>
    <details class="jd" style="margin:0 0 10px"><summary>답변 공식·좋은 답변 예시 보기</summary><div class="jb"><h4>답변 공식 · ${esc(F.f)}</h4><p style="margin:0">${esc(F.tip)}</p><h4>좋은 답변 예시 (대학생 활동 기반 가상 사례)</h4><p style="margin:0">${esc(F.good)}</p></div></details>
    ${W.steps.map((s,i)=>`<div class="acc" id="a${i}"><button type="button" class="acc-h" id="h${i}"><span class="n">${i+1}</span><span class="t">${esc(s[0])}</span><span class="sm" id="sm${i}"></span></button>
    <div class="acc-b"><label for="f${i}" style="margin-top:0">${esc(s[0])} <small>${esc(s[1])}</small></label><textarea id="f${i}" placeholder="${esc('예) '+(JEX[i]||String(s[2]).replace(/^예\) /,'')))}"></textarea>
@@ -953,7 +954,7 @@ function renderRQ(){
    ${sel&&sel.ppt?`<details class="ma" open><summary>이 대표 질문의 답변 요령 (강의 PPT)</summary><p class="dl"><span class="dt">답변 순서</span>${esc(sel.x.a)}</p>${(sel.x.tip||[]).map(t=>`<p class="dl">${esc(t)}</p>`).join('')}<p class="sub" style="margin:6px 0 0">내 직무 상황으로 바꿔 쓰려면 아래 ②의 맞춤 질문도 함께 연습하세요.</p></details>`:''}
    <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 내 직무의 ${esc(k)}면접 질문·답변 보기</button></div>
    <p class="note">${R.et?'세부 직무의 지식·기술·성과지표를 대학생 눈높이로 풀어 교내 활동과 연결한 교육용 예시입니다. 답변 속 ○○ 경험은 본인 사례로 채워야 하며, 특정 기업의 실제 기출이 아닙니다.':'직접 입력한 직무는 직무 데이터가 없어 일반 질문 2개만 제공합니다. 세부 직무를 목록에서 고르면 직무 맞춤 질문이 나옵니다.'}</p>`;
-  const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
+  const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;const qs2=$('#qsel2');if(qs2)qs2.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
   box.onclick=e=>{const b=e.target.closest('.qpick');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^[gp]/.test(d)?d:+d);renderRQ()}};
   $('#rqm').onclick=()=>{qJobInit=true;qJob='내 직무';qType=k;go(5)};if(typeof cm3G==='function'&&cm3G)cm3G()}
 
