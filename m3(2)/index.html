@@ -650,6 +650,9 @@ mark.hl{background:none;color:#C0392B;font-weight:700}
 @media (max-width:900px){.lec{grid-template-columns:minmax(0,1fr)}.lecnav{position:static;max-height:none;display:flex;flex-wrap:nowrap;overflow-x:auto;gap:6px;align-items:center}.lecnav h2,.lecnav .lecprog,.lecnav .pc{display:none}.lecnav button{width:auto;flex:none;white-space:nowrap}.lcmp{grid-template-columns:1fr}.lbars .r{grid-template-columns:70px minmax(0,1fr)}.lbars .r .nt{grid-column:1/-1}.lechead h2{font-size:20px}}
 @media print{.lecnav,.lecgo,.lpager,.lecbar{display:none!important}.lec{display:block}}
 
+.t2start{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:10px 0;padding:12px 14px;border:2px solid var(--accent);border-radius:12px;background:var(--accent-soft)}
+.t2start .btn{min-height:48px;font-size:16px;font-weight:700;padding:10px 22px}
+.t2start p{margin:0;flex:1 1 220px;font-size:14px;line-height:1.55;color:var(--fg)}
 </style>
 
 <div class="wrap">
@@ -853,6 +856,7 @@ mark.hl{background:none;color:#C0392B;font-weight:700}
           <span class="fnote">이미지와 스캔 PDF는 글자로 바꾸지 않고 AI가 그림 그대로 읽습니다. hwp는 파일 형태에 따라 읽지 못할 수 있으며, 그때는 hwpx나 PDF로 저장하거나 아래 '직접 붙여넣기'를 쓰세요. 구형 doc, ppt는 docx, pptx로 저장해 주세요.</span>
         </div>
         <div class="zones" id="t2zones"></div>
+        <div class="t2start" id="t2startbar"><button class="btn" type="button" id="t2run2">▶ AI 평가 시작</button><p>① 채용공고·직무기술서를 올리고 ② 평가할 지원서를 정한 뒤 시작을 누르세요. Claude 화면 밖에서는 「AI 연결」 창이 열립니다(복사해 붙여넣기 또는 내 API 키).</p></div>
       </section>
 
       <section class="panel" aria-label="공고 기반 평가표">
@@ -860,7 +864,7 @@ mark.hl{background:none;color:#C0392B;font-weight:700}
         <div class="runbar">
           <div class="srcline" id="t2src"></div>
           <div class="runbtns">
-            <button class="btn" type="button" id="t2run">AI 평가 초안 만들기</button>
+            <button class="btn" type="button" id="t2run">▶ AI 평가 시작</button>
             <button class="btn ghost" type="button" id="t2stop" hidden>중지</button>
           </div>
           <div class="runmsg" id="t2msg" role="status"></div>
@@ -2155,7 +2159,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   /* ---------- AI draft ---------- */
   var runMsg=$('t2msg'),ctrl=null;
   function msg(t,cls){runMsg.className='runmsg'+(cls?' '+cls:'');runMsg.textContent=t}
-  if(S.example)msg('예시 결과가 표시되어 있습니다. 위 공고와 탭① 예시 지원서로 작성한 미리보기이며, AI 평가 초안 만들기를 누르면 새로 계산합니다.');
+  if(S.example)msg('예시 결과가 표시되어 있습니다. 위 공고와 탭① 예시 지원서로 작성한 미리보기이며, AI 평가 시작을 누르면 새로 계산합니다.');
   function sampleAppText(){
     var out=[];
     [['resume','이력서'],['e1','Essay 1'],['e2','Essay 2'],['e3','Essay 3'],['e4','Essay 4']].forEach(function(p){
@@ -5395,5 +5399,9 @@ window.__ipCatSum=function(d,max){
   return o||d.slice(0,max||170);
 };
 
+</script>
+<script>
+/* AI 평가 시작 버튼(위쪽) → 평가표의 실행 버튼과 같은 동작 */
+(function(){var b=document.getElementById('t2run2');if(!b)return;b.addEventListener('click',function(){var r=document.getElementById('t2run');if(!r||r.disabled)return;r.click();var m=document.getElementById('t2msg');if(m&&m.scrollIntoView)m.scrollIntoView({block:'center',behavior:'smooth'})})})();
 </script>
 </html>
