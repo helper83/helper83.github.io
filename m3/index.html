@@ -486,7 +486,7 @@ body{font-size:15px;line-height:1.65}
 /* QA-APPSKILL2:BEGIN (AS-13 의견 보내기, AS-09 PDF) */
 .note-head h1 .bt{display:flex;flex-direction:column;min-width:0;color:var(--fg)}
 .note-head h1 .bt>span:first-child{color:var(--fg)!important;font-size:inherit}
-.note-head h1 .fb,.fb{font-size:12px;line-height:1.3;color:var(--muted);white-space:nowrap;font-weight:400;letter-spacing:0}
+.note-head h1 .fb,.fb{font-size:12px;line-height:1.3;color:var(--muted);white-space:normal;font-weight:400;letter-spacing:0}
 .fb a{color:var(--fg);text-decoration:underline;position:relative}
 .fb a::after{content:'';position:absolute;left:0;right:0;top:-16px;bottom:-16px}
 .action-bar{display:flex;gap:10px;margin:16px 0 8px;justify-content:flex-end}
@@ -1381,9 +1381,9 @@ hist:{n:'사학과',cnt:1,
       var bt=document.createElement('span');bt.className='bt';
       nm.parentNode.insertBefore(bt,nm);bt.appendChild(nm);
       var fb=document.createElement('span');fb.className='fb no-print';
-      fb.appendChild(document.createTextNode(ORG+'('));
+      fb.appendChild(document.createTextNode('© '+ORG+'('));
       var a=document.createElement('a');a.textContent=EMAIL;a.href='mailto:'+EMAIL+'?subject='+encodeURIComponent('['+APP+'] 문의');a.setAttribute('aria-label',ORG+' 이메일 '+EMAIL);
-      fb.appendChild(a);fb.appendChild(document.createTextNode(')'));bt.appendChild(fb);
+      fb.appendChild(a);fb.appendChild(document.createTextNode(') All rights reserved. 무단 복제 및 배포 금지.'));bt.appendChild(fb);
     }
     var wrap=document.querySelector('.wrap');if(!wrap)return;
     var ph=document.createElement('div');ph.className='print-head';
