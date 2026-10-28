@@ -197,6 +197,7 @@ input[type=text]{width:100%;font:inherit;font-size:16px;color:var(--ink);backgro
 body{word-break:keep-all;overflow-wrap:anywhere}
 .chip{min-height:46px;min-width:48px}
 .qgh{font-size:15px;margin:16px 0 4px;font-weight:800}.qgh:first-of-type{margin-top:8px}
+.qkg{margin:8px 0 0}.qkl{display:block;font-size:13px;color:var(--ink-sub);margin:0 0 4px;font-weight:600}.qkg .chips{margin:0 0 6px}.qkg .chip{min-height:38px;padding:4px 12px;font-size:14px}.qcur{margin:8px 0 12px;padding:10px 0 0;border-top:1px solid var(--line)}.qcur .qq{font-size:16px;font-weight:800;margin:0 0 4px}
 
 @media print{header.top,nav#tabs,.pdfb,.fbl{display:none!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
@@ -572,10 +573,9 @@ function viewWrite(){
   </section>
   <div class="chips" id="wt" role="group" aria-label="면접유형 선택" style="margin:0">${TYPES.map(t=>`<button type="button" class="chip" aria-pressed="${t.k===k}" data-k="${t.k}">${esc(t.n)}</button>`).join('')}</div>
   ${k==='인성'?'<section class="card" id="cmbox"></section>':''}
-  <section class="card" id="rq"></section>
   <div class="split"><section class="card">
    <div class="prog"><span>${esc(k)}면접 · ${esc(F.f)} · ${secTxt}</span><b id="prog">1/${N}</b></div>
-   <p class="ev-emph" id="qsel2" style="margin:0 0 10px"></p>
+   <div id="rq"></div>
    <details class="jd" style="margin:0 0 10px"><summary>답변 공식·좋은 답변 예시 보기</summary><div class="jb"><h4>답변 공식 · ${esc(F.f)}</h4><p style="margin:0">${esc(F.tip)}</p><h4>좋은 답변 예시 (강의용 가상 사례)</h4><p style="margin:0">${esc(F.good)}</p></div></details>
    ${W.steps.map((s,i)=>`<div class="acc" id="a${i}"><button type="button" class="acc-h" id="h${i}"><span class="n">${i+1}</span><span class="t">${esc(s[0])}</span><span class="sm" id="sm${i}"></span></button>
    <div class="acc-b"><label for="f${i}" style="margin-top:0">${esc(s[0])} <small>${esc(s[1])}</small></label><textarea id="f${i}" placeholder="${esc('예) '+(JEX[i]||String(s[2]).replace(/^예\) /,'')))}"></textarea>
@@ -944,17 +944,19 @@ function renderRQ(){
   const k=wType,jb=qJobOf(),R=curRole(),pr=pptRecs(k),jr=recQs(R,jb,k),recs=pr.concat(jr);
   let si=store.get('wq_'+role+'_'+k,null);if(si==null||!recs.some(r=>r.i===si))si=recs[0].i;
   const sel=recs.find(r=>r.i===si);
-  const pick=r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${r.ppt&&r.x.ev?'['+esc(r.x.ev)+'] ':''}${esc(r.x.q)}</b>${stepRows(r.x.a,'span')}${r.ppt?'':`<small>${r.db?'직무 데이터 기반 맞춤 질문':'직무명·KSA로 만든 질문(직무 데이터 없음)'}</small>`}</button>`;
-  box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">① 강의 PPT의 대표 질문을 먼저 연습하고, ② 아래 내 직무 맞춤 질문으로 이어서 연습하세요. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
-   <details class="jd" id="qchg" style="margin:8px 0 0"><summary>다른 질문 고르기 · 대표 질문 ${pr.length}개 + 내 직무 맞춤 ${jr.length}개</summary><div class="jb">
-   <h3 class="qgh">① 대표 질문 · 강의 PPT</h3>${pr.map(pick).join('')}
-   <h3 class="qgh">② 내 직무 맞춤 질문 · ${esc(R.name||'직무 미입력')}</h3><p class="sub" style="margin:0">${R.et?'위에서 고른 세부 직무의 신입 업무·성과지표·산출물·KSA로 만든 질문입니다. 직무를 바꾸면 함께 바뀝니다.':'직접 입력한 직무는 일반 질문만 제공합니다. 세부 직무를 목록에서 고르면 맞춤 질문이 나옵니다.'}</p>${jr.map(pick).join('')}</div></details>
+  const names=pr.map((r,n)=>r.x.ev||('대표 질문 '+(n+1)));names.forEach((t,n)=>{if(names.indexOf(t)!==n)names[n]=t+' '+(n+1)});
+  const chip=(r,t)=>`<button type="button" class="chip qk" data-i="${r.i}" aria-pressed="${r.i===si}">${esc(t)}</button>`;
+  const qh=`<div class="qcur"><p class="qq">${sel.ppt&&sel.x.ev?'['+esc(sel.x.ev)+'] ':''}${esc(sel.x.q)}</p>${stepRows(sel.x.a,'div')}${sel.ppt?'':`<small style="display:block;margin-top:6px;color:var(--ink-sub);font-size:13px">${sel.db?'직무 데이터 기반 맞춤 질문':'직무명·KSA로 만든 질문(직무 데이터 없음)'}</small>`}</div>`;
+  box.innerHTML=`<p class="sub" style="margin:10px 0 4px">키워드를 눌러 질문을 고르고, 아래 단계로 답변을 쓰세요.</p>
+   <div class="qkg"><span class="qkl">대표 질문 · 강의 PPT</span><div class="chips" role="group" aria-label="대표 질문 키워드">${pr.map((r,n)=>chip(r,names[n])).join('')}</div></div>
+   ${jr.length?`<div class="qkg"><span class="qkl">내 직무 맞춤 · ${esc(R.name||'직무 미입력')}</span><div class="chips" role="group" aria-label="내 직무 맞춤 질문">${jr.map((r,n)=>chip(r,'내 직무 '+(n+1))).join('')}</div></div>`:''}
+   ${qh}
    ${sel&&sel.x.ans?`<details class="ma" open><summary>고른 질문의 답변 예시 (○○는 본인 경험으로 교체)</summary>${sel.x.ans.map((t,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[k].steps[i]||[''])[0])}</span>${esc(t)}</p>`).join('')}</details>`:''}
-   ${sel&&sel.ppt?`<details class="ma" open><summary>이 대표 질문의 답변 요령 (강의 PPT)</summary><p class="dl"><span class="dt">답변 순서</span>${esc(sel.x.a)}</p>${(sel.x.tip||[]).map(t=>`<p class="dl">${esc(t)}</p>`).join('')}<p class="sub" style="margin:6px 0 0">내 직무 상황으로 바꿔 쓰려면 아래 ②의 맞춤 질문도 함께 연습하세요.</p></details>`:''}
+   ${sel&&sel.ppt?`<details class="ma" open><summary>이 대표 질문의 답변 요령 (강의 PPT)</summary><p class="dl"><span class="dt">답변 순서</span>${esc(sel.x.a).replace(/\n/g,' / ')}</p>${(sel.x.tip||[]).map(t=>`<p class="dl">${esc(t)}</p>`).join('')}<p class="sub" style="margin:6px 0 0">내 직무 상황으로 바꿔 쓰려면 위의 ‘내 직무 맞춤’ 키워드도 함께 연습하세요.</p></details>`:''}
    <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 내 직무의 ${esc(k)}면접 질문·답변 보기</button></div>
-   <p class="note">${R.et?'앱 직무 DB(신입 업무·성과지표·산출물)로 만든 교육용 예시입니다. 질문의 업무·지표는 직무별 실제 데이터이고, 답변 속 ○○ 경험은 본인 사례로 채워야 합니다. 특정 기업의 실제 기출이 아닙니다.':'직접 입력한 직무는 직무 데이터가 없어 일반 질문 2개만 제공합니다. 세부 직무를 목록에서 고르면 직무 맞춤 질문이 나옵니다.'}</p>`;
-  const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;const qs2=$('#qsel2');if(qs2)qs2.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
-  box.onclick=e=>{const b=e.target.closest('.qpick');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^[gp]/.test(d)?d:+d);renderRQ();const t=$('#qsel2');if(t&&t.scrollIntoView)t.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}};
+   <p class="note">${R.et?'세부 직무의 지식·기술·성과지표를 대학생 눈높이로 풀어 교내 활동과 연결한 교육용 예시입니다. 답변 속 ○○ 경험은 본인 사례로 채워야 하며, 특정 기업의 실제 기출이 아닙니다.':'직접 입력한 직무는 직무 데이터가 없어 일반 질문 2개만 제공합니다. 세부 직무를 목록에서 고르면 직무 맞춤 질문이 나옵니다.'}</p>`;
+  const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
+  box.onclick=e=>{const b=e.target.closest('.qk');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^[gp]/.test(d)?d:+d);renderRQ()}};
   $('#rqm').onclick=()=>{qJobInit=true;qJob='내 직무';qType=k;go(5)};if(typeof cm3G==='function'&&cm3G)cm3G()}
 
 /* 직무에 맞춰 바뀌는 답변 예시 — 선택한 세부 직무의 이름·KSA·성과지표를 문장에 넣어 단계별 예시를 만든다 */
