@@ -576,7 +576,7 @@ function viewWrite(){
   <div class="split"><section class="card">
    <div class="prog"><span>${esc(k)}면접 · ${esc(F.f)} · ${secTxt}</span><b id="prog">1/${N}</b></div>
    <div id="rq"></div>
-   <details class="jd" style="margin:0 0 10px"><summary>답변 공식·좋은 답변 예시 보기</summary><div class="jb"><h4>답변 공식 · ${esc(F.f)}</h4><p style="margin:0">${esc(F.tip)}</p><h4>좋은 답변 예시 (강의용 가상 사례)</h4><p style="margin:0">${esc(F.good)}</p></div></details>
+   
    ${W.steps.map((s,i)=>`<div class="acc" id="a${i}"><button type="button" class="acc-h" id="h${i}"><span class="n">${i+1}</span><span class="t">${esc(s[0])}</span><span class="sm" id="sm${i}"></span></button>
    <div class="acc-b"><label for="f${i}" style="margin-top:0">${esc(s[0])} <small>${esc(s[1])}</small></label><textarea id="f${i}" placeholder="${esc('예) '+(JEX[i]||String(s[2]).replace(/^예\) /,'')))}"></textarea>
    <div class="row"><button type="button" class="btn text" id="nx${i}">${i<N-1?'다음 단계':'초안 확인'}</button></div></div></div>`).join('')}
@@ -952,12 +952,10 @@ function renderRQ(){
    ${jr.length?`<div class="qkg"><span class="qkl">내 직무 맞춤 · ${esc(R.name||'직무 미입력')}</span><div class="chips" role="group" aria-label="내 직무 맞춤 질문">${jr.map((r,n)=>chip(r,'내 직무 '+(n+1))).join('')}</div></div>`:''}
    ${qh}
    ${sel&&sel.x.ans?`<details class="ma" open><summary>고른 질문의 답변 예시 (○○는 본인 경험으로 교체)</summary>${sel.x.ans.map((t,i)=>`<p class="dl"><span class="dt">${esc((WSPEC[k].steps[i]||[''])[0])}</span>${esc(t)}</p>`).join('')}</details>`:''}
-   ${sel&&sel.ppt?`<details class="ma" open><summary>이 대표 질문의 답변 요령 (강의 PPT)</summary><p class="dl"><span class="dt">답변 순서</span>${esc(sel.x.a).replace(/\n/g,' / ')}</p>${(sel.x.tip||[]).map(t=>`<p class="dl">${esc(t)}</p>`).join('')}<p class="sub" style="margin:6px 0 0">내 직무 상황으로 바꿔 쓰려면 위의 ‘내 직무 맞춤’ 키워드도 함께 연습하세요.</p></details>`:''}
-   <div class="row"><button type="button" class="btn ghost" id="rqm">예시 탭에서 내 직무의 ${esc(k)}면접 질문·답변 보기</button></div>
-   <p class="note">${R.et?'세부 직무의 지식·기술·성과지표를 대학생 눈높이로 풀어 교내 활동과 연결한 교육용 예시입니다. 답변 속 ○○ 경험은 본인 사례로 채워야 하며, 특정 기업의 실제 기출이 아닙니다.':'직접 입력한 직무는 직무 데이터가 없어 일반 질문 2개만 제공합니다. 세부 직무를 목록에서 고르면 직무 맞춤 질문이 나옵니다.'}</p>`;
+   ${sel&&sel.ppt?`<details class="ma" open><summary>이 대표 질문의 답변 요령 (강의 PPT)</summary><p class="dl"><span class="dt">답변 순서</span>${esc(sel.x.a).replace(/\n/g,' / ')}</p>${(sel.x.tip||[]).map(t=>`<p class="dl">${esc(t)}</p>`).join('')}<p class="sub" style="margin:6px 0 0">내 직무 상황으로 바꿔 쓰려면 위의 ‘내 직무 맞춤’ 키워드도 함께 연습하세요.</p></details>`:''}`;
   const qs=$('#qsel');if(qs)qs.innerHTML=`<b>답할 질문</b> ${esc(sel.x.q)}`;
   box.onclick=e=>{const b=e.target.closest('.qk');if(b){const d=b.dataset.i;store.set('wq_'+role+'_'+k,/^[gp]/.test(d)?d:+d);renderRQ()}};
-  $('#rqm').onclick=()=>{qJobInit=true;qJob='내 직무';qType=k;go(5)};if(typeof cm3G==='function'&&cm3G)cm3G()}
+  if(typeof cm3G==='function'&&cm3G)cm3G()}
 
 /* 직무에 맞춰 바뀌는 답변 예시 — 선택한 세부 직무의 이름·KSA·성과지표를 문장에 넣어 단계별 예시를 만든다 */
 function jobWords(R){
