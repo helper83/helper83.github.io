@@ -792,17 +792,13 @@ a[href^="mailto:"]{display:inline-block;padding:14px 4px;margin:-14px -4px}
           <span class="fnote">이미지와 스캔 PDF는 글자로 바꾸지 않고 AI가 그림 그대로 읽습니다. hwp는 파일 형태에 따라 읽지 못할 수 있으며, 그때는 hwpx나 PDF로 저장하거나 아래 '직접 붙여넣기'를 쓰세요. 구형 doc, ppt는 docx, pptx로 저장해 주세요.</span>
         </div>
         <div class="zones" id="t2zones"></div>
-        <div class="t2start" id="t2startbar"><button class="btn" type="button" id="t2run2">▶ AI 평가 시작</button><p>① 채용공고·직무기술서를 올리고 ② 평가할 지원서를 정한 뒤 시작을 누르세요. Claude 화면 밖에서는 「AI 연결」 창이 열립니다(복사해 붙여넣기 또는 내 API 키).</p></div>
+        <div class="t2start" id="t2startbar"><button class="btn" type="button" id="t2local">▶ AI 평가 시작</button><button class="btn ghost" type="button" id="t2run">Claude·API 키로 정밀 평가</button><button class="btn ghost" type="button" id="t2stop" hidden>중지</button><p>① 채용공고·직무기술서를 올리고 ② 평가할 지원서를 정한 뒤 「AI 평가 시작」을 누르면, 앱이 바로 평가표 초안을 채웁니다(AI 연결 불필요 · 공고 키워드·수치·분량을 규칙으로 점검). 더 정밀한 평가는 오른쪽 버튼(Claude 화면 또는 내 API 키)을 쓰세요.</p></div>
       </section>
 
       <section class="panel" aria-label="공고 기반 평가표">
         <h2>AI 평가 · 공고 기반 지원서 평가 <small>탭1과 같은 평가표 · AI가 초안을 채우고 평가위원이 확정</small></h2>
         <div class="runbar">
           <div class="srcline" id="t2src"></div>
-          <div class="runbtns">
-            <button class="btn" type="button" id="t2run">▶ AI 평가 시작</button>
-            <button class="btn ghost" type="button" id="t2stop" hidden>중지</button>
-          </div>
           <div class="runmsg" id="t2msg" role="status"></div>
         </div>
         <div class="jobbox" id="t2job" hidden></div>
@@ -2030,7 +2026,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       var cls=r.status==='충족'?'met':(r.status==='미충족'?'no':'unk');
       return '<div class="req"><span class="kind">'+esc(r.type||'')+'</span><span>'+esc(r.text||'')+'</span><span class="badge '+cls+'">'+esc(r.status||'확인불가')+'</span>'+(r.evidence?'<span class="evd">'+esc(r.evidence)+'</span>':'')+'</div>';
     }).join('');
-    box.innerHTML='<h3>공고 분석 · '+esc([j.company,j.title].filter(Boolean).join(' · ')||'모집 정보')+'</h3><div class="sub">AI가 공고에서 읽어 낸 요건과 지원서 대조 결과입니다. 공고 원문과 비교해 확인하세요.</div>'+reqs;
+    box.innerHTML='<h3>공고 분석 · '+esc([j.company,j.title].filter(Boolean).join(' · ')||'모집 정보')+'</h3><div class="sub">'+(S.local?'앱이 공고에서 찾아낸 요건과 지원서 대조 결과(글자 규칙)입니다. 요건 추출이 틀릴 수 있으니 공고 원문과 비교해 확인하세요.':'AI가 공고에서 읽어 낸 요건과 지원서 대조 결과입니다. 공고 원문과 비교해 확인하세요.')+'</div>'+reqs;
   }
   function cmp(){
     var T=window.__ipT1Scores,h=T?T():{scores:{},sample:false},hs=h.scores||{},ht=0,big=[],any=false;
@@ -2095,7 +2091,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   /* ---------- AI draft ---------- */
   var runMsg=$('t2msg'),ctrl=null;
   function msg(t,cls){runMsg.className='runmsg'+(cls?' '+cls:'');runMsg.textContent=t}
-  if(S.example)msg('예시 결과가 표시되어 있습니다. 위 공고와 탭① 예시 지원서로 작성한 미리보기이며, AI 평가 시작을 누르면 새로 계산합니다.');
+  if(S.example)msg('예시 결과가 표시되어 있습니다. 위 공고와 탭① 예시 지원서로 작성한 미리보기이며, AI 평가 시작을 누르면 앱이 새로 계산합니다.');
   function sampleAppText(){
     var out=[];
     [['resume','이력서'],['e1','Essay 1'],['e2','Essay 2'],['e3','Essay 3'],['e4','Essay 4']].forEach(function(p){
@@ -2135,6 +2131,151 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if(c==='images_unavailable'||c==='image_rejected')return '이미지를 AI에 보낼 수 없습니다. 글자로 읽히는 파일이나 붙여넣기를 사용하세요.';
     return (e&&e.message)||'AI 평가를 만들지 못했습니다.';
   }
+  /* ---------- 앱 자체 평가: AI 연결 없이 공고와 지원서를 글자 규칙으로 대조 ---------- */
+  var KWX=function(){return window.__ipKW||{KWD:[],hits:function(){return []}}};
+  function cmpt(s){return String(s||'').toLowerCase().replace(/[\s\-_.,·:;()\[\]「」『』“”"'‘’/\\|]/g,'')}
+  var STOPW=/^(그리고|또는|대한|위한|통해|있는|있음|이상|이하|가능|관련|경험|우대|필수|자격|요건|업무|지원|해당|보유|하신|분|사항|등의|가능자|경우|인정|기간|바탕|능력)$/;
+  function toks(s,n){
+    var m=String(s||'').toLowerCase().match(/[가-힣a-z][가-힣a-z0-9+#]{1,}/g)||[],o=[],seen={};
+    m.forEach(function(w){
+      if(w.length>2)w=w.replace(/(으로|에서의|에서|에게|에는|하는|하며|하고|한다|입니다|합니다|하신|보유|가능|능통|이상|및|은|는|이|가|을|를|의|에|와|과|도|로)$/,'');
+      if(w.length<2||STOPW.test(w)||seen[w])return;seen[w]=1;o.push(w);
+    });
+    return n?o.slice(0,n):o;
+  }
+  function cnt(t,re){return (String(t||'').match(re)||[]).length}
+  function sents(t){return String(t||'').replace(/([.!?다요음함])\s+/g,'$1\u0001').split(/\u0001|\n+/).map(function(x){return x.trim()}).filter(function(x){return x.length>=8})}
+  function snip(t,re,n){var a=sents(t);for(var i=0;i<a.length;i++){if(re.test(a[i])){var s=a[i].replace(/\s+/g,' ');return s.length>(n||38)?s.slice(0,n||38)+'…':s}}return ''}
+  function parsePosting(txt){
+    var lines=String(txt||'').replace(/\r/g,'').split('\n').map(function(l){return l.trim()}),sec='',reqs=[],company='',title='',m;
+    for(var i=0;i<lines.length;i++){
+      var l=lines[i];if(!l)continue;
+      if((m=/^(?:회사|기업|회사명|기업명)\s*[:：]\s*(.+)$/.exec(l))&&!company)company=m[1].slice(0,30);
+      if((m=/^(?:모집\s*부문|모집\s*직무|직무명|채용\s*분야|포지션|모집\s*분야)\s*[:：]\s*(.+)$/.exec(l))&&!title)title=m[1].slice(0,40);
+      var head=/^\[.{1,24}\]$|^(?:■|▶|●|◆|□)\s*.{1,24}$/.test(l)||(l.length<=14&&!/^[-•·ㆍ*]/.test(l)&&/(자격|요건|우대|사항|업무|전형|절차|근무|복리|처우|제출|접수|일정|유의|기타|모집)/.test(l));
+      if(head){
+        if(/우대/.test(l))sec='우대';else if(/(자격|요건|필수)/.test(l))sec='필수';else if(/(전형|절차|근무|복리|처우|제출|접수|일정|유의|기타|수행\s*업무|담당\s*업무|주요\s*업무)/.test(l))sec='';
+        continue;
+      }
+      if(sec&&/^[-•·ㆍ*○]|^\d+[.)]/.test(l)){var t=l.replace(/^[-•·ㆍ*○]\s*|^\d+[.)]\s*/,'').trim();if(t.length>=4&&t.length<=140)reqs.push({type:sec,text:t})}
+      else if(!sec&&/(필수|우대)/.test(l)&&l.length<=120&&/(분|자|경험|보유|가능|전공)/.test(l)){reqs.push({type:/우대/.test(l)?'우대':'필수',text:l.replace(/^[-•·ㆍ*○]\s*/,'')})}
+    }
+    if(!company){var f=lines.filter(Boolean)[0]||'';company=f.length<=30?f:''}
+    if(!title){for(var j=0;j<lines.length;j++){if(/(사원|인턴|신입|경력)?\s*채용\s*\(/.test(lines[j])||/\(.*(영업|기획|마케팅|개발|인사|재무|생산|연구).*\)/.test(lines[j])){title=lines[j].slice(0,40);break}}}
+    var seen={};reqs=reqs.filter(function(r){var k=cmpt(r.text);if(seen[k])return false;seen[k]=1;return true}).slice(0,12);
+    return {company:company,title:title,reqs:reqs};
+  }
+  function splitApp(txt,sample){
+    var P={resume:'',e1:'',e2:'',e3:'',e4:''},ok=0;
+    var re=/(?:^|\n)\s*\[?\s*(이력서|Essay\s*([1-4])|에세이\s*([1-4])|자기\s*소개서\s*([1-4])|문항\s*([1-4]))\s*\]?\s*(?:\n|:)/gi,idx=[],m;
+    while((m=re.exec(txt))){idx.push({k:/이력서/.test(m[1])?'resume':'e'+(m[2]||m[3]||m[4]||m[5]),at:m.index,len:m[0].length})}
+    idx.forEach(function(x,i){var end=i+1<idx.length?idx[i+1].at:txt.length;P[x.k]+=(P[x.k]?'\n':'')+txt.slice(x.at+x.len,end);ok++});
+    return {P:P,split:ok>=2};
+  }
+  function reqEval(r,app){
+    var kws=toks(r.text,8),c=cmpt(app),hit=kws.filter(function(k){return c.indexOf(cmpt(k))>=0}),cov=kws.length?hit.length/kws.length:0;
+    var unv=/병역|결격|해외\s*여행|근무\s*가능|입사\s*가능|졸업\s*(예정|자)|학위|연령|성별|비자/.test(r.text);
+    var st,ev='';
+    var tm=/(토익|toeic)[^0-9]{0,8}(\d{3})/i.exec(r.text);
+    if(tm){var need=+tm[2],got=cnt(app,/(토익|toeic)/gi)?(app.match(/(?:토익|toeic)[^0-9]{0,12}(\d{3})/i)||[])[1]:null;if(got){st=(+got>=need)?'충족':'미충족';ev='TOEIC '+got+'점'}else st='확인불가'}
+    if(!st){
+      if(cov>=.5&&!(unv&&cov<.8))st='충족';else if(cov>0)st='확인불가';else st='확인불가';
+    }
+    if(!ev&&hit.length){ev=snip(app,new RegExp(hit[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')),34)}
+    return {type:r.type,text:r.text,status:st,evidence:ev,cov:cov};
+  }
+  function localEvaluate(post,app,panes,splitOk){
+    var J=parsePosting(post),R=J.reqs.map(function(r){return reqEval(r,app)});
+    var K=KWX(),labs={},tot=0;
+    (K.KWD||[]).forEach(function(k){var n=cnt(post,new RegExp(k[1].source,'gi'));if(n){labs[k[0]]=n;tot+=n}});
+    var L=Object.keys(labs).sort(function(a,b){return labs[b]-labs[a]}).slice(0,6);
+    var pseudo=false;
+    if(!L.length){pseudo=true;var fq={};toks(post).forEach(function(w){fq[w]=cnt(post.toLowerCase(),new RegExp(w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))});L=Object.keys(fq).sort(function(a,b){return fq[b]-fq[a]}).slice(0,6)}
+    function lab(l,t){var d=pseudo?null:(K.KWD||[]).filter(function(x){return x[0]===l})[0];return d?cnt(t,new RegExp(d[1].source,'gi')):cnt(cmpt(t),new RegExp(cmpt(l).replace(/[.*+?^${}()|[\]\\]/g,'\\$&'),'g'))}
+    var resume=panes.resume||'',S0={},RS={},note={};
+    /* basic */
+    var must=R.filter(function(r){return r.type==='필수'}),pref=R.filter(function(r){return r.type==='우대'});
+    function ratio(a){return a.length?a.reduce(function(s,r){return s+(r.status==='충족'?1:(r.status==='확인불가'?.5:0))},0)/a.length:null}
+    var rm=ratio(must),rp=ratio(pref);
+    if(rm===null&&rp===null){S0.basic=6;RS.basic='공고에서 필수·우대 요건 항목을 찾지 못해 기본 점수(6/10)를 두었습니다. 공고 원문의 자격요건을 확인하세요.'}
+    else{var b=(rm===null?rp:rm)*(rp===null||rm===null?1:.7)+(rp===null||rm===null?0:rp*.3);S0.basic=Math.round(10*b);RS.basic='필수 요건 '+must.filter(function(r){return r.status==='충족'}).length+'/'+must.length+'개 충족, 우대 '+pref.filter(function(r){return r.status==='충족'}).length+'/'+pref.length+'개 충족(서류로 확인 불가한 항목은 절반 점수).'}
+    /* fit */
+    var cov=0,dep=0,lt=[];
+    L.forEach(function(l){var n=lab(l,resume);if(n>0){cov+=1;lt.push(l)}dep+=Math.min(5,n)/5});
+    cov=L.length?cov/L.length:0;dep=L.length?dep/L.length:0;
+    S0.fit=Math.round(15*(.65*cov+.35*dep));
+    RS.fit='공고 핵심 역량 '+L.length+'개('+L.slice(0,4).join('·')+') 중 이력서에 드러난 것 '+lt.length+'개'+(lt.length?'('+lt.slice(0,3).join('·')+')':'')+'.';
+    /* perf */
+    var nu=cnt(resume,/\d[\d,.]*\s*(%|퍼센트|건|명|개|원|만원|억|배|점|시간|주|개월|회|곳|위|등)/g),rw=cnt(resume,/향상|단축|절감|증가|감소|달성|수상|선정|개선|확대|성공|창출|확보|매출|성과|우수/g),ro=cnt(resume,/담당|주도|기획|수행|진행|운영|분석|설계|개발|작성|제안|관리/g);
+    S0.perf=Math.round(10*(.5*Math.min(1,nu/10)+.3*Math.min(1,rw/8)+.2*Math.min(1,ro/10)));
+    var ps=snip(resume,/\d[\d,.]*\s*(%|건|명|개|원|배|점|시간|주|개월|회|곳)/);
+    RS.perf='수치 표현 '+nu+'건, 성과 표현 '+rw+'건, 역할·행동 표현 '+ro+'건'+(ps?' · 예) 「'+ps+'」':' · 수치가 드러난 문장을 찾지 못함')+'.';
+    /* essays */
+    var co=cmpt(J.company).replace(/(주식회사|\(주\)|㈜)/g,'');
+    function ess(k){
+      var t=panes[k]||'',ch=t.replace(/\s/g,'').length;
+      if(ch<80){S0[k]=0;RS[k]=ch?'분량이 80자 미만이라 평가하기 어렵습니다('+ch+'자).':(splitOk?'이 문항 내용을 찾지 못했습니다.':'문항 구분(Essay 1~4)을 찾지 못해 점수를 줄 수 없습니다. 지원서에 「Essay 1」처럼 제목을 넣어 보세요.');return}
+      var pts=0,nt=[];
+      var lp=3*Math.min(1,ch/600);pts+=lp;nt.push('분량 '+ch+'자');
+      var n1=cnt(t,/\d[\d,.]*\s*(%|퍼센트|건|명|개|원|만원|억|배|점|시간|주|개월|회|곳|위|년|등)/g),sp=3*Math.min(1,n1/3);pts+=sp;nt.push('수치 '+n1+'건');
+      var jo=L.length?L.filter(function(l){return lab(l,t)>0}).length/L.length:0;
+      if(k==='e1'){
+        var cm=co&&cmpt(t).indexOf(co)>=0?3:(/(귀사|삼성|회사)/.test(t)?1.5:0),g=3*Math.min(1,cnt(t,/목표|포부|입사\s*후|\d+\s*년\s*(후|차)|성장|기여|이루고/g)/3),jj=3*Math.min(1,jo*1.5);
+        pts+=cm+g+jj;nt.push('회사 언급 '+(cm>=3?'있음':(cm>0?'일반 표현':'없음')));nt.push('입사 후 목표 표현 '+cnt(t,/목표|포부|입사\s*후|\d+\s*년\s*(후|차)|성장|기여|이루고/g)+'건');nt.push('직무 키워드 일치 '+Math.round(jo*100)+'%');
+      }else if(k==='e2'){
+        var nv=4*Math.min(1,cnt(t,/당시|그때|처음|계기|어려움|결과|깨달|배웠|극복|노력|도전/g)/5),ef=3*Math.min(1,cnt(t,/이후|덕분|그래서|이를\s*계기|지금|직무|역량|성장/g)/3),st=3*Math.min(1,cnt(t,/상황|과제|행동|결과|역할|맡아|담당/g)/3);
+        pts+=nv+ef+st;nt.push('사건 서술 표현 '+cnt(t,/당시|그때|처음|계기|어려움|결과|깨달|배웠|극복|노력|도전/g)+'건');nt.push('이후 영향·연결 표현 '+cnt(t,/이후|덕분|그래서|이를\s*계기|지금|직무|역량|성장/g)+'건');
+      }else if(k==='e3'){
+        var vw=3*Math.min(1,cnt(t,/생각합니다|주장|필요합니다|해야|봅니다|판단|견해|입장/g)/3),ba=3*Math.min(1,cnt(t,/때문|따라서|첫째|둘째|예를\s*들어|근거|연구|조사|통계|보고서|\d{4}년/g)/4),jl=3*Math.min(1,jo*1.5);
+        pts+=vw+ba+jl;nt.push('자기 견해 표현 '+cnt(t,/생각합니다|주장|필요합니다|해야|봅니다|판단|견해|입장/g)+'건');nt.push('근거 표현 '+cnt(t,/때문|따라서|첫째|둘째|예를\s*들어|근거|연구|조사|통계|보고서|\d{4}년/g)+'건');nt.push('직무·산업 연결 '+Math.round(jo*100)+'%');
+      }else if(k==='e4'){
+        var j4=3*Math.min(1,jo*1.5),lk=3*Math.min(1,cnt(t,/이를\s*통해|활용|적용|접목|연결|직무|업무에서/g)/3),pr=3*Math.min(1,cnt(t,/제품|서비스|사용|경험|고객|시장|판매/g)/4);
+        pts+=j4+lk+pr;nt.push('직무 키워드 일치 '+Math.round(jo*100)+'%');nt.push('경험→직무 연결 표현 '+cnt(t,/이를\s*통해|활용|적용|접목|연결|직무|업무에서/g)+'건');
+      }
+      S0[k]=Math.max(0,Math.min(15,Math.round(pts)));
+      var q=snip(t,/\d[\d,.]*\s*(%|건|명|개|원|배|점|시간|주|개월|회|곳)/);
+      RS[k]=nt.join(' · ')+(q?' · 예) 「'+q+'」':'')+'.';
+    }
+    ['e1','e2','e3','e4'].forEach(ess);
+    /* all */
+    var present=['resume','e1','e2','e3','e4'].filter(function(k){return (panes[k]||'').replace(/\s/g,'').length>=80}).length;
+    var withLab=['resume','e1','e2','e3','e4'].filter(function(k){return L.some(function(l){return lab(l,panes[k]||'')>0})}).length;
+    S0.all=Math.max(0,Math.min(5,Math.round(2*present/5+3*Math.min(1,withLab/5))));
+    RS.all='내용이 있는 부분 '+present+'/5개, 공고 핵심 역량이 드러난 부분 '+withLab+'/5개(일관성 점검).';
+    var tot=0;ITEMS.forEach(function(it){S0[it.k]=clamp(S0[it.k],it.max);tot+=S0[it.k]});
+    var rk=ITEMS.map(function(it){return {it:it,r:S0[it.k]/it.max}}).sort(function(a,b){return b.r-a.r});
+    var best=rk.slice(0,2),worst=rk.slice(-3).reverse();
+    var op='강점: '+best.map(function(x){return x.it.area+' '+S0[x.it.k]+'/'+x.it.max}).join(', ')+' — 공고 핵심 역량·수치·분량 기준으로 상대적으로 충족\n'+
+      '보완: '+worst.slice(0,2).map(function(x){return x.it.area+' '+S0[x.it.k]+'/'+x.it.max}).join(', ')+' — '+(RS[worst[0].it.k]||'').slice(0,70)+'\n'+
+      '종합: 합계 '+tot+'/100점(앱 자체 평가). 글자 규칙(키워드·수치·분량) 점검이며 문장의 의미·진실성은 판단하지 못합니다. 평가위원이 확인해 점수를 고치세요.';
+    var Q={basic:function(){var u=R.filter(function(r){return r.status!=='충족'})[0];return u?'공고의 요건 「'+u.text.slice(0,40)+'」은 서류만으로 확인되지 않습니다. 어떻게 충족하나요?':'공고의 요건 중 가장 자신 있는 것은 무엇이고 근거는?'},
+      fit:function(){var m=L.filter(function(l){return lab(l,resume)===0})[0]||L[0]||'직무';return '공고가 강조한 「'+m+'」 역량을 보여 줄 가장 대표적인 경험은 무엇인가요?'},
+      perf:function(){return '이력서에 적은 성과 수치는 어떻게 측정했고, 본인 기여는 몇 %인가요?'},
+      e1:function(){return '왜 이 회사·사업부여야 하나요? 다른 회사가 아닌 이유 한 가지는?'},
+      e2:function(){return '그 사건에서 본인이 내린 결정과, 그 뒤 달라진 점은 무엇인가요?'},
+      e3:function(){return '제시한 의견에 대한 반대 의견은 무엇이고 어떻게 답하겠습니까?'},
+      e4:function(){return '그 경험에서 직무에 바로 쓸 수 있는 역량 한 가지와 근거는?'},
+      all:function(){return '지원서 전체를 관통하는 직무 강점을 한 문장으로 말해 보세요.'}};
+    var qs=worst.map(function(x){return Q[x.it.k]()});
+    return {scores:S0,reasons:RS,opinion:op,questions:qs,job:{company:J.company,title:J.title,requirements:R.map(function(r){return {type:r.type,text:r.text,status:r.status,evidence:r.evidence}})},total:tot};
+  }
+  function runLocal(){
+    var post=collect('posting',90000);
+    if(!post.length){msg('채용공고·직무기술서를 먼저 불러오세요.','err');return}
+    var postTxt=post.map(function(x){return x.text}).join('\n\n');
+    if(!postTxt.trim()){msg('공고에서 글자를 읽지 못했습니다(이미지 파일일 수 있음). 글자로 읽히는 파일이나 붙여넣기를 사용하세요.','err');return}
+    var appTxt='';
+    if(appSrc==='sample')appTxt=sampleAppText();
+    else{var af=collect('app',120000);if(!af.length){msg('평가할 입사지원서 파일을 올리거나 탭① 예시 지원서를 선택하세요.','err');return}appTxt=af.map(function(x){return x.text}).join('\n\n')}
+    if(!appTxt.trim()){msg('지원서에서 글자를 읽지 못했습니다. 글자로 읽히는 파일이나 붙여넣기를 사용하세요.','err');return}
+    var sp=splitApp(appTxt),panes=sp.P;
+    if(!sp.split){panes={resume:appTxt,e1:appTxt,e2:appTxt,e3:appTxt,e4:appTxt}}
+    var res;
+    try{res=localEvaluate(postTxt,appTxt,panes,sp.split)}catch(e){msg('앱 자체 평가를 만들지 못했습니다. 공고·지원서 글자를 확인하세요.','err');return}
+    S.scores=res.scores;S.reasons=res.reasons;S.opinion=res.opinion;S.questions=res.questions;S.job=res.job;S.ai=false;S.local=true;S.example=false;save();render();
+    msg('앱 자체 평가를 마쳤습니다(합계 '+res.total+'점). 공고 키워드·수치·분량을 규칙으로 점검한 초안이며, 평가위원이 확인해 고치세요.'+(sp.split?'':' 지원서에서 이력서/Essay 구분을 찾지 못해 전체 글을 모든 항목에 적용했습니다.'),'ok');
+  }
+  if($('t2local'))$('t2local').addEventListener('click',function(){runLocal();var m=$('t2msg');if(m&&m.scrollIntoView)setTimeout(function(){m.scrollIntoView({block:'center',behavior:'smooth'})},50)});
   $('t2stop').addEventListener('click',function(){if(ctrl)ctrl.abort()});
   window.__ipDoc={parseFile:parseFile,clean:clean,EXAMPLE_POSTING:EXAMPLE_POSTING,EXAMPLE_JOB:EXAMPLE_JOB};
   window.__ipT2={files:function(kind){return files.filter(function(f){return f.kind===kind&&!f.busy&&!f.err&&(f.text||(f.images&&f.images.length))}).map(function(f){return {name:f.name,ext:f.ext,text:f.text||'',images:f.images||[],example:!!f.example}})}};
@@ -3765,6 +3906,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   renderBody();preview();banner();guide();
   if(window.__ipHB&&window.__ipHB.on)window.__ipHB.on(function(){tips()});
   window.__ipInfo.on(function(v,src){if(src==='t4')return;S.company=v.company;S.job=v.job;S.example=false;$('t4company').value=v.company;$('t4job').value=v.job;save();preview();banner()});
+  window.__ipKW={KWD:KWD,hits:kwHits};
   window.__ipT4={sources:sources,info:function(){return {company:S.company,job:S.job}},
     setInfo:function(v){
       if(v.company!=null){S.company=v.company;$('t4company').value=v.company}
@@ -4977,6 +5119,6 @@ t.textContent='';t.appendChild(d);t.appendChild(l);t.appendChild(sh)})})();
 </script>
 <script>
 /* AI 평가 시작 버튼(위쪽) → 평가표의 실행 버튼과 같은 동작 */
-(function(){var b=document.getElementById('t2run2');if(!b)return;b.addEventListener('click',function(){var r=document.getElementById('t2run');if(!r||r.disabled)return;r.click();var m=document.getElementById('t2msg');if(m&&m.scrollIntoView)m.scrollIntoView({block:'center',behavior:'smooth'})})})();
+(function(){var b=document.getElementById('t2run');if(!b)return;b.addEventListener('click',function(){var m=document.getElementById('t2msg');if(m&&m.scrollIntoView)setTimeout(function(){m.scrollIntoView({block:'center',behavior:'smooth'})},50)})})();
 </script>
 </html>
