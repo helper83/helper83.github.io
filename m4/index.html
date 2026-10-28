@@ -198,6 +198,8 @@ body{word-break:keep-all;overflow-wrap:anywhere}
 .chip{min-height:46px;min-width:48px}
 .qgh{font-size:15px;margin:16px 0 4px;font-weight:800}.qgh:first-of-type{margin-top:8px}
 .qkg{margin:8px 0 0}.qkl{display:block;font-size:13px;color:var(--ink-sub);margin:0 0 4px;font-weight:600}.qkg .chips{margin:0 0 6px}.qkg .chip{min-height:38px;padding:4px 12px;font-size:14px}.qcur{margin:8px 0 12px;padding:10px 0 0;border-top:1px solid var(--line)}.qcur .qq{font-size:16px;font-weight:800;margin:0 0 4px}
+.fold-hd{margin:0;font-size:inherit}.fold-hd>button{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:8px;width:100%;min-height:44px;cursor:pointer;font:inherit;font-size:18px;font-weight:800;color:var(--ink)}.fold-hd>button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}.fold-t{flex:1}.fold-s{font-size:13px;font-weight:600;color:var(--ink-sub)}.fold-c:after{content:'▾';font-size:16px;color:var(--ink-sub)}.fold-hd>button[aria-expanded=false] .fold-c:after{content:'▸'}.fold-b[hidden]{display:none}.fold-b{margin-top:6px}
+.cmf .jb{padding-top:4px}
 
 @media print{header.top,nav#tabs,.pdfb,.fbl{display:none!important}*{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
 
@@ -563,7 +565,7 @@ function viewWrite(){
  const curJ=isC?null:JOB_BY[role],curG=isC?'custom':curJ.g;
  const secTxt=W.sec>=120?`${W.sec/60}분`:`${W.sec}초`;
  viewEl.innerHTML=pageHead(2)+`<div class="stack">
-  <section class="card">
+  <section class="card" id="jbc">
    ${majorHtml()}
    <label for="rg">직무 대영역</label>
    <select id="rg">${JOBGROUPS.map(g=>`<option value="${esc(g.name)}"${g.name===curG?' selected':''}>${g.no}. ${esc(g.name)}</option>`).join('')}<option value="custom"${isC?' selected':''}>직접 입력 (채용공고의 직무)</option></select>
@@ -582,7 +584,7 @@ function viewWrite(){
    <div class="row"><button type="button" class="btn text" id="nx${i}">${i<N-1?'다음 단계':'초안 확인'}</button></div></div></div>`).join('')}
   </section>
   <div class="stack">
-  <section class="card"><h2>내 ${esc(k)}면접 답변 초안</h2><p class="qs" id="qsel"></p><p class="sub">비어 있는 칸은 노란색으로 표시됩니다.</p>
+  <section class="card" id="dc"><h2>내 ${esc(k)}면접 답변 초안</h2><p class="qs" id="qsel"></p><p class="sub">비어 있는 칸은 노란색으로 표시됩니다.</p>
    <div class="draft" id="draft" aria-live="polite"></div>
    <div class="row"><span class="meter" id="cnt"></span></div>
    <div class="row"><span class="timer" id="tm">00:00</span><button type="button" class="btn" id="ts">${secTxt} 말하기 시작</button><button type="button" class="btn ghost" id="cp">답변 복사</button><span class="sample" id="msg" role="status"></span></div>
@@ -603,7 +605,7 @@ function viewWrite(){
  const EG={K:l=>`“${l} 관련 내용을 ○○에서 확인하고 ○○에 적용했습니다.”`,S:l=>`“${l}을(를) 활용해 ○○를 ○○했습니다.”`,A:l=>`“${l}이(가) 필요한 상황에서 ○○하게 행동해 ○○ 결과를 냈습니다.”`};
  const FIELD=W.steps.map((s,i)=>`${i+1}. ${s[0]}`);
  function guide(){
-  const v=vals(),box=$('#gdb'),R=curRole(),nm=R.name?esc(R.name):'선택한';
+  const v=vals(),box=$('#gdb'),R=curRole(),nm=R.name?esc(R.name):'선택한';const dn=v.every(Boolean);if(dn&&!guide.was)setFold($('#gd'),'gd',true);guide.was=dn;
   if(!v.every(Boolean)){box.innerHTML=`<div class="lockmsg"><b>답변을 먼저 작성하세요.</b><br>${N}단계를 모두 채우면 ${nm} 직무의 KSA(지식·기술·태도) 기준으로 ${esc(k)}면접 답변 수정 가이드가 열립니다.</div>`;return}
   if(!(R.K.length+R.S.length+R.A.length)){box.innerHTML='<div class="lockmsg"><b>직무 KSA를 입력하세요.</b><br>위 입력칸에 지식·기술·태도를 적으면 점검 결과가 나옵니다.</div>';return}
   const E=evalKSA(v,R,isC?null:role,k);
@@ -648,6 +650,7 @@ function viewWrite(){
   left=W.sec;show();$('#ts').textContent='중지·초기화';t=setInterval(()=>{left--;show()},1000)};
  $('#cp').onclick=async()=>{const txt=upd();try{await navigator.clipboard.writeText(txt);$('#msg').textContent='복사했습니다'}catch(e){const r=document.createRange();r.selectNodeContents($('#draft'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('#msg').textContent='텍스트를 선택했습니다. 복사하세요'}};
  renderRQ();if($('#cmbox'))renderCM3();upd();refresh();
+ foldCard($('#jbc'),'jb',true,'직무 선택',esc(curRole().name||'직접 입력'));foldCard($('#dc'),'dc',true);foldCard($('#gd'),'gd',false);
  new MutationObserver(()=>{if(t&&!document.body.contains(tm)){clearInterval(t);t=null}}).observe(viewEl,{childList:true});
 }
 
@@ -671,6 +674,19 @@ function introLines(a,R,fill){
 let cm3G=null;
 const cm3Plain=(c,a)=>c.id==='intro'?introLines(a,curRole(),i=>String(a[i]||'').trim()||'○○').join('\n'):joinAns(a);
 function cm3IntroEx(R){const {K1,S1,P1}=jobWords(R),a=[`${K1} 수업과 공모전`,S1,`${P1} 관련 업무 문제`,'팀 프로젝트의 일정 관리'];return introLines(a,R,i=>a[i]).join('\n')}
+/* 접기·펴기 — 카드 제목을 누르면 본문이 접힙니다(상태는 화면을 다시 그려도 유지) */
+const FOLD={};
+function foldCard(card,key,def,title,extra){
+ if(!card||card.querySelector(':scope>.fold-hd'))return;
+ const open=key in FOLD?FOLD[key]:def,h2=card.querySelector(':scope>h2'),hw=document.createElement('h2'),bt=document.createElement('button');
+ hw.className='fold-hd';bt.type='button';bt.setAttribute('aria-expanded',open);
+ bt.innerHTML=`<span class="fold-t">${h2?h2.innerHTML:title}</span>${extra?`<span class="fold-s">${extra}</span>`:''}<span class="fold-c" aria-hidden="true"></span>`;
+ if(h2)h2.remove();hw.appendChild(bt);
+ const body=document.createElement('div');body.className='fold-b';body.hidden=!open;
+ while(card.firstChild)body.appendChild(card.firstChild);
+ card.appendChild(hw);card.appendChild(body);
+ bt.onclick=()=>setFold(card,key,body.hidden)}
+function setFold(card,key,open){const bt=card&&card.querySelector(':scope>.fold-hd>button'),b=card&&card.querySelector(':scope>.fold-b');if(!bt||!b)return;FOLD[key]=open;b.hidden=!open;bt.setAttribute('aria-expanded',open)}
 function renderCM3(){
  const box=$('#cmbox');if(!box)return;
  let cur=store.get('cm3t','intro');if(!CM3.some(c=>c.id===cur))cur='intro';
@@ -678,22 +694,26 @@ function renderCM3(){
  const done=id=>get(id).every(x=>x.trim());
  const c=CM3.find(x=>x.id===cur),v=get(cur),lim=Math.round(c.sec*5.5),EXC=cm3Ex(cur,R);
  const kw=[...R.K,...R.S,...R.A].map(x=>String(x[0]||'').split(/[,(·]/)[0].trim()).filter(Boolean).slice(0,4);
+ const dt=(f,label,body,def,lid)=>`<details class="jd cmf" data-f="${f}"${(f in FOLD?FOLD[f]:def)?' open':''}><summary${lid?` id="${lid}"`:''}>${label}</summary><div class="jb">${body}</div></details>`;
+ const nDone=CM3.filter(x=>done(x.id)).length,curDone=done(cur),wk='cmw_'+cur;
  box.innerHTML=`<h2>인성면접 · 공통 질문 3종</h2><p class="sub">인성면접에서 거의 매번 나오는 질문입니다. 아래 STAR-L 경험 답변보다 먼저 준비하세요. 각 ${c.sec}초(권장 ${lim}자 이내) 기준입니다.</p>
   <div class="chips" id="cmc" role="group" aria-label="공통 질문 선택" style="margin-bottom:10px">${CM3.map(x=>`<button type="button" class="chip" data-id="${x.id}" aria-pressed="${x.id===cur}">${done(x.id)?'✓ ':''}${esc(x.n)}</button>`).join('')}</div>
   <p class="q" style="margin:0 0 4px">${esc(c.q)}</p><p class="sample" style="margin:0 0 6px">공식 · ${esc(c.f)}</p>
-  ${cur==='intro'?`<div class="ex good"><b>결과 예시 (강의용 가상 사례 · ${esc(R.name||'선택 직무')})</b>${cm3IntroEx(R).split('\n').map(esc).join('<br>')}</div><p class="sample" style="margin:8px 0 0">아래 4칸을 채우면 위와 같은 형식의 자기소개가 완성됩니다.</p>`:''}
+  ${cur==='intro'?dt('cmx','결과 예시 보기 (대학생 활동 기반 가상 사례 · '+esc(R.name||'선택 직무')+')',`<div class="ex good">${cm3IntroEx(R).split('\n').map(esc).join('<br>')}</div><p class="sample" style="margin:8px 0 0">아래 4칸을 채우면 위와 같은 형식의 자기소개가 완성됩니다.</p>`,true):''}
   ${cur==='job'&&kw.length?`<p class="sample" style="margin:0 0 6px">답변에 넣을 직무 용어(${esc(R.name||'선택 직무')}) · ${kw.map(esc).join(', ')}</p>`:''}
   ${cur==='comp'?'<p class="sample" style="margin:0 0 6px">회사의 사업·가치는 채용공고와 공식 홈페이지에서 확인한 내용만 쓰세요(확인 필요).</p>':''}
-  ${c.steps.map((s,i)=>`<label for="cm${i}">${i+1}. ${esc(s[0])} <small>${esc(s[1])}</small></label>${s[3]?`<p class="sample" style="margin:0 0 4px">${esc(s[3])}</p>`:''}<textarea id="cm${i}" placeholder="${esc('예) '+((EXC||[])[i]||String(s[2]).replace(/^예\) /,'')))}"></textarea>`).join('')}
-  ${c.ksa?'<div id="cmg"></div>':''}
-  <label style="margin-top:14px">내 ${esc(c.n)} 결과</label><div class="draft" id="cmd" style="min-height:0;margin-top:4px" aria-live="polite"></div>
+  ${dt(wk,`작성 칸 · <span id="cmws">${v.filter(x=>x.trim()).length}/${c.steps.length} 완료</span>`,c.steps.map((s,i)=>`<label for="cm${i}">${i+1}. ${esc(s[0])} <small>${esc(s[1])}</small></label>${s[3]?`<p class="sample" style="margin:0 0 4px">${esc(s[3])}</p>`:''}<textarea id="cm${i}" placeholder="${esc('예) '+((EXC||[])[i]||String(s[2]).replace(/^예\) /,'')))}"></textarea>`).join(''),!curDone,'cmw')}
+  ${c.ksa?dt('cmgd_'+cur,'직무 KSA 비교 가이드','<div id="cmg"></div>',false,'cmgd'):''}
+  ${dt('cmr_'+cur,'내 '+esc(c.n)+' 결과',`<div class="draft" id="cmd" style="min-height:0;margin-top:4px" aria-live="polite"></div>
   <div class="row"><span class="meter" id="cmn"></span></div>
-  <div class="row"><button type="button" class="btn ghost" id="cmp">답변 복사</button><span class="sample" id="cmm" role="status"></span></div>`;
+  <div class="row"><button type="button" class="btn ghost" id="cmp">답변 복사</button><span class="sample" id="cmm" role="status"></span></div>`,true)}`;
+ $$('details[data-f]',box).forEach(d=>d.ontoggle=()=>{FOLD[d.dataset.f]=d.open});
+ foldCard(box,'cm',nDone<CM3.length,'',nDone+'/'+CM3.length+' 완료');
  const fs=c.steps.map((_,i)=>$('#cm'+i));
  const upd=()=>{const a=fs.map(f=>f.value),p=cm3Plain(c,a);store.set(skey(cur),a);
   $('#cmd').innerHTML=cur==='intro'?introLines(a,{...R,name:esc(R.name||'')},i=>a[i].trim()?esc(a[i].trim()):`<mark>[${esc(c.steps[i][1])}]</mark>`).join('<br>'):c.steps.map((s,i)=>`<p class="dl"><span class="dt">${esc(s[0])}</span>${a[i].trim()?esc(a[i].trim()):`<mark>[${esc(s[1])}]</mark>`}</p>`).join('');
   $('#cmn').textContent=`${p.length}자 · 읽기 약 ${Math.max(1,Math.round(p.length/5.5))}초 · 권장 ${lim}자 이내`;
-  const b=$(`#cmc [data-id="${cur}"]`);if(b)b.textContent=(a.every(x=>x.trim())?'✓ ':'')+c.n;if(c.ksa)guideC();return p};
+  const b=$(`#cmc [data-id="${cur}"]`);if(b)b.textContent=(a.every(x=>x.trim())?'✓ ':'')+c.n;{const q=a.filter(x=>x.trim()).length,w=$('#cmws');if(w)w.textContent=q+'/'+a.length+' 완료';const hs=$('.fold-s',box);if(hs)hs.textContent=CM3.filter(x=>done(x.id)).length+'/'+CM3.length+' 완료'}if(c.ksa)guideC();return p};
  const EGC={K:l=>`${l} 학습·활동`,S:l=>l,A:l=>`${josa(l,'을','를')} 발휘한 팀 활동`},NMC={K:'지식',S:'기술',A:'태도'},FLD=[0,1,3];
  let fix=[];
  const guideC=()=>{const g=$('#cmg');if(!g)return;
@@ -719,7 +739,7 @@ function renderCM3(){
    <p class="note">빈칸에 쓴 내용만 비교합니다(고정 문장의 ‘전문지식’·‘책임감’ 등은 제외). 판정은 직무 KSA 용어가 들어 있는지 보는 참고용입니다.</p>`};
  cm3G=c.ksa?guideC:null;
  if($('#cmg'))$('#cmg').onclick=e=>{const b=e.target.closest('[data-fx]');if(!b)return;const f=fix[+b.dataset.fx],ta=fs[f.i];ta.value=(ta.value.trim()?ta.value.replace(/\s*$/,' '):'')+f.s;upd();ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length)};
- fs.forEach((f,i)=>{f.value=v[i]||'';f.oninput=upd});upd();
+ let wasDn=curDone;fs.forEach((f,i)=>{f.value=v[i]||'';f.oninput=upd;f.onchange=()=>{const dn=fs.every(x=>x.value.trim());if(dn&&!wasDn){const w=$('#cmw');if(w)w.parentElement.open=false;const g=$('#cmgd');if(g&&c.ksa)g.parentElement.open=true;if(CM3.every(x=>done(x.id)))setFold(box,'cm',false)}wasDn=dn}});upd();
  $('#cmc').onclick=e=>{const b=e.target.closest('button');if(!b)return;store.set('cm3t',b.dataset.id);renderCM3()};
  $('#cmp').onclick=async()=>{const t=upd();try{await navigator.clipboard.writeText(t);$('#cmm').textContent='복사했습니다'}catch(e){const r=document.createRange();r.selectNodeContents($('#cmd'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('#cmm').textContent='텍스트를 선택했습니다. 복사하세요'}}}
 /* 직무 DB 기반 맞춤 질문·답변 생성기 (순수 함수) — 세부 직무의 신입 업무·핵심 업무·성과지표·산출물·KSA로 6개 유형 × 3문항과 단계별 답변 예시를 만든다 */
