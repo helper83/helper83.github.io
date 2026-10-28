@@ -945,7 +945,7 @@ function renderRQ(){
   const k=wType,jb=qJobOf(),R=curRole(),pr=pptRecs(k),jr=recQs(R,jb,k),recs=pr.concat(jr);
   let si=store.get('wq_'+role+'_'+k,null);if(si==null||!recs.some(r=>r.i===si))si=recs[0].i;
   const sel=recs.find(r=>r.i===si);
-  const pick=r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${esc(r.x.q)}</b>${stepRows(r.x.a,'span')}<small>${r.ppt?'강의 PPT 대표 질문'+(r.x.ev?' · '+esc(r.x.ev):''):r.db?'직무 데이터 기반 맞춤 질문':'직무명·KSA로 만든 질문(직무 데이터 없음)'}</small></button>`;
+  const pick=r=>`<button type="button" class="qpick" data-i="${r.i}" aria-pressed="${r.i===si}"><b>${r.ppt&&r.x.ev?'['+esc(r.x.ev)+'] ':''}${esc(r.x.q)}</b>${stepRows(r.x.a,'span')}${r.ppt?'':`<small>${r.db?'직무 데이터 기반 맞춤 질문':'직무명·KSA로 만든 질문(직무 데이터 없음)'}</small>`}</button>`;
   box.innerHTML=`<h2>${esc(k)}면접 · 답할 질문 고르기</h2><p class="sub">① 강의 PPT의 대표 질문을 먼저 연습하고, ② 아래 내 직무 맞춤 질문으로 이어서 연습하세요. 하나를 골라 아래 단계로 답변을 쓰세요.</p>
    <h3 class="qgh">① 대표 질문 · 강의 PPT</h3>${pr.map(pick).join('')}
    <h3 class="qgh">② 내 직무 맞춤 질문 · ${esc(R.name||'직무 미입력')}</h3><p class="sub" style="margin:0">${R.et?'위에서 고른 세부 직무와 대학생 활동(팀 프로젝트·동아리·학생회·아르바이트·인턴)을 연결해 만든 대학생 수준 질문입니다. 직무를 바꾸면 함께 바뀝니다.':'직접 입력한 직무는 일반 질문만 제공합니다. 세부 직무를 목록에서 고르면 맞춤 질문이 나옵니다.'}</p>${jr.map(pick).join('')}
