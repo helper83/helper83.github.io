@@ -241,9 +241,9 @@ nav.tabs{overflow-x:auto;justify-content:flex-start;scrollbar-width:none}nav.tab
 <style>
 /* ===== 헬퍼손 면접(m4) 방식 구조: 영역 탭 머리말 아래 ①이론 ②사례 … ⑧마무리 단계 버튼 ===== */
 .stp{display:flex;flex-direction:column;gap:8px}
-.stp .steps{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
-.stp .steps::-webkit-scrollbar{display:none}
-.stp-b{flex:1 0 auto;min-height:44px;padding:6px 14px;border-radius:10px;border:1px solid var(--line2);background:#fff;color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.stp .stpbar{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.stp-b{min-width:0;width:auto;min-height:44px;padding:6px 2px;border-radius:10px;border:1px solid var(--line2);background:#fff;color:var(--fg);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;text-align:center}
+@media(max-width:400px){.stp-b{font-size:13px}}
 .stp-b.on{background:color-mix(in srgb,var(--tc,var(--t0)) 80%,#000);border-color:color-mix(in srgb,var(--tc,var(--t0)) 80%,#000);color:#fff;font-weight:700}
 .stp-b.dn:not(.on){background:color-mix(in srgb,var(--tc,var(--t0)) 13%,#fff);border-color:color-mix(in srgb,var(--tc,var(--t0)) 80%,#000);color:color-mix(in srgb,var(--tc,var(--t0)) 80%,#000)}
 .stp-b.lk:not(.on){opacity:.6;border-style:dashed}
@@ -846,12 +846,14 @@ window.addEventListener('DOMContentLoaded',function(){mount()});
   var CN=['①','②','③','④','⑤','⑥','⑦','⑧'];
   var main=null,area=null,curStep='th',accs=[];
   var stp=document.createElement('div');stp.id='stp';stp.className='stp';
-  var bar=document.createElement('div');bar.className='steps';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','진행 단계');
+  var bar=document.createElement('div');bar.className='stpbar';bar.setAttribute('role','tablist');bar.setAttribute('aria-label','진행 단계');
   var lock=document.createElement('div');lock.className='stp-lock';lock.hidden=true;lock.setAttribute('role','status');
   stp.appendChild(bar);stp.appendChild(lock);
   var stpn=document.createElement('div');stpn.id='stpn';stpn.className='stpn';
   function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  function labelOf(acc){var b=acc.querySelector('.h b'),t=b?b.textContent:'';return t.replace(/^\d+\.\s*/,'').replace(/\s*·\s*\d+분\s*$/,'')}
+  var SHORT=['사례','카드','검사','비교','추천','나눔'];
+  function fullOf(acc){var b=acc.querySelector('.h b'),t=b?b.textContent:'';return t.replace(/^\d+\.\s*/,'').replace(/\s*·\s*\d+분\s*$/,'')}
+  function labelOf(acc,i){return i===4&&/행동/.test(fullOf(acc))?'행동':SHORT[i]}
   function kids(){return Array.prototype.slice.call(main.children)}
   function decorate(){
     if(!main||main.querySelector(':scope>#stp'))return;
@@ -878,7 +880,7 @@ window.addEventListener('DOMContentLoaded',function(){mount()});
   }
   function steps(){
     var a=[{k:'th',l:CN[0]+' 이론',dn:!!st.seen[area+'_th']}];
-    accs.forEach(function(x,i){a.push({k:'s'+i,l:CN[i+1]+' '+labelOf(x),dn:x.classList.contains('done'),lk:x.classList.contains('locked'),sub:(x.querySelector('.h small')||{}).textContent||''})});
+    accs.forEach(function(x,i){a.push({k:'s'+i,l:CN[i+1]+' '+labelOf(x,i),full:fullOf(x),dn:x.classList.contains('done'),lk:x.classList.contains('locked'),sub:(x.querySelector('.h small')||{}).textContent||''})});
     var op=main.querySelector(':scope>.lecp[data-stp="out"]'),ok=!!op&&op.style.display!=='none';
     a.push({k:'out',l:CN[7]+' 마무리',dn:ok});
     return a;
@@ -889,7 +891,7 @@ window.addEventListener('DOMContentLoaded',function(){mount()});
     var cur=S[idx];
     if(main.dataset.step!==curStep)main.dataset.step=curStep;
     Array.prototype.forEach.call(main.querySelectorAll('[data-stp]'),function(el){el.classList.toggle('stp-off',el.dataset.stp!==curStep)});
-    var h=S.map(function(x){var on=x.k===curStep,dn=x.dn&&!on;return '<button type="button" role="tab" class="stp-b'+(on?' on':'')+(dn?' dn':'')+(x.lk?' lk':'')+'" aria-selected="'+on+'" data-k="'+x.k+'">'+(dn?'✓ ':'')+(x.lk?'🔒 ':'')+esc(x.l)+'</button>'}).join('');
+    var h=S.map(function(x){var on=x.k===curStep,dn=x.dn&&!on;return '<button type="button" role="tab" class="stp-b'+(on?' on':'')+(dn?' dn':'')+(x.lk?' lk':'')+'" aria-selected="'+on+'" data-k="'+x.k+'"'+(x.full?' title="'+esc(x.full)+'"':'')+'>'+(dn?'✓ ':'')+(x.lk?'🔒 ':'')+esc(x.l)+'</button>'}).join('');
     if(bar.dataset.h!==h){bar.dataset.h=h;bar.innerHTML=h}
     var lk=!!cur.lk;if(lock.hidden===lk){lock.hidden=!lk}
     var lt=lk?'🔒 앞 단계를 먼저 마치면 열려요'+(cur.sub?' · '+cur.sub:''):'';if(lock.textContent!==lt)lock.textContent=lt;
