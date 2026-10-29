@@ -259,6 +259,11 @@ main[data-step] .acc .chv{display:none}
 main[data-step] .acc .acc-b{display:block!important}
 main[data-step] .acc.locked{display:none!important}
 @media print{.stp,.stpn{display:none!important}}
+/* ===== PC 화면 최대폭 자동 맞춤(기존 980px 고정폭 해제) ===== */
+:root{--pg:clamp(14px,2.5vw,48px)}
+#app{max-width:none!important;width:100%;padding-inline:var(--pg)!important}
+header.top{margin-inline:calc(-1*var(--pg))!important;padding-inline:var(--pg)!important}
+nav.tabs{margin-inline:calc(-1*var(--pg))!important;padding-inline:var(--pg)!important}
 </style>
 </head><body>
 <div id="app"></div>
