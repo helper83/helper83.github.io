@@ -632,7 +632,7 @@ function areaTab(a){return function(el){
  var tot=MIN[a].reduce(function(x,y){return x+y});
  el.appendChild(K.card('cls:band',K.h('h2',null,AN[a]),K.h('p',{class:'mute'},AD[a]+' · 권장 '+tot+'분')));
  var todo=K.h('div',{class:'todo',role:'status'});el.appendChild(todo);
- el.appendChild(lecPanel(a+'.in',LEC_IN[a],'인트로',AN[a]+' · 인트로',stepCount(a)===0));el.appendChild(lecPrac(AN[a]));
+ el.appendChild(lecPanel(a+'.in',(a==='value'?LEC_IN.home.concat(LEC_IN[a]):LEC_IN[a]),'이론',(a==='value'?'수업 도입 · 가치 인트로':AN[a]+' · 인트로'),stepCount(a)===0));el.appendChild(lecPrac(AN[a]));
  var bodies=[0,1,2,3,4,5].map(function(){return K.h('div')});
  bodies[0].appendChild(hookCard(a));
  if(a==='pers')persCard(bodies[1]);else if(a==='eff')effCard(bodies[1]);else cardArea(a,bodies[1]);
@@ -735,7 +735,7 @@ APP.done=function(id){if(AREAS.indexOf(id)>=0)return areaComplete(id);if(id==='s
 APP.locked=function(id){var i=AREAS.indexOf(id);return i>=0&&!areaUnlocked(i)};
 function areaTabPage(a){return function(el){var i=AREAS.indexOf(a);
  if(!areaUnlocked(i)){var n=nextArea();el.style.setProperty('--tc',AC[a]);el.appendChild(K.card('cls:band',K.h('h2',null,AN[a]),K.h('p',{class:'mute'},'앞 영역을 먼저 마치면 열려요. (사례·카드·검사)')));el.appendChild(K.card(K.note('지금은 '+AN[n]+' 영역 차례예요.'),K.btn('이어서 하기 · '+AN[n]+' 영역',function(){go(n)},'gold')));return}
- if(a==='value')el.appendChild(lecPanel('home',LEC_IN.home,'도입','수업 도입 · 과정 안내',false));
+ 
  areaTab(a)(el)}}
 APP.tabs=AREAS.map(function(a){return {id:a,label:AN[a],chip:AN[a].charAt(0),render:areaTabPage(a)}}).concat([{id:'syn',label:'성찰',chip:'찰',render:function(el){
  var secs=[['syn','성찰 노트'],['major','내 학과 진로 안내'],['out','출력 · PDF 저장']],cur=APP.synSec||'syn';
