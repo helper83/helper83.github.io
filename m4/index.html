@@ -1298,6 +1298,6 @@ tabsEl.addEventListener('keydown',e=>{const k=e.key,bs=$$('.stop');let i=bs.inde
  if(k==='ArrowRight')i=(i+1)%bs.length;else if(k==='ArrowLeft')i=(i-1+bs.length)%bs.length;else if(k==='Home')i=0;else if(k==='End')i=bs.length-1;else return;
  e.preventDefault();go(i);bs[i].focus()});
 markHas();
-const h=location.hash.slice(1);go(Math.max(0,TABS.findIndex(t=>t[0]===h)));
+const h=location.hash.slice(1);go(Math.max(0,TABS.findIndex(t=>t[0]===h)));try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}
 </script>
 </body></html>

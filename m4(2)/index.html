@@ -1353,7 +1353,7 @@ function initFromHash(){
  const old={score:[0,'eval'],formula:[0,'theory'],write:[1,'write'],card:[0,'card'],types:[0,'theory'],q36:[1,'ex']};
  let t=TABS.findIndex(x=>x[0]===key),s=st;
  if(t<0&&old[key]){t=old[key][0];s=old[key][1]}
- openTab(Math.max(0,t),s)}
+ openTab(Math.max(0,t),s);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}}
 new MutationObserver(()=>{fillPanels();stepUi()}).observe(viewEl,{childList:true});
 let _dt=null;['input','click','change'].forEach(ev=>viewEl.addEventListener(ev,()=>{clearTimeout(_dt);_dt=setTimeout(stepUi,250)}));
 
