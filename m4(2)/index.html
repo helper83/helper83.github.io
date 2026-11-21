@@ -688,7 +688,7 @@ function foldCard(card,key,def,title,extra){
 function setFold(card,key,open){const bt=card&&card.querySelector(':scope>.fold-hd>button'),b=card&&card.querySelector(':scope>.fold-b');if(!bt||!b)return;FOLD[key]=open;b.hidden=!open;bt.setAttribute('aria-expanded',open)}
 /* 모든 화면: 제목(h2)이 있는 카드는 제목을 눌러 접고 펼 수 있게 자동 적용 */
 (()=>{let q=0;const run=()=>{q=0;$$('.card',viewEl).forEach(c=>{if(c.querySelector(':scope>.fold-hd')||c.classList.contains('fwp')||c.closest('.page-head'))return;
- const h=c.querySelector(':scope>h2'),cp=c.classList.contains('tw')&&c.querySelector('caption'),kb=(location.hash||'#').split('.')[0]+'|'+(location.hash.split('.')[1]||'')+'|';
+ const h=c.querySelector(':scope>h2'),cp=c.classList.contains('tw')&&c.querySelector('caption'),kb=(TABS[curT]?TABS[curT][0]:'')+'|'+(curS==='theory'?'':curS)+'|';
  if(h&&c.children.length>=3)foldCard(c,kb+h.textContent.trim().slice(0,40),true);else if(cp){const t=cp.textContent.trim();cp.style.display='none';foldCard(c,kb+t.slice(0,40),true,esc(t))}})};
  new MutationObserver(()=>{if(!q)q=requestAnimationFrame(run)}).observe(viewEl,{childList:true,subtree:true});requestAnimationFrame(run)})();
 function renderCM3(){
@@ -1333,7 +1333,6 @@ function openTab(t,s){
  else if(curS==='card')viewCard();
  else viewDone();
  markSeen();
- try{history.replaceState(null,'','#'+TABS[t][0]+(curS==='theory'?'':'.'+curS))}catch(e){}
  stepUi();scrollTo(0,0)}
 function stepUi(){
  const sp=$('#stp'),sn=$('#stpn');if(!sp)return;sp.hidden=false;sn.hidden=false;
