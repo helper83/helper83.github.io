@@ -388,7 +388,6 @@ function go(i){
   $$('.stop').forEach((b,j)=>{b.tabIndex=j===i?0:-1;b.setAttribute('aria-selected',j===i);b.classList.toggle('active',j===i)});
   viewEl.style.setProperty('--tc',`var(${TC[i]})`);viewEl.style.setProperty('--tb',`var(--b${i})`);viewEl.style.setProperty('--ti',`var(--i${i})`);viewEl.onclick=null;viewEl.innerHTML='';
   [viewScore,viewFormula,viewWrite,viewCard,viewTypes,viewQ36][i]();
-  try{history.replaceState(null,'','#'+TABS[i][0])}catch(e){}
   scrollTo(0,0)}
 
 function viewTypes(){
